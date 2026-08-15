@@ -6,6 +6,8 @@
 
   <title>Rajthari Village</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -49,7 +51,7 @@
     }
 
     nav a {
-      margin: 6px;
+      margin: 5px;
       text-decoration: none;
       color: #176b3a;
       font-weight: bold;
@@ -107,34 +109,42 @@
       padding: 12px 20px;
       border-radius: 8px;
       text-decoration: none;
-      margin-top: 10px;
+      margin: 5px;
       border: none;
       cursor: pointer;
     }
 
-    .button:hover {
-      background: #10542d;
-    }
-
-    /* LOGIN */
-    .login-section {
-      max-width: 450px;
+    .login-section,
+    .admin-login {
+      width: 90%;
+      max-width: 400px;
       margin: 25px auto;
-      padding: 25px;
+      padding: 22px;
       background: white;
       border-radius: 14px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.1);
     }
 
-    .login-section h2 {
+    .login-section h2,
+    .admin-login h3 {
       text-align: center;
       color: #176b3a;
+    }
+
+    .admin-login {
+      max-width: 350px;
+      text-align: center;
+    }
+
+    .admin-icon {
+      font-size: 35px;
     }
 
     label {
       display: block;
       margin-top: 12px;
       font-weight: bold;
+      text-align: left;
     }
 
     input,
@@ -148,29 +158,44 @@
       font-size: 15px;
     }
 
-    button {
-      font-family: inherit;
+    textarea {
+      min-height: 100px;
+      resize: vertical;
     }
 
-    .login-btn {
-      width: 100%;
-      margin-top: 18px;
-      padding: 12px;
-      background: #176b3a;
-      color: white;
+    .login-btn,
+    .admin-login button,
+    .upload-btn,
+    .delete-btn,
+    .logout-btn {
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      padding: 11px 18px;
       cursor: pointer;
+      color: white;
+      font-weight: bold;
     }
 
-    .login-btn:hover {
-      background: #10542d;
+    .login-btn,
+    .admin-login button,
+    .upload-btn {
+      background: #176b3a;
     }
 
-    /* ADMIN PANEL */
+    .login-btn,
+    .admin-login button {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .logout-btn,
+    .delete-btn {
+      background: #b3261e;
+    }
+
     #adminPanel {
       display: none;
+      width: 90%;
       max-width: 800px;
       margin: 25px auto;
       padding: 25px;
@@ -180,8 +205,8 @@
     }
 
     #adminPanel h2 {
-      color: #176b3a;
       text-align: center;
+      color: #176b3a;
     }
 
     .admin-box {
@@ -191,34 +216,8 @@
       margin-top: 15px;
     }
 
-    .upload-btn {
-      margin-top: 15px;
-      background: #176b3a;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .logout-btn {
-      background: #b3261e;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
-    /* GALLERY */
     .gallery-card {
       cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .gallery-card:hover {
-      transform: translateY(-3px);
     }
 
     #photoGallery {
@@ -226,10 +225,6 @@
       text-align: center;
       padding: 25px 15px;
       background: #eef7f0;
-    }
-
-    #galleryTitle {
-      color: #176b3a;
     }
 
     #galleryPhotos {
@@ -252,40 +247,6 @@
       height: 200px;
       object-fit: cover;
       border-radius: 8px;
-      display: block;
-    }
-
-    .photo-name {
-      margin: 8px 0 0;
-      font-size: 14px;
-      color: #555;
-    }
-
-    .delete-photo {
-      display: none;
-      margin-top: 8px;
-      background: #b3261e;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .back-btn {
-      padding: 10px 20px;
-      margin-top: 20px;
-      background: #176b3a;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    /* NOTICES */
-    #notice-board {
-      max-width: 1000px;
-      margin: auto;
     }
 
     .notice {
@@ -297,7 +258,6 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
-    /* FOOTER */
     footer {
       margin-top: 30px;
       background: #123b26;
@@ -306,12 +266,6 @@
       padding: 25px;
     }
 
-    footer a {
-      color: white;
-      text-decoration: none;
-    }
-
-    /* MESSAGE */
     #message {
       position: fixed;
       bottom: 20px;
@@ -322,420 +276,424 @@
       padding: 12px 20px;
       border-radius: 8px;
       display: none;
-      z-index: 999;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 24px;
-      }
-
-      .hero h2 {
-        font-size: 26px;
-      }
-
-      nav a {
-        font-size: 14px;
-        margin: 4px;
-      }
-
-      #galleryPhotos img {
-        height: 220px;
-      }
+      z-index: 9999;
+      max-width: 90%;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <h1>🌾 Rajthari Village</h1>
-    <p>Our Village • Our Community • Our Connection</p>
-  </header>
+<header>
+  <h1>🌾 Rajthari Village</h1>
+  <p>Our Village • Our Community • Our Connection</p>
+</header>
 
-  <!-- NAVIGATION -->
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#updates">Updates</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#notices">Notices</a>
-    <a href="#contact">Contact</a>
-    <a href="#admin-login">Admin</a>
-  </nav>
+<nav>
+  <a href="#home">Home</a>
+  <a href="#updates">Updates</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#notices">Notices</a>
+  <a href="#member-login">Member Login</a>
+  <a href="#admin-login">Admin</a>
+  <a href="#contact">Contact</a>
+</nav>
 
-  <!-- HOME -->
-  <section class="hero" id="home">
-    <h2>Welcome to Rajthari</h2>
+<section class="hero" id="home">
+  <h2>Welcome to Rajthari</h2>
+  <p>आपका अपना गाँव, आपकी अपनी community.</p>
 
-    <p>
-      आपका अपना गाँव, आपकी अपनी community.
-    </p>
+  <a href="#member-login" class="button">👤 Member Login</a>
+  <a href="#admin-login" class="button">👑 Login as Admin</a>
+</section>
 
-    <a href="#member-login" class="button">
-      👤 Member Login
-    </a>
+<!-- MEMBER LOGIN -->
 
-    <a href="#admin-login" class="button">
-      👑 Admin Login
-    </a>
-  </section>
+<section class="login-section" id="member-login">
 
+  <h2>👤 Member Login</h2>
 
-  <!-- MEMBER LOGIN -->
-  <section class="login-section" id="member-login">
+  <form onsubmit="memberLogin(event)">
 
-    <h2>👤 Member Login</h2>
+    <label>Email</label>
 
-    <form onsubmit="memberLogin(event)">
-
-      <label for="username">
-        Username
-      </label>
-
-      <input
-        type="text"
-        id="username"
-        placeholder="Enter your username"
-        required
-      >
-
-      <label for="password">
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter your password"
-        required
-      >
-
-      <button class="login-btn" type="submit">
-        Login
-      </button>
-
-    </form>
-
-  </section>
-
-
-  <!-- ADMIN LOGIN -->
-  <section class="login-section" id="admin-login">
-
-    <h2>👑 Admin Login</h2>
-
-    <form onsubmit="adminLogin(event)">
-
-      <label for="adminId">
-        Admin ID
-      </label>
-
-      <input
-        type="text"
-        id="adminId"
-        placeholder="Enter Admin ID"
-        required
-      >
-
-      <label for="adminPassword">
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="adminPassword"
-        placeholder="Enter Password"
-        required
-      >
-
-      <label for="adminKey">
-        Admin Key
-      </label>
-
-      <input
-        type="password"
-        id="adminKey"
-        placeholder="Enter Admin Key"
-        required
-      >
-
-      <button class="login-btn" type="submit">
-        🔐 Admin Login
-      </button>
-
-    </form>
-
-  </section>
-
-
-  <!-- ADMIN PANEL -->
-  <section id="adminPanel">
-
-    <h2>👑 Admin Dashboard</h2>
-
-    <p style="text-align:center;">
-      Welcome Admin! यहाँ से आप Gallery में photos upload कर सकते हैं।
-    </p>
-
-    <div class="admin-box">
-
-      <h3>📸 Upload Village Photo</h3>
-
-      <label for="photoCategory">
-        Select Category
-      </label>
-
-      <select id="photoCategory">
-
-        <option value="village">
-          🏘️ Village
-        </option>
-
-        <option value="farming">
-          🌾 Farming
-        </option>
-
-        <option value="events">
-          🎉 Events
-        </option>
-
-      </select>
-
-
-      <label for="photoUpload">
-        Select Photo
-      </label>
-
-      <input
-        type="file"
-        id="photoUpload"
-        accept="image/*"
-      >
-
-      <button
-        class="upload-btn"
-        onclick="uploadPhoto()"
-      >
-        📤 Upload Photo
-      </button>
-
-    </div>
-
-
-    <button
-      class="logout-btn"
-      onclick="adminLogout()"
+    <input
+      type="email"
+      id="memberEmail"
+      placeholder="Enter your email"
+      required
     >
-      🚪 Logout Admin
+
+    <label>Password</label>
+
+    <input
+      type="password"
+      id="memberPassword"
+      placeholder="Enter your password"
+      required
+    >
+
+    <button class="login-btn" type="submit">
+      Login
     </button>
 
-  </section>
+  </form>
 
+  <button
+    id="memberLogout"
+    class="logout-btn"
+    style="display:none; margin-top:15px;"
+    onclick="logoutUser()"
+  >
+    🚪 Logout
+  </button>
 
-  <!-- NOTICES -->
-  <section id="notices" class="container">
+</section>
 
-    <h2 class="section-title">
-      📢 Village Notices
-    </h2>
+<!-- SMALL ADMIN LOGIN -->
 
-    <div id="notice-board">
+<section class="admin-login" id="admin-login">
 
-      <div class="notice">
-        <strong>📢 Rajthari Village</strong>
+  <div class="admin-icon">👑</div>
 
-        <p>
-          गाँव की important announcements और notices यहाँ दिखाई देंगी।
-        </p>
-      </div>
+  <h3>Login as Admin</h3>
 
-    </div>
+  <p>Only village administrator</p>
 
-  </section>
+  <form onsubmit="adminLogin(event)">
 
-
-  <!-- UPDATES -->
-  <section class="container" id="updates">
-
-    <h2 class="section-title">
-      🔴 Village Updates
-    </h2>
-
-    <div class="cards">
-
-      <div class="card">
-
-        <h3>
-          📍 Going to Bankhedi?
-        </h3>
-
-        <p>
-          अगर कोई गाँव का व्यक्ति Bankhedi जा रहा है,
-          तो वह गाँव के लोगों को बता सकता है।
-        </p>
-
-      </div>
-
-
-      <div class="card">
-
-        <h3>
-          🛒 Need Something?
-        </h3>
-
-        <p>
-          Bankhedi से किसी चीज़ की जरूरत है?
-          अपनी request गाँव के लोगों को बताएं।
-        </p>
-
-      </div>
-
-
-      <div class="card">
-
-        <h3>
-          🩺 Doctor / Service
-        </h3>
-
-        <p>
-          गाँव में कोई doctor, mechanic या दूसरी service आई है?
-          Community को बताएं।
-        </p>
-
-      </div>
-
-
-      <div class="card">
-
-        <h3>
-          📢 Notices
-        </h3>
-
-        <p>
-          गाँव की important announcements और notices यहाँ दिखाई देंगी।
-        </p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- GALLERY -->
-  <section class="container" id="gallery">
-
-    <h2 class="section-title">
-      📸 Village Gallery
-    </h2>
-
-    <div class="cards">
-
-      <div
-        class="card gallery-card"
-        onclick="showGallery('village')"
-      >
-
-        <h3>
-          🏘️ Village
-        </h3>
-
-        <p>
-          Rajthari की photos यहाँ दिखाई देंगी।
-        </p>
-
-      </div>
-
-
-      <div
-        class="card gallery-card"
-        onclick="showGallery('farming')"
-      >
-
-        <h3>
-          🌾 Farming
-        </h3>
-
-        <p>
-          गाँव की खेती और खेतों की photos।
-        </p>
-
-      </div>
-
-
-      <div
-        class="card gallery-card"
-        onclick="showGallery('events')"
-      >
-
-        <h3>
-          🎉 Events
-        </h3>
-
-        <p>
-          गाँव के कार्यक्रम और celebrations।
-        </p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- PHOTO GALLERY -->
-  <section id="photoGallery">
-
-    <h2 id="galleryTitle"></h2>
-
-    <div id="galleryPhotos"></div>
-
-    <button
-      class="back-btn"
-      onclick="closeGallery()"
+    <input
+      type="email"
+      id="adminEmail"
+      placeholder="Admin Email"
+      required
     >
-      ⬅️ Back
+
+    <input
+      type="password"
+      id="adminPassword"
+      placeholder="Admin Password"
+      required
+    >
+
+    <input
+      type="password"
+      id="adminKey"
+      placeholder="Admin Key"
+      required
+    >
+
+    <button type="submit">
+      🔐 Admin Login
     </button>
 
-  </section>
+  </form>
 
+</section>
 
-  <!-- FOOTER -->
-  <footer id="contact">
+<!-- ADMIN PANEL -->
 
-    <p>
-      🌾 Rajthari Village
-    </p>
+<section id="adminPanel">
 
-    <p>
-      आपका अपना गाँव • आपकी अपनी website
-    </p>
+  <h2>👑 Admin Dashboard</h2>
 
-    <p>
-      © 2026 Rajthari Village
-    </p>
+  <p style="text-align:center;">
+    Welcome Admin! Manage Rajthari Village.
+  </p>
 
-  </footer>
+  <div class="admin-box">
 
+    <h3>📸 Upload Gallery Photo</h3>
 
-  <!-- MESSAGE -->
-  <div id="message"></div>
+    <label>Category</label>
 
+    <select id="photoCategory">
+
+      <option value="village">🏘️ Village</option>
+
+      <option value="farming">🌾 Farming</option>
+
+      <option value="events">🎉 Events</option>
+
+    </select>
+
+    <label>Select Photo</label>
+
+    <input
+      type="file"
+      id="photoUpload"
+      accept="image/*"
+    >
+
+    <button
+      class="upload-btn"
+      onclick="uploadPhoto()"
+    >
+      📤 Upload Photo
+    </button>
+
+  </div>
+
+  <div class="admin-box">
+
+    <h3>📢 Publish Notice</h3>
+
+    <label>Notice Title</label>
+
+    <input
+      type="text"
+      id="noticeTitle"
+      placeholder="Notice title"
+    >
+
+    <label>Notice Message</label>
+
+    <textarea
+      id="noticeMessage"
+      placeholder="Write village notice..."
+    ></textarea>
+
+    <button
+      class="upload-btn"
+      onclick="addNotice()"
+    >
+      📢 Publish Notice
+    </button>
+
+  </div>
+
+  <button
+    class="logout-btn"
+    onclick="logoutUser()"
+  >
+    🚪 Logout
+  </button>
+
+</section>
+
+<!-- NOTICES -->
+
+<section class="container" id="notices">
+
+  <h2 class="section-title">
+    📢 Village Notices
+  </h2>
+
+  <div id="notice-board">
+    <p>Loading notices...</p>
+  </div>
+
+</section>
+
+<!-- UPDATES -->
+
+<section class="container" id="updates">
+
+  <h2 class="section-title">
+    🔴 Village Updates
+  </h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>📍 Going to Bankhedi?</h3>
+      <p>
+        अगर कोई गाँव का व्यक्ति Bankhedi जा रहा है,
+        तो वह गाँव के लोगों को बता सकता है।
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>🛒 Need Something?</h3>
+      <p>
+        Bankhedi से किसी चीज़ की जरूरत है?
+        अपनी request गाँव के लोगों को बताएं।
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>🩺 Doctor / Service</h3>
+      <p>
+        गाँव में कोई doctor, mechanic या दूसरी service आई है?
+        Community को बताएं।
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>📢 Notices</h3>
+      <p>
+        गाँव की important announcements यहाँ दिखाई देंगी।
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- GALLERY -->
+
+<section class="container" id="gallery">
+
+  <h2 class="section-title">
+    📸 Village Gallery
+  </h2>
+
+  <div class="cards">
+
+    <div
+      class="card gallery-card"
+      onclick="showGallery('village')"
+    >
+      <h3>🏘️ Village</h3>
+      <p>Rajthari की photos यहाँ दिखाई देंगी।</p>
+    </div>
+
+    <div
+      class="card gallery-card"
+      onclick="showGallery('farming')"
+    >
+      <h3>🌾 Farming</h3>
+      <p>गाँव की खेती और खेतों की photos।</p>
+    </div>
+
+    <div
+      class="card gallery-card"
+      onclick="showGallery('events')"
+    >
+      <h3>🎉 Events</h3>
+      <p>गाँव के कार्यक्रम और celebrations।</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- PHOTO GALLERY -->
+
+<section id="photoGallery">
+
+  <h2 id="galleryTitle"></h2>
+
+  <div id="galleryPhotos"></div>
+
+  <button
+    class="button"
+    onclick="closeGallery()"
+  >
+    ⬅️ Back
+  </button>
+
+</section>
+
+<footer id="contact">
+
+  <p>🌾 Rajthari Village</p>
+
+  <p>आपका अपना गाँव • आपकी अपनी website</p>
+
+  <p>© 2026 Rajthari Village</p>
+
+</footer>
+
+<div id="message"></div>
 
 <script>
 
-/* ================================
-   ADMIN LOGIN
-================================ */
+/* =====================================
+   SUPABASE CONNECTION
+===================================== */
 
-function adminLogin(event) {
+const SUPABASE_URL =
+  "https://idrbdrnzomavafkvoike.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+let currentUser = null;
+let currentProfile = null;
+
+
+/* =====================================
+   MESSAGE
+===================================== */
+
+function showMessage(text) {
+
+  const box =
+    document.getElementById("message");
+
+  box.innerText = text;
+
+  box.style.display = "block";
+
+  setTimeout(() => {
+
+    box.style.display = "none";
+
+  }, 3500);
+
+}
+
+
+/* =====================================
+   MEMBER LOGIN
+===================================== */
+
+async function memberLogin(event) {
 
   event.preventDefault();
 
-  const id =
-    document.getElementById("adminId").value.trim();
+  const email =
+    document.getElementById("memberEmail").value.trim();
+
+  const password =
+    document.getElementById("memberPassword").value;
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (error) {
+
+    showMessage(
+      "❌ Login failed: " + error.message
+    );
+
+    return;
+  }
+
+  currentUser = data.user;
+
+  await loadCurrentUser();
+
+  showMessage("✅ Login successful!");
+
+}
+
+
+/* =====================================
+   ADMIN LOGIN
+===================================== */
+
+async function adminLogin(event) {
+
+  event.preventDefault();
+
+  const email =
+    document.getElementById("adminEmail").value.trim();
 
   const password =
     document.getElementById("adminPassword").value;
@@ -743,592 +701,539 @@ function adminLogin(event) {
   const key =
     document.getElementById("adminKey").value;
 
+  /* Admin Key */
 
-  /*
-     ADMIN LOGIN DETAILS
-     
-     ID       = rajthari
-     PASSWORD = 12345
-     KEY      = Rajthari
-  */
+  if (key !== "Rajthari") {
 
-  if (
-    id === "rajthari" &&
-    password === "12345" &&
-    key === "Rajthari"
-  ) {
+    showMessage("❌ Wrong Admin Key");
 
-    localStorage.setItem(
-      "rajthariAdmin",
-      "true"
-    );
-
-    document.getElementById("adminPanel").style.display =
-      "block";
-
-    showMessage("✅ Admin Login Successful!");
-
-    document.getElementById("adminPanel")
-      .scrollIntoView({
-        behavior: "smooth"
-      });
-
+    return;
   }
 
-  else {
+  /* Supabase Authentication */
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (error) {
 
     showMessage(
-      "❌ Wrong Admin ID, Password or Key!"
+      "❌ Admin login failed: " +
+      error.message
     );
 
+    return;
+  }
+
+  currentUser = data.user;
+
+  /* Get profile */
+
+  const {
+    data: profile,
+    error: profileError
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+  if (
+    profileError ||
+    !profile ||
+    profile.role !== "admin"
+  ) {
+
+    await supabaseClient.auth.signOut();
+
+    currentUser = null;
+
+    showMessage(
+      "❌ This account is not an Admin."
+    );
+
+    return;
+  }
+
+  currentProfile = profile;
+
+  document.getElementById(
+    "adminPanel"
+  ).style.display = "block";
+
+  showMessage(
+    "👑 Admin Login Successful!"
+  );
+
+  document.getElementById(
+    "adminPanel"
+  ).scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =====================================
+   LOAD CURRENT USER
+===================================== */
+
+async function loadCurrentUser() {
+
+  const {
+    data: {
+      user
+    }
+  } =
+    await supabaseClient.auth.getUser();
+
+  currentUser = user;
+
+  if (!user) {
+
+    currentProfile = null;
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display = "none";
+
+    document.getElementById(
+      "memberLogout"
+    ).style.display = "none";
+
+    return;
+  }
+
+  const {
+    data: profile
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
+
+  currentProfile = profile;
+
+  document.getElementById(
+    "memberLogout"
+  ).style.display = "block";
+
+  if (
+    profile &&
+    profile.role === "admin"
+  ) {
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display = "block";
   }
 
 }
 
 
-/* ================================
-   CHECK ADMIN LOGIN
-================================ */
+/* =====================================
+   LOGOUT
+===================================== */
 
-function checkAdmin() {
+async function logoutUser() {
 
-  const loggedIn =
-    localStorage.getItem("rajthariAdmin");
+  await supabaseClient.auth.signOut();
 
-  if (loggedIn === "true") {
+  currentUser = null;
 
-    document.getElementById("adminPanel").style.display =
-      "block";
+  currentProfile = null;
 
-  }
+  document.getElementById(
+    "adminPanel"
+  ).style.display = "none";
 
-}
+  document.getElementById(
+    "memberLogout"
+  ).style.display = "none";
 
-
-/* ================================
-   ADMIN LOGOUT
-================================ */
-
-function adminLogout() {
-
-  localStorage.removeItem(
-    "rajthariAdmin"
-  );
-
-  document.getElementById("adminPanel").style.display =
-    "none";
-
-  showMessage(
-    "🚪 Admin Logged Out"
-  );
+  showMessage("🚪 Logged out");
 
 }
 
 
-/* ================================
-   MEMBER LOGIN
-================================ */
-
-function memberLogin(event) {
-
-  event.preventDefault();
-
-  showMessage(
-    "ℹ️ Member login will be connected later."
-  );
-
-}
-
-
-/* ================================
+/* =====================================
    UPLOAD PHOTO
-================================ */
+===================================== */
 
-function uploadPhoto() {
+async function uploadPhoto() {
 
-  const fileInput =
-    document.getElementById("photoUpload");
+  if (
+    !currentUser ||
+    !currentProfile ||
+    currentProfile.role !== "admin"
+  ) {
 
-  const category =
-    document.getElementById("photoCategory").value;
+    showMessage(
+      "❌ Only Admin can upload photos."
+    );
+
+    return;
+  }
 
   const file =
-    fileInput.files[0];
+    document.getElementById(
+      "photoUpload"
+    ).files[0];
 
+  const category =
+    document.getElementById(
+      "photoCategory"
+    ).value;
 
   if (!file) {
 
     showMessage(
-      "⚠️ पहले photo select करें!"
+      "⚠️ Please select a photo."
     );
 
     return;
-
   }
 
+  const extension =
+    file.name.split(".").pop();
 
-  if (!file.type.startsWith("image/")) {
+  const fileName =
+    Date.now() +
+    "_" +
+    Math.random()
+      .toString(36)
+      .substring(2) +
+    "." +
+    extension;
+
+  const path =
+    category + "/" + fileName;
+
+  showMessage("📤 Uploading...");
+
+  const {
+    error: uploadError
+  } =
+    await supabaseClient.storage
+      .from("gallery")
+      .upload(
+        path,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false
+        }
+      );
+
+  if (uploadError) {
 
     showMessage(
-      "❌ केवल image file upload करें!"
+      "❌ Upload failed: " +
+      uploadError.message
     );
 
     return;
-
   }
 
+  const {
+    error: dbError
+  } =
+    await supabaseClient
+      .from("gallery_photos")
+      .insert({
+        category: category,
+        file_name: file.name,
+        storage_path: path,
+        uploaded_by: currentUser.id
+      });
 
-  /*
-     Photo को browser में save करने के लिए
-     FileReader का इस्तेमाल किया जा रहा है.
-  */
+  if (dbError) {
 
-  const reader =
-    new FileReader();
-
-
-  reader.onload = function(event) {
-
-    const photoData = {
-
-      id: Date.now(),
-
-      category: category,
-
-      image: event.target.result,
-
-      name: file.name
-
-    };
-
-
-    let photos =
-      JSON.parse(
-        localStorage.getItem(
-          "rajthariPhotos"
-        )
-      ) || [];
-
-
-    photos.push(photoData);
-
-
-    localStorage.setItem(
-      "rajthariPhotos",
-      JSON.stringify(photos)
-    );
-
-
-    fileInput.value = "";
-
+    await supabaseClient.storage
+      .from("gallery")
+      .remove([path]);
 
     showMessage(
-      "✅ Photo successfully uploaded!"
+      "❌ Database error: " +
+      dbError.message
     );
 
+    return;
+  }
 
-    /*
-       अगर gallery open है तो
-       उसे तुरंत refresh करें.
-    */
+  document.getElementById(
+    "photoUpload"
+  ).value = "";
 
-    const currentTitle =
-      document.getElementById(
-        "galleryTitle"
-      ).dataset.category;
-
-    if (currentTitle) {
-
-      showGallery(currentTitle);
-
-    }
-
-  };
-
-
-  reader.readAsDataURL(file);
+  showMessage(
+    "✅ Photo uploaded successfully!"
+  );
 
 }
 
 
-/* ================================
+/* =====================================
    SHOW GALLERY
-================================ */
+===================================== */
 
-function showGallery(type) {
+async function showGallery(category) {
 
   const title =
     document.getElementById(
       "galleryTitle"
     );
 
-  const photosContainer =
+  const photos =
     document.getElementById(
       "galleryPhotos"
     );
 
+  photos.innerHTML =
+    "<p>Loading photos...</p>";
 
-  photosContainer.innerHTML = "";
+  title.dataset.category =
+    category;
 
-
-  title.dataset.category = type;
-
-
-  if (type === "village") {
-
+  if (category === "village") {
     title.innerText =
       "🏘️ Village Photos";
-
   }
 
-  else if (type === "farming") {
-
+  if (category === "farming") {
     title.innerText =
       "🌾 Farming Photos";
-
   }
 
-  else if (type === "events") {
-
+  if (category === "events") {
     title.innerText =
       "🎉 Event Photos";
+  }
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("gallery_photos")
+      .select("*")
+      .eq("category", category)
+      .order("created_at", {
+        ascending: false
+      });
+
+  if (error) {
+
+    photos.innerHTML =
+      "<p>❌ Could not load gallery.</p>";
+
+    return;
+  }
+
+  photos.innerHTML = "";
+
+  if (!data || data.length === 0) {
+
+    photos.innerHTML =
+      "<p>📸 No photos available yet.</p>";
 
   }
 
+  data.forEach(photo => {
 
-  /*
-     OLD / DEFAULT PHOTOS
-  */
+    const {
+      data: publicData
+    } =
+      supabaseClient.storage
+        .from("gallery")
+        .getPublicUrl(
+          photo.storage_path
+        );
 
-  if (type === "village") {
+    const box =
+      document.createElement("div");
 
-    addPhoto(
-      "img.0001.jpg",
-      "Village Photo"
-    );
+    box.className =
+      "photo-box";
 
-    addPhoto(
-      "img.0002.jpg",
-      "Village Photo"
-    );
+    const image =
+      document.createElement("img");
 
-    addPhoto(
-      "img.0003.jpg",
-      "Village Photo"
-    );
+    image.src =
+      publicData.publicUrl;
 
-  }
+    image.alt =
+      photo.file_name;
 
+    box.appendChild(image);
 
-  if (type === "farming") {
+    const name =
+      document.createElement("p");
 
-    addPhoto(
-      "img.0004.jpg",
-      "Farming Photo"
-    );
+    name.innerText =
+      photo.file_name;
 
-    addPhoto(
-      "img.0005.jpg",
-      "Farming Photo"
-    );
+    box.appendChild(name);
 
-    addPhoto(
-      "img.0006.jpg",
-      "Farming Photo"
-    );
+    if (
+      currentProfile &&
+      currentProfile.role === "admin"
+    ) {
 
-  }
+      const button =
+        document.createElement("button");
 
+      button.className =
+        "delete-btn";
 
-  if (type === "events") {
+      button.innerText =
+        "🗑️ Delete";
 
-    addPhoto(
-      "img.0007.jpg",
-      "Event Photo"
-    );
+      button.onclick =
+        () => deletePhoto(photo);
 
-    addPhoto(
-      "img.0008.jpg",
-      "Event Photo"
-    );
+      box.appendChild(button);
+    }
 
-    addPhoto(
-      "img.0009.jpg",
-      "Event Photo"
-    );
+    photos.appendChild(box);
 
-  }
-
-
-  /*
-     ADMIN UPLOADED PHOTOS
-  */
-
-  const uploadedPhotos =
-    JSON.parse(
-      localStorage.getItem(
-        "rajthariPhotos"
-      )
-    ) || [];
-
-
-  uploadedPhotos
-    .filter(photo => photo.category === type)
-    .forEach(photo => {
-
-      addUploadedPhoto(photo);
-
-    });
-
+  });
 
   document.getElementById(
     "photoGallery"
   ).style.display = "block";
 
+}
+
+
+/* =====================================
+   CLOSE GALLERY
+===================================== */
+
+function closeGallery() {
 
   document.getElementById(
     "photoGallery"
-  ).scrollIntoView({
-    behavior: "smooth"
-  });
-
-
-  updateDeleteButtons();
+  ).style.display = "none";
 
 }
 
 
-/* ================================
-   DEFAULT PHOTO
-================================ */
-
-function addPhoto(
-  src,
-  alt
-) {
-
-  const container =
-    document.getElementById(
-      "galleryPhotos"
-    );
-
-
-  const box =
-    document.createElement("div");
-
-  box.className =
-    "photo-box";
-
-
-  const image =
-    document.createElement("img");
-
-  image.src = src;
-
-  image.alt = alt;
-
-
-  const name =
-    document.createElement("p");
-
-  name.className =
-    "photo-name";
-
-  name.innerText =
-    alt;
-
-
-  box.appendChild(image);
-
-  box.appendChild(name);
-
-
-  container.appendChild(box);
-
-}
-
-
-/* ================================
-   ADMIN UPLOADED PHOTO
-================================ */
-
-function addUploadedPhoto(photo) {
-
-  const container =
-    document.getElementById(
-      "galleryPhotos"
-    );
-
-
-  const box =
-    document.createElement("div");
-
-  box.className =
-    "photo-box";
-
-
-  const image =
-    document.createElement("img");
-
-  image.src =
-    photo.image;
-
-  image.alt =
-    photo.name;
-
-
-  const name =
-    document.createElement("p");
-
-  name.className =
-    "photo-name";
-
-  name.innerText =
-    "📤 " + photo.name;
-
-
-  const deleteButton =
-    document.createElement("button");
-
-  deleteButton.className =
-    "delete-photo";
-
-  deleteButton.innerText =
-    "🗑️ Delete";
-
-
-  deleteButton.dataset.id =
-    photo.id;
-
-
-  deleteButton.onclick =
-    function() {
-
-      deletePhoto(photo.id);
-
-    };
-
-
-  box.appendChild(image);
-
-  box.appendChild(name);
-
-  box.appendChild(deleteButton);
-
-
-  container.appendChild(box);
-
-}
-
-
-/* ================================
+/* =====================================
    DELETE PHOTO
-================================ */
+===================================== */
 
-function deletePhoto(id) {
+async function deletePhoto(photo) {
 
   if (
-    localStorage.getItem(
-      "rajthariAdmin"
-    ) !== "true"
+    !currentProfile ||
+    currentProfile.role !== "admin"
   ) {
 
     showMessage(
-      "❌ केवल Admin photo delete कर सकता है."
+      "❌ Admin only."
     );
 
     return;
-
   }
 
-
-  const confirmDelete =
-    confirm(
-      "क्या आप इस photo को delete करना चाहते हैं?"
-    );
-
-
-  if (!confirmDelete) {
+  if (
+    !confirm(
+      "Delete this photo?"
+    )
+  ) {
 
     return;
-
   }
 
+  const {
+    error: storageError
+  } =
+    await supabaseClient.storage
+      .from("gallery")
+      .remove([
+        photo.storage_path
+      ]);
 
-  let photos =
-    JSON.parse(
-      localStorage.getItem(
-        "rajthariPhotos"
-      )
-    ) || [];
+  if (storageError) {
 
-
-  photos =
-    photos.filter(
-      photo => photo.id !== id
+    showMessage(
+      "❌ Could not delete photo."
     );
 
+    return;
+  }
 
-  localStorage.setItem(
-    "rajthariPhotos",
-    JSON.stringify(photos)
-  );
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("gallery_photos")
+      .delete()
+      .eq("id", photo.id);
 
+  if (error) {
+
+    showMessage(
+      "❌ Database delete failed."
+    );
+
+    return;
+  }
 
   showMessage(
     "🗑️ Photo deleted!"
   );
 
-
-  const category =
+  await showGallery(
     document.getElementById(
       "galleryTitle"
-    ).dataset.category;
-
-
-  if (category) {
-
-    showGallery(category);
-
-  }
+    ).dataset.category
+  );
 
 }
 
 
-/* ================================
-   SHOW / HIDE DELETE BUTTON
-================================ */
+/* =====================================
+   LOAD NOTICES
+===================================== */
 
-function updateDeleteButtons() {
+async function loadNotices() {
 
-  const isAdmin =
-    localStorage.getItem(
-      "rajthariAdmin"
-    ) === "true";
-
-
-  const buttons =
-    document.querySelectorAll(
-      ".delete-photo"
+  const board =
+    document.getElementById(
+      "notice-board"
     );
 
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("notices")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
 
-  buttons.forEach(button => {
+  if (error) {
 
-    button.style.display =
-      isAdmin
-        ? "inline-block"
-        : "none";
+    board.innerHTML =
+      "<p>❌ Could not load notices.</p>";
 
-  });
+    return;
+  }
 
-}
+  board.innerHTML = "";
 
+  if (!data || data.length === 0) {
 
-/* ================================
-   CLOSE GALLERY
-===
-        
-        
-        
-    
+    board.innerHTML =
+      "<p>No notices avail
