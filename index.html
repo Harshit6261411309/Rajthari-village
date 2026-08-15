@@ -224,24 +224,64 @@
   </section>
 
   <section class="container" id="gallery">
-    <h2 class="section-title">📸 Village Gallery</h2>
+  <h2 class="section-title">📸 Village Gallery</h2>
 
-    <div class="cards">
+  <div class="cards">
 
-      <div class="card">
-        <h3>🏘️ Village</h3>
-        <p>Rajthari की photos यहाँ दिखाई देंगी।</p>
-      </div>
+    <div class="card" onclick="showGallery('village')">
+      <h3>🏘️ Village</h3>
+      <p>Rajthari की photos यहाँ दिखाई देंगी।</p>
+    </div>
 
-      <div class="card">
-        <h3>🌾 Farming</h3>
-        <p>गाँव की खेती और खेतों की photos।</p>
-      </div>
+    <div class="card" onclick="showGallery('farming')">
+      <h3>🌾 Farming</h3>
+      <p>गाँव की खेती और खेतों की photos।</p>
+    </div>
 
-      <div class="card">
-        <h3>🎉 Events</h3>
-        <p>गाँव के कार्यक्रम और celebrations।</p>
-      </div>
+    <div class="card" onclick="showGallery('events')">
+      <h3>🎉 Events</h3>
+      <p>गाँव के कार्यक्रम और celebrations।</p>
+    </div>
+
+  </div>
+</section>
+
+<div id="photoGallery" style="display:none; padding:20px;">
+  <h2 id="galleryTitle"></h2>
+  <div id="galleryPhotos"></div>
+</div>
+
+<script>
+function showGallery(type) {
+  const title = document.getElementById("galleryTitle");
+  const photos = document.getElementById("galleryPhotos");
+
+  photos.innerHTML = "";
+
+  if (type === "village") {
+    title.innerText = "🏘️ Village Photos";
+    photos.innerHTML = `
+      <img src="IMG_20260815_130514919.jpg" style="width:300px; margin:10px;">
+    `;
+  }
+
+  if (type === "farming") {
+    title.innerText = "🌾 Farming Photos";
+    photos.innerHTML = `
+      <p>यहाँ Farming की photos आएंगी।</p>
+    `;
+  }
+
+  if (type === "events") {
+    title.innerText = "🎉 Event Photos";
+    photos.innerHTML = `
+      <p>यहाँ Events की photos आएंगी।</p>
+    `;
+  }
+
+  document.getElementById("photoGallery").style.display = "block";
+}
+</script>
 
     </div>
   </section>
