@@ -1,1 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Rajthari Village</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7f5;
+      color: #222;
+    }
+
+    header {
+      background: #176b3a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+    }
+
+    nav {
+      background: white;
+      padding: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      margin: 6px;
+      text-decoration: none;
+      color: #176b3a;
+      font-weight: bold;
+    }
+
+    .hero {
+      padding: 45px 20px;
+      text-align: center;
+      background: #e7f4ea;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 17px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #176b3a;
+    }
+
+    .button {
+      display: inline-block;
+      background: #176b3a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+
+    footer {
+      margin-top: 30px;
+      background: #123b26;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🌾 Rajthari Village</h1>
+    <p>Our Village • Our Community • Our Connection</p>
+  </header>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#updates">Updates</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section class="hero" id="home">
+    <h2>Welcome to Rajthari</h2>
+    <p>
+      आपका अपना गाँव, आपकी अपनी community.
+    </p>
+
+    <a href="#" class="button">👤 Member Login</a>
+  </section>
+
+  <section class="container" id="updates">
+    <h2 class="section-title">🔴 Village Updates</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>📍 Going to Bankhedi?</h3>
+        <p>
+          अगर कोई गाँव का व्यक्ति Bankhedi जा रहा है,
+          तो वह गाँव के लोगों को बता सकता है।
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🛒 Need Something?</h3>
+        <p>
+          Bankhedi से किसी चीज़ की जरूरत है?
+          अपनी request गाँव के लोगों को बताएं।
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🩺 Doctor / Service</h3>
+        <p>
+          गाँव में कोई doctor, mechanic या दूसरी service आई है?
+          Community को बताएं।
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>📢 Notices</h3>
+        <p>
+          गाँव की important announcements और notices यहाँ दिखाई देंगी।
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="container" id="gallery">
+    <h2 class="section-title">📸 Village Gallery</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>🏘️ Village</h3>
+        <p>Rajthari की photos यहाँ दिखाई देंगी।</p>
+      </div>
+
+      <div class="card">
+        <h3>🌾 Farming</h3>
+        <p>गाँव की खेती और खेतों की photos।</p>
+      </div>
+
+      <div class="card">
+        <h3>🎉 Events</h3>
+        <p>गाँव के कार्यक्रम और celebrations।</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer id="contact">
+    <p>🌾 Rajthari Village</p>
+
+    <p>
+      <a href="#">👑 Login as Admin</a>
+    </p>
+
+    <p>© 2026 Rajthari Village</p>
+  </footer>
+
+</body>
+</html>
