@@ -223,22 +223,22 @@
     </div>
   </section>
 
-  <section class="container" id="gallery">
+<section class="container" id="gallery">
   <h2 class="section-title">📸 Village Gallery</h2>
 
   <div class="cards">
 
-    <div class="card" onclick="showGallery('village')">
+    <div class="card gallery-card" onclick="showGallery('village')">
       <h3>🏘️ Village</h3>
       <p>Rajthari की photos यहाँ दिखाई देंगी।</p>
     </div>
 
-    <div class="card" onclick="showGallery('farming')">
+    <div class="card gallery-card" onclick="showGallery('farming')">
       <h3>🌾 Farming</h3>
       <p>गाँव की खेती और खेतों की photos।</p>
     </div>
 
-    <div class="card" onclick="showGallery('events')">
+    <div class="card gallery-card" onclick="showGallery('events')">
       <h3>🎉 Events</h3>
       <p>गाँव के कार्यक्रम और celebrations।</p>
     </div>
@@ -246,13 +246,17 @@
   </div>
 </section>
 
-<div id="photoGallery" style="display:none; padding:20px;">
+<section id="photoGallery" style="display:none; text-align:center; padding:20px;">
   <h2 id="galleryTitle"></h2>
+
   <div id="galleryPhotos"></div>
-</div>
+
+  <button onclick="closeGallery()">⬅️ Back</button>
+</section>
 
 <script>
 function showGallery(type) {
+
   const title = document.getElementById("galleryTitle");
   const photos = document.getElementById("galleryPhotos");
 
@@ -260,31 +264,68 @@ function showGallery(type) {
 
   if (type === "village") {
     title.innerText = "🏘️ Village Photos";
+
     photos.innerHTML = `
-      <img src="IMG_20260815_130514919.jpg" style="width:300px; margin:10px;">
+      <img src="img.0001.jpg" alt="Village Photo">
+      <img src="img.0002.jpg" alt="Village Photo">
+      <img src="img.0003.jpg" alt="Village Photo">
     `;
   }
 
-  if (type === "farming") {
+  else if (type === "farming") {
     title.innerText = "🌾 Farming Photos";
+
     photos.innerHTML = `
-      <p>यहाँ Farming की photos आएंगी।</p>
+      <img src="img.0004.jpg" alt="Farming Photo">
+      <img src="img.0005.jpg" alt="Farming Photo">
+      <img src="img.0006.jpg" alt="Farming Photo">
     `;
   }
 
-  if (type === "events") {
+  else if (type === "events") {
     title.innerText = "🎉 Event Photos";
+
     photos.innerHTML = `
-      <p>यहाँ Events की photos आएंगी।</p>
+      <img src="img.0007.jpg" alt="Event Photo">
+      <img src="img.0008.jpg" alt="Event Photo">
+      <img src="img.0009.jpg" alt="Event Photo">
     `;
   }
 
   document.getElementById("photoGallery").style.display = "block";
 }
+
+function closeGallery() {
+  document.getElementById("photoGallery").style.display = "none";
+}
 </script>
 
-    </div>
-  </section>
+<style>
+.gallery-card {
+  cursor: pointer;
+}
+
+#galleryPhotos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#galleryPhotos img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 10px;
+  max-width: 90%;
+}
+
+#photoGallery button {
+  padding: 10px 20px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+</style>
 
   <footer id="contact">
     <p>🌾 Rajthari Village</p>
