@@ -3,28 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Rajthari Village</title>
 
-  <!-- SUPABASE JS SDK -->
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f5f7f5;
       color: #222;
     }
+
     header {
       background: #176b3a;
       color: white;
       text-align: center;
       padding: 25px 15px;
     }
-    header h1 { margin: 0; font-size: 30px; }
-    header p { margin: 8px 0 0; }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+    }
 
     nav {
       background: white;
@@ -35,6 +50,7 @@
       z-index: 100;
       box-shadow: 0 2px 8px rgba(0,0,0,.12);
     }
+
     nav a {
       display: inline-block;
       margin: 5px 7px;
@@ -48,8 +64,15 @@
       padding: 50px 18px;
       background: #e7f4ea;
     }
-    .hero h2 { margin: 0 0 12px; font-size: 32px; }
-    .hero p { font-size: 17px; }
+
+    .hero h2 {
+      margin: 0 0 12px;
+      font-size: 32px;
+    }
+
+    .hero p {
+      font-size: 17px;
+    }
 
     .container {
       width: 92%;
@@ -57,13 +80,18 @@
       margin: auto;
       padding: 30px 0;
     }
-    .section-title { text-align: center; margin-bottom: 20px; }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 15px;
     }
+
     .card {
       background: white;
       padding: 22px;
@@ -71,7 +99,11 @@
       box-shadow: 0 3px 12px rgba(0,0,0,.08);
       cursor: pointer;
     }
-    .card h3 { color: #176b3a; margin-top: 0; }
+
+    .card h3 {
+      color: #176b3a;
+      margin-top: 0;
+    }
 
     .button {
       display: inline-block;
@@ -85,9 +117,19 @@
       font-weight: bold;
       font-size: 15px;
     }
-    .button:hover { opacity: .9; }
-    .full-button { width: 100%; margin: 15px 0 0; }
-    .logout-button { background: #b3261e; }
+
+    .button:hover {
+      opacity: .9;
+    }
+
+    .full-button {
+      width: 100%;
+      margin: 15px 0 0;
+    }
+
+    .logout-button {
+      background: #b3261e;
+    }
 
     .login-box {
       width: 92%;
@@ -98,11 +140,27 @@
       border-radius: 15px;
       box-shadow: 0 3px 12px rgba(0,0,0,.1);
     }
-    .login-box h2, .login-box h3 { text-align: center; color: #176b3a; }
-    .admin-icon { text-align: center; font-size: 42px; }
 
-    label { display: block; margin-top: 13px; font-weight: bold; }
-    input, select, textarea {
+    .login-box h2,
+    .login-box h3 {
+      text-align: center;
+      color: #176b3a;
+    }
+
+    .admin-icon {
+      text-align: center;
+      font-size: 42px;
+    }
+
+    label {
+      display: block;
+      margin-top: 13px;
+      font-weight: bold;
+    }
+
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 12px;
       margin-top: 6px;
@@ -110,7 +168,11 @@
       border-radius: 8px;
       font-size: 15px;
     }
-    textarea { min-height: 110px; resize: vertical; }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
 
     #adminPanel {
       display: none;
@@ -122,7 +184,11 @@
       border-radius: 15px;
       box-shadow: 0 3px 12px rgba(0,0,0,.1);
     }
-    #adminPanel h2 { text-align: center; color: #176b3a; }
+
+    #adminPanel h2 {
+      text-align: center;
+      color: #176b3a;
+    }
 
     .admin-box {
       background: #f1f8f3;
@@ -139,7 +205,11 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,.07);
     }
-    .notice h3 { margin-top: 0; color: #176b3a; }
+
+    .notice h3 {
+      margin-top: 0;
+      color: #176b3a;
+    }
 
     #photoGallery {
       display: none;
@@ -147,6 +217,7 @@
       text-align: center;
       background: #eef7f0;
     }
+
     #galleryPhotos {
       width: 92%;
       max-width: 1000px;
@@ -155,12 +226,14 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 15px;
     }
+
     .photo-card {
       background: white;
       padding: 10px;
       border-radius: 12px;
       box-shadow: 0 3px 10px rgba(0,0,0,.1);
     }
+
     .photo-card img {
       width: 100%;
       height: 220px;
@@ -202,9 +275,20 @@
       text-align: center;
       padding: 25px;
     }
-    .status { text-align: center; font-weight: bold; margin: 10px 0; }
+
+    .status {
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+    }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -222,477 +306,1040 @@
 </nav>
 
 <section class="hero" id="home">
+
   <h2>Welcome to Rajthari</h2>
-  <p>आपका अपना गाँव, आपकी अपनी community.</p>
-  <a href="#member-login" class="button">👤 Member Login</a>
-  <a href="#admin-login" class="button">👑 Admin Login</a>
+
+  <p>
+    आपका अपना गाँव, आपकी अपनी community.
+  </p>
+
+  <a href="#member-login" class="button">
+    👤 Member Login
+  </a>
+
+  <a href="#admin-login" class="button">
+    👑 Admin Login
+  </a>
+
 </section>
 
-<!-- MEMBER LOGIN -->
+
+<!-- =====================================================
+     MEMBER LOGIN
+===================================================== -->
+
 <section class="login-box" id="member-login">
+
   <h2>👤 Member Login</h2>
-  <label for="memberEmail">Email</label>
-  <input id="memberEmail" type="email" placeholder="Enter your email" autocomplete="email">
 
-  <label for="memberPassword">Password</label>
-  <input id="memberPassword" type="password" placeholder="Enter your password" autocomplete="current-password">
+  <label for="memberEmail">
+    Email
+  </label>
 
-  <button type="button" class="button full-button" id="memberLoginButton">🔐 Login</button>
-  <button type="button" class="button full-button logout-button" id="memberLogoutButton" style="display:none;">🚪 Logout</button>
+  <input
+    id="memberEmail"
+    type="email"
+    placeholder="Enter your email"
+    autocomplete="email"
+  >
 
-  <p id="memberStatus" class="status"></p>
+  <label for="memberPassword">
+    Password
+  </label>
+
+  <input
+    id="memberPassword"
+    type="password"
+    placeholder="Enter your password"
+    autocomplete="current-password"
+  >
+
+  <button
+    type="button"
+    class="button full-button"
+    id="memberLoginButton"
+  >
+    🔐 Login
+  </button>
+
+  <button
+    type="button"
+    class="button full-button logout-button"
+    id="memberLogoutButton"
+    style="display:none;"
+  >
+    🚪 Logout
+  </button>
+
+  <p
+    id="memberStatus"
+    class="status"
+  ></p>
+
 </section>
 
-<!-- ADMIN LOGIN -->
+
+<!-- =====================================================
+     ADMIN LOGIN
+===================================================== -->
+
 <section class="login-box" id="admin-login">
-  <div class="admin-icon">👑</div>
-  <h3>Admin Login</h3>
-  <p style="text-align:center;">Rajthari Village Administrator</p>
 
-  <label for="adminEmail">Admin Email</label>
-  <input id="adminEmail" type="email" placeholder="Admin email" autocomplete="email">
+  <div class="admin-icon">
+    👑
+  </div>
 
-  <label for="adminPassword">Admin Password</label>
-  <input id="adminPassword" type="password" placeholder="Admin password" autocomplete="current-password">
+  <h3>
+    Admin Login
+  </h3>
 
-  <label for="adminKey">Admin Key</label>
-  <input id="adminKey" type="password" placeholder="Enter Admin Key">
+  <p style="text-align:center;">
+    Rajthari Village Administrator
+  </p>
 
-  <button type="button" class="button full-button" id="adminLoginButton">🔐 Admin Login</button>
-  <p id="adminStatus" class="status"></p>
+  <label for="adminEmail">
+    Admin Email
+  </label>
+
+  <input
+    id="adminEmail"
+    type="email"
+    placeholder="Admin email"
+    autocomplete="email"
+  >
+
+  <label for="adminPassword">
+    Admin Password
+  </label>
+
+  <input
+    id="adminPassword"
+    type="password"
+    placeholder="Admin password"
+    autocomplete="current-password"
+  >
+
+  <label for="adminKey">
+    Admin Key
+  </label>
+
+  <input
+    id="adminKey"
+    type="password"
+    placeholder="Enter Admin Key"
+  >
+
+  <button
+    type="button"
+    class="button full-button"
+    id="adminLoginButton"
+  >
+    🔐 Admin Login
+  </button>
+
+  <p
+    id="adminStatus"
+    class="status"
+  ></p>
+
 </section>
 
-<!-- ADMIN PANEL -->
-<section id="adminPanel">
-  <h2>👑 Admin Dashboard</h2>
-  <p style="text-align:center;">Welcome Admin! Manage Rajthari Village.</p>
 
-  <!-- UPLOAD PHOTO -->
+<!-- =====================================================
+     ADMIN PANEL
+===================================================== -->
+
+<section id="adminPanel">
+
+  <h2>
+    👑 Admin Dashboard
+  </h2>
+
+  <p style="text-align:center;">
+    Welcome Admin! Manage Rajthari Village.
+  </p>
+
+
+  <!-- PHOTO UPLOAD -->
+
   <div class="admin-box">
-    <h3>📸 Upload Gallery Photo</h3>
-    <label for="photoCategory">Category</label>
+
+    <h3>
+      📸 Upload Gallery Photo
+    </h3>
+
+    <label for="photoCategory">
+      Category
+    </label>
+
     <select id="photoCategory">
-      <option value="village">🏘️ Village</option>
-      <option value="farming">🌾 Farming</option>
-      <option value="events">🎉 Events</option>
+
+      <option value="village">
+        🏘️ Village
+      </option>
+
+      <option value="farming">
+        🌾 Farming
+      </option>
+
+      <option value="events">
+        🎉 Events
+      </option>
+
     </select>
 
-    <label for="photoUpload">Select Photo</label>
-    <input id="photoUpload" type="file" accept="image/*">
+    <label for="photoUpload">
+      Select Photo
+    </label>
 
-    <button type="button" class="button" id="uploadPhotoButton">📤 Upload Photo</button>
+    <input
+      id="photoUpload"
+      type="file"
+      accept="image/*"
+    >
+
+    <button
+      type="button"
+      class="button"
+      id="uploadPhotoButton"
+    >
+      📤 Upload Photo
+    </button>
+
   </div>
 
-  <!-- ADD NOTICE -->
+
+  <!-- NOTICE -->
+
   <div class="admin-box">
-    <h3>📢 Publish Notice</h3>
-    <label for="noticeTitle">Notice Title</label>
-    <input id="noticeTitle" type="text" placeholder="Notice title">
 
-    <label for="noticeMessage">Notice Message</label>
-    <textarea id="noticeMessage" placeholder="Write village notice..."></textarea>
+    <h3>
+      📢 Publish Notice
+    </h3>
 
-    <button type="button" class="button" id="addNoticeButton">📢 Publish Notice</button>
+    <label for="noticeTitle">
+      Notice Title
+    </label>
+
+    <input
+      id="noticeTitle"
+      type="text"
+      placeholder="Notice title"
+    >
+
+    <label for="noticeMessage">
+      Notice Message
+    </label>
+
+    <textarea
+      id="noticeMessage"
+      placeholder="Write village notice..."
+    ></textarea>
+
+    <button
+      type="button"
+      class="button"
+      id="addNoticeButton"
+    >
+      📢 Publish Notice
+    </button>
+
   </div>
 
-  <button type="button" class="button logout-button" id="adminLogoutButton">🚪 Logout</button>
+
+  <button
+    type="button"
+    class="button logout-button"
+    id="adminLogoutButton"
+  >
+    🚪 Logout
+  </button>
+
 </section>
 
-<!-- NOTICES -->
+
+<!-- =====================================================
+     NOTICES
+===================================================== -->
+
 <section class="container" id="notices">
-  <h2 class="section-title">📢 Village Notices</h2>
+
+  <h2 class="section-title">
+    📢 Village Notices
+  </h2>
+
   <div id="notice-board">
-    <p>Loading notices...</p>
+
+    <p class="loading">
+      Loading notices...
+    </p>
+
   </div>
+
 </section>
 
-<!-- UPDATES -->
+
+<!-- =====================================================
+     UPDATES
+===================================================== -->
+
 <section class="container" id="updates">
-  <h2 class="section-title">🔴 Village Updates</h2>
+
+  <h2 class="section-title">
+    🔴 Village Updates
+  </h2>
+
   <div class="cards">
+
     <div class="card">
-      <h3>📍 Going to Bankhedi?</h3>
-      <p>अगर कोई गाँव का व्यक्ति Bankhedi जा रहा है, तो वह गाँव के लोगों को बता सकता है।</p>
+
+      <h3>
+        📍 Going to Bankhedi?
+      </h3>
+
+      <p>
+        अगर कोई गाँव का व्यक्ति Bankhedi जा रहा है,
+        तो वह गाँव के लोगों को बता सकता है।
+      </p>
+
     </div>
+
     <div class="card">
-      <h3>🛒 Need Something?</h3>
-      <p>Bankhedi से किसी चीज़ की जरूरत है? अपनी request गाँव के लोगों को बताएं।</p>
+
+      <h3>
+        🛒 Need Something?
+      </h3>
+
+      <p>
+        Bankhedi से किसी चीज़ की जरूरत है?
+        अपनी request गाँव के लोगों को बताएं।
+      </p>
+
     </div>
+
     <div class="card">
-      <h3>🩺 Doctor / Service</h3>
-      <p>गाँव में कोई doctor, mechanic या दूसरी service आई है? Community को बताएं।</p>
+
+      <h3>
+        🩺 Doctor / Service
+      </h3>
+
+      <p>
+        गाँव में कोई doctor, mechanic या दूसरी
+        service आई है? Community को बताएं।
+      </p>
+
     </div>
+
     <div class="card">
-      <h3>📢 Notices</h3>
-      <p>गाँव की important announcements यहाँ दिखाई देंगी।</p>
+
+      <h3>
+        📢 Notices
+      </h3>
+
+      <p>
+        गाँव की important announcements यहाँ
+        दिखाई देंगी।
+      </p>
+
     </div>
+
   </div>
+
 </section>
 
-<!-- GALLERY -->
+
+<!-- =====================================================
+     GALLERY
+===================================================== -->
+
 <section class="container" id="gallery">
-  <h2 class="section-title">📸 Village Gallery</h2>
+
+  <h2 class="section-title">
+    📸 Village Gallery
+  </h2>
+
   <div class="cards">
-    <div class="card" onclick="showGallery('village')">
-      <h3>🏘️ Village</h3>
-      <p>Rajthari की photos यहाँ दिखाई देंगी।</p>
+
+    <div
+      class="card"
+      onclick="showGallery('village')"
+    >
+
+      <h3>
+        🏘️ Village
+      </h3>
+
+      <p>
+        Rajthari की photos यहाँ दिखाई देंगी।
+      </p>
+
     </div>
-    <div class="card" onclick="showGallery('farming')">
-      <h3>🌾 Farming</h3>
-      <p>गाँव की खेती और खेतों की photos।</p>
+
+
+    <div
+      class="card"
+      onclick="showGallery('farming')"
+    >
+
+      <h3>
+        🌾 Farming
+      </h3>
+
+      <p>
+        गाँव की खेती और खेतों की photos।
+      </p>
+
     </div>
-    <div class="card" onclick="showGallery('events')">
-      <h3>🎉 Events</h3>
-      <p>गाँव के कार्यक्रम और celebrations।</p>
+
+
+    <div
+      class="card"
+      onclick="showGallery('events')"
+    >
+
+      <h3>
+        🎉 Events
+      </h3>
+
+      <p>
+        गाँव के कार्यक्रम और celebrations।
+      </p>
+
     </div>
+
   </div>
+
 </section>
 
-<!-- PHOTO VIEWER -->
+
+<!-- =====================================================
+     PHOTO VIEWER
+===================================================== -->
+
 <section id="photoGallery">
+
   <h2 id="galleryTitle"></h2>
+
   <div id="galleryPhotos"></div>
-  <button type="button" class="button" onclick="closeGallery()">⬅️ Back</button>
+
+  <button
+    type="button"
+    class="button"
+    onclick="closeGallery()"
+  >
+    ⬅️ Back
+  </button>
+
 </section>
+
 
 <footer>
-  <p>🌾 Rajthari Village</p>
-  <p>आपका अपना गाँव • आपकी अपनी website</p>
-  <p>© 2026 Rajthari Village</p>
+
+  <p>
+    🌾 Rajthari Village
+  </p>
+
+  <p>
+    आपका अपना गाँव • आपकी अपनी website
+  </p>
+
+  <p>
+    © 2026 Rajthari Village
+  </p>
+
 </footer>
+
 
 <div id="message"></div>
 
-<!-- JAVASCRIPT LOGIC -->
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
 <script>
+
 "use strict";
 
-const SUPABASE_URL = "https://idrbdrnzomavafkvoike.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+  "https://idrbdrnzomavafkvoike.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
+
+
+/*
+   Admin Key
+*/
+
+const ADMIN_KEY =
+  "Rajthari";
+
+
+/*
+   Supabase client
+*/
 
 let supabaseClient = null;
+
 let currentUser = null;
+
 let currentProfile = null;
 
-// Initialize Supabase Safe Check
-if (window.supabase) {
-  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+/* =====================================================
+   INITIALIZE SUPABASE
+===================================================== */
+
+if (!window.supabase) {
+
+  alert(
+    "❌ Supabase SDK load नहीं हुआ। Internet connection check करें।"
+  );
+
 } else {
-  alert("❌ Supabase SDK failed to load. Check internet connection.");
+
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
 }
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
 
 function showMessage(text) {
-  const box = document.getElementById("message");
+
+  const box =
+    document.getElementById("message");
+
   box.textContent = text;
+
   box.style.display = "block";
-  setTimeout(() => { box.style.display = "none"; }, 4000);
+
+  setTimeout(function() {
+
+    box.style.display = "none";
+
+  }, 4000);
+
 }
+
+
+/* =====================================================
+   STATUS
+===================================================== */
 
 function setAdminStatus(text) {
-  document.getElementById("adminStatus").textContent = text;
+
+  document.getElementById(
+    "adminStatus"
+  ).textContent = text;
+
 }
+
 
 function setMemberStatus(text) {
-  document.getElementById("memberStatus").textContent = text;
+
+  document.getElementById(
+    "memberStatus"
+  ).textContent = text;
+
 }
+
+
+/* =====================================================
+   SHOW / HIDE ADMIN PANEL
+===================================================== */
+
+function showAdminPanel() {
+
+  document.getElementById(
+    "adminPanel"
+  ).style.display = "block";
+
+}
+
+
+function hideAdminPanel() {
+
+  document.getElementById(
+    "adminPanel"
+  ).style.display = "none";
+
+}
+
+
+/* =====================================================
+   LOAD CURRENT USER
+===================================================== */
 
 async function loadCurrentUser() {
-  if (!supabaseClient) return;
-  try {
-    const result = await supabaseClient.auth.getUser();
 
-    if (result.error || !result.data.user) {
-      currentUser = null;
-      currentProfile = null;
-      document.getElementById("adminPanel").style.display = "none";
-      return;
-    }
-
-    currentUser = result.data.user;
-
-    const profileResult = await supabaseClient
-      .from("profiles")
-      .select("id, role")
-      .eq("id", currentUser.id)
-      .maybeSingle();
-
-    if (!profileResult.error && profileResult.data) {
-      currentProfile = profileResult.data;
-      if (currentProfile.role === "admin") {
-        document.getElementById("adminPanel").style.display = "block";
-      }
-      // If it's a member, show logout button
-      document.getElementById("memberLogoutButton").style.display = "block";
-    }
-  } catch (error) {
-    console.error("Session load error:", error);
-  }
-}
-
-async function loadNotices() {
-  if (!supabaseClient) return;
-  const board = document.getElementById("notice-board");
-  board.innerHTML = "<p>Loading notices...</p>";
-
-  try {
-    const result = await supabaseClient
-      .from("notices")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (result.error) {
-      board.innerHTML = "<p>❌ Error loading notices.</p>";
-      return;
-    }
-
-    if (!result.data || result.data.length === 0) {
-      board.innerHTML = "<p>📢 No notices available.</p>";
-      return;
-    }
-
-    board.innerHTML = "";
-    result.data.forEach((notice) => {
-      const box = document.createElement("div");
-      box.className = "notice";
-
-      const title = document.createElement("h3");
-      title.textContent = "📢 " + (notice.title || "Notice");
-
-      const message = document.createElement("p");
-      message.textContent = notice.message || "";
-
-      box.appendChild(title);
-      box.appendChild(message);
-
-      if (currentProfile && currentProfile.role === "admin") {
-        const deleteBtn = document.createElement("button");
-        deleteBtn.className = "delete-button";
-        deleteBtn.textContent = "🗑️ Delete Notice";
-        deleteBtn.onclick = () => deleteNotice(notice.id);
-        box.appendChild(deleteBtn);
-      }
-
-      board.appendChild(box);
-    });
-  } catch (error) {
-    board.innerHTML = "<p>❌ Failed to fetch notices.</p>";
-  }
-}
-
-async function deleteNotice(id) {
-  const key = prompt("Enter Admin Key to Confirm Delete:");
-  if (key !== "Rajthari") {
-    showMessage("❌ Invalid Admin Key!");
+  if (!supabaseClient) {
     return;
   }
 
-  const result = await supabaseClient.from("notices").delete().eq("id", id);
-  if (result.error) {
-    showMessage("❌ Delete error: " + result.error.message);
-  } else {
-    showMessage("✅ Notice deleted!");
-    loadNotices();
-  }
-}
-
-async function showGallery(category) {
-  if (!supabaseClient) return;
-  document.getElementById("galleryTitle").textContent = category.toUpperCase() + " Gallery";
-  const galleryPhotos = document.getElementById("galleryPhotos");
-  document.getElementById("photoGallery").style.display = "block";
-  document.getElementById("photoGallery").scrollIntoView({ behavior: "smooth" });
-
-  galleryPhotos.innerHTML = "<p>Loading photos...</p>";
-
   try {
-    const { data, error } = await supabaseClient
-      .from("gallery_photos")
-      .select("*")
-      .eq("category", category)
-      .order("created_at", { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      galleryPhotos.innerHTML = "<p>📷 No photos uploaded in this category.</p>";
+    const result =
+      await supabaseClient.auth.getUser();
+
+
+    if (
+      result.error ||
+      !result.data ||
+      !result.data.user
+    ) {
+
+      currentUser = null;
+
+      currentProfile = null;
+
+      hideAdminPanel();
+
+      document.getElementById(
+        "memberLogoutButton"
+      ).style.display = "none";
+
       return;
+
     }
 
-    galleryPhotos.innerHTML = "";
-    data.forEach((photo) => {
-      const publicUrlData = supabaseClient.storage.from("gallery").getPublicUrl(photo.storage_path);
-      const photoCard = document.createElement("div");
-      photoCard.className = "photo-card";
 
-      const img = document.createElement("img");
-      img.src = publicUrlData.data.publicUrl;
-      img.alt = photo.file_name || "Gallery Image";
+    currentUser =
+      result.data.user;
 
-      photoCard.appendChild(img);
-      galleryPhotos.appendChild(photoCard);
-    });
-  } catch (err) {
-    galleryPhotos.innerHTML = "<p>❌ Error loading photos.</p>";
+
+    /*
+       Get profile
+    */
+
+    const profileResult =
+      await supabaseClient
+        .from("profiles")
+        .select("id, role")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+
+    if (profileResult.error) {
+
+      console.error(
+        "Profile error:",
+        profileResult.error
+      );
+
+      currentProfile = null;
+
+      hideAdminPanel();
+
+      return;
+
+    }
+
+
+    currentProfile =
+      profileResult.data;
+
+
+    /*
+       Member logged in
+    */
+
+    document.getElementById(
+      "memberLogoutButton"
+    ).style.display = "block";
+
+
+    /*
+       Admin check
+    */
+
+    if (
+      currentProfile &&
+      currentProfile.role === "admin"
+    ) {
+
+      showAdminPanel();
+
+      setAdminStatus(
+        "👑 Admin session active."
+      );
+
+    } else {
+
+      hideAdminPanel();
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "loadCurrentUser error:",
+      error
+    );
+
   }
+
 }
 
-function closeGallery() {
-  document.getElementById("photoGallery").style.display = "none";
+
+/* =====================================================
+   MEMBER LOGIN
+===================================================== */
+
+async function memberLogin() {
+
+  const email =
+    document
+      .getElementById("memberEmail")
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById("memberPassword")
+      .value;
+
+
+  if (!email || !password) {
+
+    setMemberStatus(
+      "⚠️ Email और password डालें।"
+    );
+
+    return;
+
+  }
+
+
+  setMemberStatus(
+    "🔐 Logging in..."
+  );
+
+
+  try {
+
+    const result =
+      await supabaseClient.auth
+        .signInWithPassword({
+
+          email: email,
+
+          password: password
+
+        });
+
+
+    if (result.error) {
+
+      setMemberStatus(
+        "❌ " +
+        result.error.message
+      );
+
+      return;
+
+    }
+
+
+    currentUser =
+      result.data.user;
+
+
+    await loadCurrentUser();
+
+
+    setMemberStatus(
+      "✅ Login successful!"
+    );
+
+
+    showMessage(
+      "✅ Member Login Successful!"
+    );
+
+
+  } catch (error) {
+
+    setMemberStatus(
+      "❌ " +
+      error.message
+    );
+
+  }
+
 }
+
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+async function adminLogin() {
+
+  const email =
+    document
+      .getElementById("adminEmail")
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById("adminPassword")
+      .value;
+
+
+  const key =
+    document
+      .getElementById("adminKey")
+      .value
+      .trim();
+
+
+  /*
+     Check fields
+  */
+
+  if (
+    !email ||
+    !password ||
+    !key
+  ) {
+
+    setAdminStatus(
+      "⚠️ सभी fields भरें।"
+    );
+
+    return;
+
+  }
+
+
+  /*
+     Check admin key
+  */
+
+  if (key !== ADMIN_KEY) {
+
+    setAdminStatus(
+      "❌ Wrong Admin Key."
+    );
+
+    return;
+
+  }
+
+
+  setAdminStatus(
+    "🔐 Logging in..."
+  );
+
+
+  try {
+
+    /*
+       Supabase Auth Login
+    */
+
+    const result =
+      await supabaseClient.auth
+        .signInWithPassword({
+
+          email: email,
+
+          password: password
+
+        });
+
+
+    if (result.error) {
+
+      setAdminStatus(
+        "❌ Login failed: " +
+        result.error.message
+      );
+
+      return;
+
+    }
+
+
+    currentUser =
+      result.data.user;
+
+
+    /*
+       Check profile
+    */
+
+    const profileResult =
+      await supabaseClient
+        .from("profiles")
+        .select("id, role")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+
+    if (profileResult.error) {
+
+      await supabaseClient.auth.signOut();
+
+      currentUser = null;
+
+      currentProfile = null;
+
+      setAdminStatus(
+        "❌ Profile error: " +
+        profileResult.error.message
+      );
+
+      return;
+
+    }
+
+
+    if (!profileResult.data) {
+
+      await supabaseClient.auth.signOut();
+
+      currentUser = null;
+
+      currentProfile = null;
+
+      setAdminStatus(
+        "❌ इस account की profile नहीं मिली।"
+      );
+
+      return;
+
+    }
+
+
+    /*
+       ADMIN ROLE CHECK
+    */
+
+    if (
+      profileResult.data.role !== "admin"
+    ) {
+
+      await supabaseClient.auth.signOut();
+
+      currentUser = null;
+
+      currentProfile = null;
+
+      setAdminStatus(
+        "❌ यह account Admin नहीं है।"
+      );
+
+      return;
+
+    }
+
+
+    /*
+       Admin successfully logged in
+    */
+
+    currentProfile =
+      profileResult.data;
+
+
+    showAdminPanel();
+
+
+    setAdminStatus(
+      "👑 Admin Login Successful!"
+    );
+
+
+    showMessage(
+      "👑 Admin Login Successful!"
+    );
+
+
+    document
+      .getElementById("adminPanel")
+      .scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+      });
+
+
+    await loadNotices();
+
+
+  } catch (error) {
+
+    console.error(
+      "Admin login error:",
+      error
+    );
+
+    setAdminStatus(
+      "❌ " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 async function logout() {
-  if (!supabaseClient) return;
+
+  if (!supabaseClient) {
+    return;
+  }
+
+
   try {
-    await supabaseClient.auth.signOut();
+
+    const result =
+      await supabaseClient.auth.signOut();
+
+
+    if (result.error) {
+
+      showMessage(
+        "❌ Logout failed: " +
+        result.error.message
+      );
+
+      return;
+
+    }
+
+
     currentUser = null;
+
     currentProfile = null;
-    
-    // Reset UI
-    document.getElementById("adminPanel").style.display = "none";
-    document.getElementById("memberLogoutButton").style.display = "none";
-    setAdminStatus("");
-    setMemberStatus("");
-    
-    // Clear forms
-    document.getElementById("adminEmail").value = "";
-    document.getElementById("adminPassword").value = "";
-    document.getElementById("adminKey").value = "";
-    document.getElementById("memberEmail").value = "";
-    document.getElementById("memberPassword").value = "";
 
-    showMessage("🚪 Logged out successfully.");
-    loadNotices(); // Reload notices to hide delete buttons
-  } catch (error) {
-    showMessage("❌ Logout failed.");
-  }
-}
 
-// ATTACH LISTENERS SAFELY AFTER DOM LOAD
-document.addEventListener("DOMContentLoaded", async () => {
-  await loadCurrentUser();
-  await loadNotices();
+    hideAdminPanel();
 
-  // Admin Login Event Listener
-  const adminBtn = document.getElementById("adminLoginButton");
-  if (adminBtn) {
-    adminBtn.addEventListener("click", async () => {
-      const email = document.getElementById("adminEmail").value.trim();
-      const password = document.getElementById("adminPassword").value;
-      const key = document.getElementById("adminKey").value.trim();
 
-      if (!email || !password || !key) {
-        setAdminStatus("⚠️ Fill all fields.");
-        return;
-      }
-
-      if (key !== "Rajthari") {
-        setAdminStatus("❌ Wrong Admin Key.");
-        return;
-      }
-
-      setAdminStatus("🔐 Logging in...");
-
-      try {
-        const result = await supabaseClient.auth.signInWithPassword({ email, password });
-
-        if (result.error) {
-          setAdminStatus("❌ " + result.error.message);
-          return;
-        }
-
-        currentUser = result.data.user;
-
-        const profileResult = await supabaseClient
-          .from("profiles")
-          .select("id, role")
-          .eq("id", currentUser.id)
-          .maybeSingle();
-
-        if (profileResult.error || !profileResult.data || profileResult.data.role !== "admin") {
-          await supabaseClient.auth.signOut();
-          currentUser = null;
-          currentProfile = null;
-          setAdminStatus("❌ Account lacks Admin privileges.");
-          return;
-        }
-
-        currentProfile = profileResult.data;
-        document.getElementById("adminPanel").style.display = "block";
-        setAdminStatus("👑 Welcome Admin!");
-        showMessage("👑 Admin Logged In!");
-        document.getElementById("adminPanel").scrollIntoView({ behavior: "smooth" });
-        loadNotices(); // Reload to show delete buttons
-      } catch (err) {
-        setAdminStatus("❌ Error during login process.");
-      }
-    });
-  }
-
-  // Member Login Event Listener
-  const memberBtn = document.getElementById("memberLoginButton");
-  if (memberBtn) {
-    memberBtn.addEventListener("click", async () => {
-      const email = document.getElementById("memberEmail").value.trim();
-      const password = document.getElementById("memberPassword").value;
-
-      if (!email || !password) {
-        setMemberStatus("⚠️ Enter email & password.");
-        return;
-      }
-
-      setMemberStatus("🔐 Logging in...");
-
-      try {
-        const result = await supabaseClient.auth.signInWithPassword({ email, password });
-
-        if (result.error) {
-          setMemberStatus("❌ " + result.error.message);
-          return;
-        }
-
-        currentUser = result.data.user;
-        await loadCurrentUser();
-
-        document.getElementById("memberLogoutButton").style.display = "block";
-        setMemberStatus("✅ Login Successful!");
-        showMessage("✅ Member Logged In!");
-      } catch (err) {
-        setMemberStatus("❌ Login failed.");
-      }
-    });
-  }
-
-  // Add Notice Event Listener
-  const noticeBtn = document.getElementById("addNoticeButton");
-  if (noticeBtn) {
-    noticeBtn.addEventListener("click", async () => {
-      const key = prompt("Enter Admin Key:");
-      if (key !== "Rajthari") {
-        showMessage("❌ Invalid Key!");
-        return;
-      }
-
-      const title = document.getElementById("noticeTitle").value.trim();
-      const message = document.getElementById("noticeMessage").value.trim();
-
-      if (!title || !message) {
-        showMessage("⚠️ Provide title and message.");
-        return;
-      }
-
-      const result = await supabaseClient.from("notices").insert({ title, message });
-
-      if (result.error) {
-        showMessage("❌ " + result.error.message);
-      } else {
-        document.getElementById("noticeTitle").value = "";
-        document.getElementById("noticeMessage").value = "";
-        showMessage("✅ Notice Published!");
-        loadNotices();
-      }
-    });
-  }
-
-  // Upload Photo Event Listener (COMPLETED)
-  const uploadBtn = document.getElementById("uploadPhotoButton");
-  if (uploadBtn) {
-    uploadBtn.addEventListener("click", async () => {
-      if (!currentUser || !currentP
+    document.getElementById(
+      "memberLogoutButt
