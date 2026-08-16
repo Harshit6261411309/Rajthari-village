@@ -1192,57 +1192,32 @@ document
     logout
   );
 
-
 /* ==================================================
    LOAD NOTICES
    ================================================== */
 
 async function loadNotices() {
-
-  const board =
-    document.getElementById(
-      "notice-board"
-    );
-
-
-  board.innerHTML =
-    "<p>Loading notices...</p>";
-
+  const board = document.getElementById("notice-board");
+  board.innerHTML = "<p>Loading notices...</p>";
 
   try {
-
-    const result =
-      await supabaseClient
-        .from("notices")
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
+    const result = await supabaseClient
+      .from("notices")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (result.error) {
-
-      board.innerHTML =
-        "<p>❌ " +
-        result.error.message +
-        "</p>";
-
+      board.innerHTML = "<p>❌ " + result.error.message + "</p>";
       return;
     }
-
-
-    board.innerHTML = "";
 
     if (!result.data || result.data.length === 0) {
       board.innerHTML = "<p>📢 No notices available.</p>";
       return;
     }
 
-    result.data.forEach(function(notice) {
-
+    board.innerHTML = "";
+    result.data.forEach((notice) => {
       const box = document.createElement("div");
       box.className = "notice";
 
@@ -1255,489 +1230,197 @@ async function loadNotices() {
       box.appendChild(title);
       box.appendChild(message);
 
-      if (
-        currentProfile &&
-        currentProfile.role === "admin"
-      ) {
-
-        const deleteButton =
-          document.createElement("button");
-
-        deleteButton.className =
-          "delete-button";
-
-        deleteButton.textContent =
-          "🗑️ Delete";
-
-        deleteButton.onclick = async function() {
-
-          const result =
-            await supabaseClient
-              .from("notices")
-              .delete()
-              .eq("id", notice.id);
-
-          if (result.error) {
-            showMessage("❌ " + result.error.message);
-            return;
-          }
-
-          showMessage("✅ Notice deleted!");
-          loadNotices();
-        };
-
-        box.appendChild(deleteButton);
+      if (currentProfile && currentProfile.role === "admin") {
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-button";
+        deleteBtn.textContent = "🗑️ Delete Notice";
+        deleteBtn.onclick = () => deleteNotice(notice.id);
+        box.appendChild(deleteBtn);
       }
 
       board.appendChild(box);
     });
-
   } catch (error) {
-
-    console.error(error);
-
-    board.innerHTML =
-      "<p>❌ Could not load notices.</p>";
+    board.innerHTML = "<p>❌ Error loading notices.</p>";
   }
 }
 
+async function deleteNotice(id) {
+  const adminKey = prompt("Enter Admin Passcode to Delete:");
+  if (adminKey !== "Rajthari") {
+    showMessage("❌ Invalid Admin Key!");
+    return;
+  }
 
-/* ==================================================
+  const result = await supabaseClient.from("notices").delete().eq("id", id);
+  if (result.error) {
+    showMessage("❌ " + result.error.message);
+    return;
+  }
+  showMessage("✅ Notice deleted!");
+  await loadNotices();
+}
+
+/* =========================
    ADD NOTICE
-================================================== */
-
-document
-  .getElementById("addNoticeButton")
-  .addEventListener("click", async function() {
-
-    if (
-      !currentUser ||
-      !currentProfile ||
-      currentProfile.role !== "admin"
-    ) {
-      showMessage("❌ Admin access required.");
-      return;
-    }
-
-    const title =
-      document.getElementById("noticeTitle").value.trim();
-
-    const message =
-      document.getElementById("noticeMessage").value.trim();
-
-    if (!title || !message) {
-      showMessage("⚠️ Enter title and message.");
-      return;
-    }
-
-    const result =
-      await supabaseClient
-        .from("notices")
-        .insert({
-          title: title,
-          message: message,
-          created_by: currentUser.id
-        });
-
-    if (result.error) {
-      showMessage("❌ " + result.error.message);
-      return;
-    }
-
-    document.getElementById("noticeTitle").value = "";
-    document.getElementById("noticeMessage").value = "";
-
-    showMessage("✅ Notice published!");
-
-    loadNotices();
-  });
-
-
-/* ==================================================
-   START
-================================================== */
-
-window.addEventListener("DOMContentLoaded", async function() {
-
-  await loadCurrentUser();
-  await loadNotices();
-
-  console.log("✅ Rajthari website is running.");
-
-});
-
-
-supabaseClient.auth.onAuthStateChange(async function() {
-
-  await loadCurrentUser();
-  await loadNotices();
-
-});
-document
-  .getElementById("uploadPhotoButton")
-  .addEventListener("click", async function () {
-<script>
-
-"use strict";
-
-/* =========================
-   SUPABASE
 ========================= */
 
-const SUPABASE_URL =
-  "https://idrbdrnzomavafkvoike.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-let currentUser = null;
-let currentProfile = null;
-
-
-/* =========================
-   MESSAGE
-========================= */
-
-function showMessage(text) {
-
-  const message =
-    document.getElementById("message");
-
-  if (!message) return;
-
-  message.textContent = text;
-  message.style.display = "block";
-
-  setTimeout(function () {
-    message.style.display = "none";
-  }, 4000);
-}
-
-
-/* =========================
-   LOAD CURRENT USER
-========================= */
-
-async function loadCurrentUser() {
-
-  const result =
-    await supabaseClient.auth.getUser();
-
-  if (result.error || !result.data.user) {
-
-    currentUser = null;
-    currentProfile = null;
-
-    document.getElementById(
-      "adminPanel"
-    ).style.display = "none";
-
+document.getElementById("addNoticeButton").addEventListener("click", async function() {
+  const adminKey = prompt("Enter Admin Passcode / Key:");
+  if (adminKey !== "Rajthari") {
+    showMessage("❌ Invalid Admin Key!");
     return;
   }
 
-  currentUser =
-    result.data.user;
+  const title = document.getElementById("noticeTitle").value.trim();
+  const message = document.getElementById("noticeMessage").value.trim();
 
-  const profileResult =
-    await supabaseClient
-      .from("profiles")
-      .select("id, role")
-      .eq("id", currentUser.id)
-      .maybeSingle();
-
-  if (profileResult.error) {
-
-    console.error(
-      profileResult.error
-    );
-
-    currentProfile = null;
+  if (!title || !message) {
+    showMessage("⚠️ Enter title and message.");
     return;
   }
 
-  currentProfile =
-    profileResult.data;
-
-  if (
-    currentProfile &&
-    currentProfile.role === "admin"
-  ) {
-
-    document.getElementById(
-      "adminPanel"
-    ).style.display = "block";
-
-  } else {
-
-    document.getElementById(
-      "adminPanel"
-    ).style.display = "none";
-  }
-}
-
-
-/* =========================
-   ADMIN LOGIN
-========================= */
-
-document
-  .getElementById("adminLoginButton")
-  .addEventListener("click", async function () {
-
-    const email =
-      document
-        .getElementById("adminEmail")
-        .value
-        .trim();
-
-    const password =
-      document
-        .getElementById("adminPassword")
-        .value;
-
-    const key =
-      document
-        .getElementById("adminKey")
-        .value
-        .trim();
-
-    if (!email || !password || !key) {
-
-      showMessage(
-        "⚠️ Fill all Admin Login fields."
-      );
-
-      return;
-    }
-
-    if (key !== "Rajthari") {
-
-      showMessage(
-        "❌ Wrong Admin Key."
-      );
-
-      return;
-    }
-
-    showMessage(
-      "🔐 Logging in..."
-    );
-
-    const login =
-      await supabaseClient.auth
-        .signInWithPassword({
-          email: email,
-          password: password
-        });
-
-    if (login.error) {
-
-      showMessage(
-        "❌ " + login.error.message
-      );
-
-      return;
-    }
-
-    currentUser =
-      login.data.user;
-
-    const profile =
-      await supabaseClient
-        .from("profiles")
-        .select("id, role")
-        .eq("id", currentUser.id)
-        .maybeSingle();
-
-    if (
-      profile.error ||
-      !profile.data ||
-      profile.data.role !== "admin"
-    ) {
-
-      await supabaseClient.auth.signOut();
-
-      currentUser = null;
-      currentProfile = null;
-
-      showMessage(
-        "❌ This account is not an Admin."
-      );
-
-      return;
-    }
-
-    currentProfile =
-      profile.data;
-
-    document.getElementById(
-      "adminPanel"
-    ).style.display = "block";
-
-    showMessage(
-      "👑 Admin Login Successful!"
-    );
-
-    document.getElementById(
-      "adminPanel"
-    ).scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-
+  const result = await supabaseClient.from("notices").insert({
+    title: title,
+    message: message
   });
 
+  if (result.error) {
+    showMessage("❌ " + result.error.message);
+    return;
+  }
+
+  document.getElementById("noticeTitle").value = "";
+  document.getElementById("noticeMessage").value = "";
+  showMessage("✅ Notice published!");
+  await loadNotices();
+});
 
 /* =========================
    UPLOAD PHOTO
 ========================= */
 
-document
-  .getElementById("uploadPhotoButton")
-  .addEventListener("click", async function () {
+document.getElementById("uploadPhotoButton").addEventListener("click", async function () {
+  if (!currentUser || !currentProfile || currentProfile.role !== "admin") {
+    showMessage("❌ Admin access required.");
+    return;
+  }
 
-    if (
-      !currentUser ||
-      !currentProfile ||
-      currentProfile.role !== "admin"
-    ) {
+  const fileInput = document.getElementById("photoUpload");
+  const file = fileInput.files[0];
+  const category = document.getElementById("photoCategory").value;
 
-      showMessage(
-        "❌ Admin access required."
-      );
+  if (!file) {
+    showMessage("⚠️ Please select a photo first.");
+    return;
+  }
 
-      return;
-    }
+  showMessage("📤 Uploading photo...");
 
-    const file =
-      document
-        .getElementById("photoUpload")
-        .files[0];
+  const extension = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
+  const path = category + "/" + Date.now() + "_" + Math.random().toString(36).substring(2) + "." + extension;
 
-    const category =
-      document
-        .getElementById("photoCategory")
-        .value;
+  const upload = await supabaseClient.storage
+    .from("gallery")
+    .upload(path, file, { upsert: false });
 
-    if (!file) {
+  if (upload.error) {
+    showMessage("❌ Upload failed: " + upload.error.message);
+    return;
+  }
 
-      showMessage(
-        "⚠️ Please select a photo first."
-      );
+  const insert = await supabaseClient
+    .from("gallery_photos")
+    .insert({
+      category: category,
+      file_name: file.name,
+      storage_path: path,
+      uploaded_by: currentUser.id
+    });
 
-      return;
-    }
+  if (insert.error) {
+    await supabaseClient.storage.from("gallery").remove([path]);
+    showMessage("❌ Database error: " + insert.error.message);
+    return;
+  }
 
-    showMessage(
-      "📤 Uploading photo..."
-    );
-
-    const extension =
-      file.name.includes(".")
-        ? file.name.split(".").pop()
-        : "jpg";
-
-    const path =
-      category +
-      "/" +
-      Date.now() +
-      "_" +
-      Math.random()
-        .toString(36)
-        .substring(2) +
-      "." +
-      extension;
-
-    const upload =
-      await supabaseClient.storage
-        .from("gallery")
-        .upload(
-          path,
-          file,
-          {
-            upsert: false
-          }
-        );
-
-    if (upload.error) {
-
-      showMessage(
-        "❌ Upload failed: " +
-        upload.error.message
-      );
-
-      return;
-    }
-
-    const insert =
-      await supabaseClient
-        .from("gallery_photos")
-        .insert({
-          category: category,
-          file_name: file.name,
-          storage_path: path,
-          uploaded_by: currentUser.id
-        });
-
-    if (insert.error) {
-
-      await supabaseClient.storage
-        .from("gallery")
-        .remove([path]);
-
-      showMessage(
-        "❌ Database error: " +
-        insert.error.message
-      );
-
-      return;
-    }
-
-    document.getElementById(
-      "photoUpload"
-    ).value = "";
-
-    showMessage(
-      "✅ Photo uploaded successfully!"
-    );
-
-  });
-
+  fileInput.value = "";
+  showMessage("✅ Photo uploaded successfully!");
+});
 
 /* =========================
-   AUTH STATE
+   GALLERY FUNCTIONS (फोटोज़ दिखने का फिक्स)
 ========================= */
 
-supabaseClient.auth.onAuthStateChange(
-  async function () {
+async function showGallery(category) {
+  document.getElementById("galleryTitle").textContent = category.toUpperCase() + " Gallery";
+  const galleryPhotos = document.getElementById("galleryPhotos");
+  document.getElementById("photoGallery").style.display = "block";
+  document.getElementById("photoGallery").scrollIntoView({ behavior: "smooth" });
 
-    await loadCurrentUser();
+  galleryPhotos.innerHTML = "<p>Loading photos...</p>";
 
+  try {
+    // 1. Database से उस Category की सब फ़ोटो लिस्ट लाएँ
+    const { data, error } = await supabaseClient
+      .from("gallery_photos")
+      .select("*")
+      .eq("category", category)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      galleryPhotos.innerHTML = "<p>❌ " + error.message + "</p>";
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      galleryPhotos.innerHTML = "<p>📷 No photos uploaded yet in this section.</p>";
+      return;
+    }
+
+    galleryPhotos.innerHTML = "";
+
+    // 2. हर फोटो का Public URL निकालकर स्क्रीन पर दिखाएँ
+    data.forEach((photo) => {
+      const publicUrlData = supabaseClient.storage
+        .from("gallery")
+        .getPublicUrl(photo.storage_path);
+
+      const photoUrl = publicUrlData.data.publicUrl;
+
+      const photoCard = document.createElement("div");
+      photoCard.className = "photo-card";
+
+      const img = document.createElement("img");
+      img.src = photoUrl;
+      img.alt = photo.file_name || "Village Photo";
+
+      photoCard.appendChild(img);
+      galleryPhotos.appendChild(photoCard);
+    });
+
+  } catch (err) {
+    galleryPhotos.innerHTML = "<p>❌ Error loading gallery photos.</p>";
   }
-);
+}
 
+function closeGallery() {
+  document.getElementById("photoGallery").style.display = "none";
+}
 
 /* =========================
-   INITIAL LOAD
+   AUTH STATE & INITIAL LOAD
 ========================= */
 
-window.addEventListener(
-  "DOMContentLoaded",
-  async function () {
+supabaseClient.auth.onAuthStateChange(async function () {
+  await loadCurrentUser();
+});
 
-    await loadCurrentUser();
+window.addEventListener("DOMContentLoaded", async function () {
+  await loadCurrentUser();
+  await loadNotices();
+});
 
-  }
-);
 
-</script>
-
-</body>
-</html>
-    
+      
+        
