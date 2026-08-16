@@ -597,7 +597,18 @@
 </footer>
 
 <div id="message"></div>
+document.getElementById("adminLoginForm").addEventListener("submit", function(event) {
+  event.preventDefault();
 
+  const key = document.getElementById("adminKey").value;
+
+  if (key !== "Rajthari") {
+    showMessage("❌ Wrong Admin Key");
+    return;
+  }
+
+  adminLogin(event);
+});
 <script>
 
 /* =====================================
