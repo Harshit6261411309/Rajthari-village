@@ -1376,28 +1376,267 @@ supabaseClient.auth.onAuthStateChange(async function() {
 document
   .getElementById("uploadPhotoButton")
   .addEventListener("click", async function () {
+<script>
+
+"use strict";
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+  "https://idrbdrnzomavafkvoike.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+let currentUser = null;
+let currentProfile = null;
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showMessage(text) {
+
+  const message =
+    document.getElementById("message");
+
+  if (!message) return;
+
+  message.textContent = text;
+  message.style.display = "block";
+
+  setTimeout(function () {
+    message.style.display = "none";
+  }, 4000);
+}
+
+
+/* =========================
+   LOAD CURRENT USER
+========================= */
+
+async function loadCurrentUser() {
+
+  const result =
+    await supabaseClient.auth.getUser();
+
+  if (result.error || !result.data.user) {
+
+    currentUser = null;
+    currentProfile = null;
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display = "none";
+
+    return;
+  }
+
+  currentUser =
+    result.data.user;
+
+  const profileResult =
+    await supabaseClient
+      .from("profiles")
+      .select("id, role")
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+  if (profileResult.error) {
+
+    console.error(
+      profileResult.error
+    );
+
+    currentProfile = null;
+    return;
+  }
+
+  currentProfile =
+    profileResult.data;
+
+  if (
+    currentProfile &&
+    currentProfile.role === "admin"
+  ) {
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display = "block";
+
+  } else {
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display = "none";
+  }
+}
+
+
+/* =========================
+   ADMIN LOGIN
+========================= */
+
+document
+  .getElementById("adminLoginButton")
+  .addEventListener("click", async function () {
+
+    const email =
+      document
+        .getElementById("adminEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("adminPassword")
+        .value;
+
+    const key =
+      document
+        .getElementById("adminKey")
+        .value
+        .trim();
+
+    if (!email || !password || !key) {
+
+      showMessage(
+        "⚠️ Fill all Admin Login fields."
+      );
+
+      return;
+    }
+
+    if (key !== "Rajthari") {
+
+      showMessage(
+        "❌ Wrong Admin Key."
+      );
+
+      return;
+    }
+
+    showMessage(
+      "🔐 Logging in..."
+    );
+
+    const login =
+      await supabaseClient.auth
+        .signInWithPassword({
+          email: email,
+          password: password
+        });
+
+    if (login.error) {
+
+      showMessage(
+        "❌ " + login.error.message
+      );
+
+      return;
+    }
+
+    currentUser =
+      login.data.user;
+
+    const profile =
+      await supabaseClient
+        .from("profiles")
+        .select("id, role")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+    if (
+      profile.error ||
+      !profile.data ||
+      profile.data.role !== "admin"
+    ) {
+
+      await supabaseClient.auth.signOut();
+
+      currentUser = null;
+      currentProfile = null;
+
+      showMessage(
+        "❌ This account is not an Admin."
+      );
+
+      return;
+    }
+
+    currentProfile =
+      profile.data;
+
+    document.getElementById(
+      "adminPanel"
+    ).style.display = "block";
+
+    showMessage(
+      "👑 Admin Login Successful!"
+    );
+
+    document.getElementById(
+      "adminPanel"
+    ).scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  });
+
+
+/* =========================
+   UPLOAD PHOTO
+========================= */
+
+document
+  .getElementById("uploadPhotoButton")
+  .addEventListener("click", async function () {
 
     if (
       !currentUser ||
       !currentProfile ||
       currentProfile.role !== "admin"
     ) {
-      showMessage("❌ Admin access required.");
+
+      showMessage(
+        "❌ Admin access required."
+      );
+
       return;
     }
 
     const file =
-      document.getElementById("photoUpload").files[0];
+      document
+        .getElementById("photoUpload")
+        .files[0];
 
     const category =
-      document.getElementById("photoCategory").value;
+      document
+        .getElementById("photoCategory")
+        .value;
 
     if (!file) {
-      showMessage("⚠️ Please select a photo first.");
+
+      showMessage(
+        "⚠️ Please select a photo first."
+      );
+
       return;
     }
 
-    showMessage("📤 Uploading photo...");
+    showMessage(
+      "📤 Uploading photo..."
+    );
 
     const extension =
       file.name.includes(".")
@@ -1409,17 +1648,30 @@ document
       "/" +
       Date.now() +
       "_" +
-      Math.random().toString(36).substring(2) +
+      Math.random()
+        .toString(36)
+        .substring(2) +
       "." +
       extension;
 
     const upload =
       await supabaseClient.storage
         .from("gallery")
-        .upload(path, file);
+        .upload(
+          path,
+          file,
+          {
+            upsert: false
+          }
+        );
 
     if (upload.error) {
-      showMessage("❌ " + upload.error.message);
+
+      showMessage(
+        "❌ Upload failed: " +
+        upload.error.message
+      );
+
       return;
     }
 
@@ -1439,16 +1691,53 @@ document
         .from("gallery")
         .remove([path]);
 
-      showMessage("❌ " + insert.error.message);
+      showMessage(
+        "❌ Database error: " +
+        insert.error.message
+      );
+
       return;
     }
 
-    document.getElementById("photoUpload").value = "";
+    document.getElementById(
+      "photoUpload"
+    ).value = "";
 
-    showMessage("✅ Photo uploaded successfully!");
+    showMessage(
+      "✅ Photo uploaded successfully!"
+    );
+
   });
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+supabaseClient.auth.onAuthStateChange(
+  async function () {
+
+    await loadCurrentUser();
+
+  }
+);
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  async function () {
+
+    await loadCurrentUser();
+
+  }
+);
+
 </script>
 
 </body>
 </html>
-      
+    
