@@ -421,6 +421,8 @@ async function loadCurrentUser() {
       if (currentProfile.role === "admin") {
         document.getElementById("adminPanel").style.display = "block";
       }
+      // If it's a member, show logout button
+      document.getElementById("memberLogoutButton").style.display = "block";
     }
   } catch (error) {
     console.error("Session load error:", error);
@@ -542,11 +544,22 @@ async function logout() {
     await supabaseClient.auth.signOut();
     currentUser = null;
     currentProfile = null;
+    
+    // Reset UI
     document.getElementById("adminPanel").style.display = "none";
     document.getElementById("memberLogoutButton").style.display = "none";
     setAdminStatus("");
-    setMemberStatus("🚪 Logged out.");
+    setMemberStatus("");
+    
+    // Clear forms
+    document.getElementById("adminEmail").value = "";
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("adminKey").value = "";
+    document.getElementById("memberEmail").value = "";
+    document.getElementById("memberPassword").value = "";
+
     showMessage("🚪 Logged out successfully.");
+    loadNotices(); // Reload notices to hide delete buttons
   } catch (error) {
     showMessage("❌ Logout failed.");
   }
@@ -606,6 +619,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         setAdminStatus("👑 Welcome Admin!");
         showMessage("👑 Admin Logged In!");
         document.getElementById("adminPanel").scrollIntoView({ behavior: "smooth" });
+        loadNotices(); // Reload to show delete buttons
       } catch (err) {
         setAdminStatus("❌ Error during login process.");
       }
@@ -677,27 +691,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Upload Photo Event Listener
+  // Upload Photo Event Listener (COMPLETED)
   const uploadBtn = document.getElementById("uploadPhotoButton");
   if (uploadBtn) {
     uploadBtn.addEventListener("click", async () => {
-      if (!currentUser || !currentProfile || currentProfile.role !== "admin") {
-        showMessage("❌ Admin rights required.");
-        return;
-      }
-
-      const fileInput = document.getElementById("photoUpload");
-      const file = fileInput.files[0];
-      const category = document.getElementById("photoCategory").value;
-
-      if (!file) {
-        showMessage("⚠️ Choose a file to upload.");
-        return;
-      }
-
-      showMessage("📤 Uploading...");
-
-      const ext = file.name.split(".").pop();
-      const path = category + "/" + Date.now() + "." + ext;
-
-      const upload = aw
+      if (!currentUser || !currentP
