@@ -1270,8 +1270,15 @@ async function loadNotices() {
     board.innerHTML = "<p>❌ Error loading notices.</p>";
   }
 }
-
+  
 async function deleteNotice(id) {
+  const adminKey = prompt("Enter Admin Passcode to Delete:");
+  
+  if (adminKey !== "Rajthari") {
+    showMessage("❌ Invalid Admin Key!");
+    return;
+  }
+
   const result = await supabaseClient.from("notices").delete().eq("id", id);
   if (result.error) {
     showMessage("❌ " + result.error.message);
@@ -1281,15 +1288,18 @@ async function deleteNotice(id) {
   await loadNotices();
 }
 
-/* ADD NOTICE */
+/* ADD NOTICE WITH RAJTHARI ADMIN KEY */
 document.getElementById("addNoticeButton").addEventListener("click", async function() {
-  if (!currentProfile || currentProfile.role !== "admin") {
-    showMessage("❌ Admin access required.");
+  const adminKey = prompt("Enter Admin Passcode / Key:");
+  
+  if (adminKey !== "Rajthari") {
+    showMessage("❌ Invalid Admin Key!");
     return;
   }
 
   const title = document.getElementById("noticeTitle").value.trim();
   const message = document.getElementById("noticeMessage").value.trim();
+  
 
   if (!title || !message) {
     showMessage("⚠️ Enter title and message.");
