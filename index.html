@@ -422,856 +422,693 @@
 
 </section>
 
-
-<!-- =========================
-     ADMIN LOGIN
-========================= -->
-
-<section class="login-box" id="admin-login">
-
-  <div class="admin-icon">
-    👑
-  </div>
-
-  <h3>
-    Admin Login
-  </h3>
-
-  <p style="text-align:center;">
-    Rajthari Village Administrator
-  </p>
-
-  <label for="adminEmail">
-    Admin Email
-  </label>
-
-  <input
-    id="adminEmail"
-    type="email"
-    placeholder="Admin email"
-    autocomplete="email"
-  >
-
-  <label for="adminPassword">
-    Admin Password
-  </label>
-
-  <input
-    id="adminPassword"
-    type="password"
-    placeholder="Admin password"
-    autocomplete="current-password"
-  >
-
-  <label for="adminKey">
-    Admin Key
-  </label>
-
-  <input
-    id="adminKey"
-    type="password"
-    placeholder="Enter Admin Key"
-  >
-
-  <button
-    type="button"
-    class="button full-button"
-    id="adminLoginButton"
-  >
-    🔐 Admin Login
-  </button>
-
-  <p
-    id="adminStatus"
-    class="status"
-  ></p>
-
-</section>
-
-
-<!-- =========================
-     ADMIN PANEL
-========================= -->
-
-<section id="adminPanel">
-
-  <h2>
-    👑 Admin Dashboard
-  </h2>
-
-  <p style="text-align:center;">
-    Welcome Admin! Manage Rajthari Village.
-  </p>
-
-
-  <!-- PHOTO UPLOAD -->
-
-  <div class="admin-box">
-
-    <h3>
-      📸 Upload Gallery Photo
-    </h3>
-
-    <label for="photoCategory">
-      Category
-    </label>
-
-    <select id="photoCategory">
-
-      <option value="village">
-        🏘️ Village
-      </option>
-
-      <option value="farming">
-        🌾 Farming
-      </option>
-
-      <option value="events">
-        🎉 Events
-      </option>
-
-    </select>
-
-    <label for="photoUpload">
-      Select Photo
-    </label>
-
-    <input
-      id="photoUpload"
-      type="file"
-      accept="image/*"
-    >
-
-    <button
-      type="button"
-      class="button"
-      id="uploadPhotoButton"
-    >
-      📤 Upload Photo
-    </button>
-
-  </div>
-
-
-  <!-- NOTICE -->
-
-  <div class="admin-box">
-
-    <h3>
-      📢 Publish Notice
-    </h3>
-
-    <label for="noticeTitle">
-      Notice Title
-    </label>
-
-    <input
-      id="noticeTitle"
-      type="text"
-      placeholder="Notice title"
-    >
-
-    <label for="noticeMessage">
-      Notice Message
-    </label>
-
-    <textarea
-      id="noticeMessage"
-      placeholder="Write village notice..."
-    ></textarea>
-
-    <button
-      type="button"
-      class="button"
-      id="addNoticeButton"
-    >
-      📢 Publish Notice
-    </button>
-
-  </div>
-
-
-  <button
-    type="button"
-    class="button logout-button"
-    id="adminLogoutButton"
-  >
-    🚪 Logout
-  </button>
-
-</section>
-
-
-<!-- =========================
-     NOTICES
-========================= -->
-
-<section class="container" id="notices">
-
-  <h2 class="section-title">
-    📢 Village Notices
-  </h2>
-
-  <div id="notice-board">
-    <p class="empty">
-      Loading notices...
-    </p>
-  </div>
-
-</section>
-
-
-<!-- =========================
-     UPDATES
-========================= -->
-
-<section class="container" id="updates">
-
-  <h2 class="section-title">
-    🔴 Village Updates
-  </h2>
-
-  <div class="cards">
-
-    <div class="card">
-
-      <h3>
-        📍 Going to Bankhedi?
-      </h3>
-
-      <p>
-        अगर कोई गाँव का व्यक्ति Bankhedi जा रहा है,
-        तो वह गाँव के लोगों को बता सकता है।
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <h3>
-        🛒 Need Something?
-      </h3>
-
-      <p>
-        Bankhedi से किसी चीज़ की जरूरत है?
-        अपनी request गाँव के लोगों को बताएं।
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <h3>
-        🩺 Doctor / Service
-      </h3>
-
-      <p>
-        गाँव में कोई doctor, mechanic या दूसरी
-        service आई है? Community को बताएं।
-      </p>
-
-    </div>
-
-
-    <div class="card">
-
-      <h3>
-        📢 Notices
-      </h3>
-
-      <p>
-        गाँव की important announcements यहाँ
-        दिखाई देंगी।
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     GALLERY
-========================= -->
-
-<section class="container" id="gallery">
-
-  <h2 class="section-title">
-    📸 Village Gallery
-  </h2>
-
-  <div class="cards">
-
-    <div
-      class="card"
-      onclick="showGallery('village')"
-    >
-
-      <h3>
-        🏘️ Village
-      </h3>
-
-      <p>
-        Rajthari की photos यहाँ दिखाई देंगी।
-      </p>
-
-    </div>
-
-
-    <div
-      class="card"
-      onclick="showGallery('farming')"
-    >
-
-      <h3>
-        🌾 Farming
-      </h3>
-
-      <p>
-        गाँव की खेती और खेतों की photos।
-      </p>
-
-    </div>
-
-
-    <div
-      class="card"
-      onclick="showGallery('events')"
-    >
-
-      <h3>
-        🎉 Events
-      </h3>
-
-      <p>
-        गाँव के कार्यक्रम और celebrations।
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     PHOTO VIEWER
-========================= -->
-
-<section id="photoGallery">
-
-  <h2 id="galleryTitle">
-    Gallery
-  </h2>
-
-  <div id="galleryPhotos">
-  </div>
-
-  <button
-    type="button"
-    class="button"
-    onclick="closeGallery()"
-  >
-    ⬅️ Back
-  </button>
-
-</section>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-  <p>
-    🌾 Rajthari Village
-  </p>
-
-  <p>
-    आपका अपना गाँव • आपकी अपनी website
-  </p>
-
-  <p>
-    © 2026 Rajthari Village
-  </p>
-
-</footer>
-
-
-<div id="message"></div>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
-<script>
-
-"use strict";
-
-
-/* =====================================================
-   SUPABASE CONFIGURATION
-===================================================== */
-
-const SUPABASE_URL =
-  "https://idrbdrnzomavafkvoike.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
-
-
-/* =====================================================
-   CREATE SUPABASE CLIENT
-===================================================== */
-
-if (!window.supabase) {
-
-  alert(
-    "Supabase library could not load."
-  );
-
-  throw new Error(
-    "Supabase library not loaded."
-  );
-}
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-
-/* =====================================================
-   GLOBAL VARIABLES
-===================================================== */
-
-let currentUser = null;
-let currentProfile = null;
-
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-function showMessage(text) {
-
-  const box =
-    document.getElementById("message");
-
-  box.textContent = text;
-
-  box.style.display = "block";
-
-  clearTimeout(
-    window.messageTimer
-  );
-
-  window.messageTimer =
-    setTimeout(function () {
-
-      box.style.display = "none";
-
-    }, 4000);
-}
-
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-function setAdminStatus(text) {
-
-  document.getElementById(
-    "adminStatus"
-  ).textContent = text;
-
-}
-
-
-function setMemberStatus(text) {
-
-  document.getElementById(
-    "memberStatus"
-  ).textContent = text;
-
-}
-
-
-/* =====================================================
-   ADMIN PANEL
-===================================================== */
-
-function hideAdminPanel() {
-
-  document.getElementById(
-    "adminPanel"
-  ).style.display = "none";
-
-}
-
-
-function showAdminPanel() {
-
-  document.getElementById(
-    "adminPanel"
-  ).style.display = "block";
-
-}
-
-
-/* =====================================================
-   LOAD CURRENT USER
-===================================================== */
-
-async function loadCurrentUser() {
-
-  try {
-
-    const result =
-      await supabaseClient.auth.getUser();
-
-
-    if (result.error) {
-
-      console.error(
-        "getUser error:",
-        result.error
-      );
-
-      currentUser = null;
-      currentProfile = null;
-
-      hideAdminPanel();
-
-      return;
-
-    }
-
-
-    if (!result.data.user) {
-
-      currentUser = null;
-      currentProfile = null;
-
-      hideAdminPanel();
-
-      document.getElementById(
-        "memberLogoutButton"
-      ).style.display = "none";
-
-      return;
-
-    }
-
-
-    currentUser =
-      result.data.user;
-
-
-    document.getElementById(
-      "memberLogoutButton"
-    ).style.display = "block";
-
-
-    /* ===============================================
-       LOAD PROFILE
-    =============================================== */
-
-    const profileResult =
-      await supabaseClient
-        .from("profiles")
-        .select("id, role")
-        .eq(
-          "id",
-          currentUser.id
-        )
-        .maybeSingle();
-
-
-    if (profileResult.error) {
-
-      console.error(
-        "Profile error:",
-        profileResult.error
-      );
-
-      currentProfile = null;
-
-      hideAdminPanel();
-
-      return;
-
-    }
-
-
-    currentProfile =
-      profileResult.data;
-
-
-    if (
-      currentProfile &&
-      currentProfile.role === "admin"
-    ) {
-
-      showAdminPanel();
-
-    } else {
-
-      hideAdminPanel();
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Session error:",
-      error
-    );
-
-    currentUser = null;
-    currentProfile = null;
-
-    hideAdminPanel();
-
-  }
-
-}
-
-
-/* =====================================================
-   MEMBER LOGIN
-===================================================== */
-
-document
-  .getElementById("memberLoginButton")
-  .addEventListener(
-    "click",
-    async function () {
-
-      const email =
-        document
-          .getElementById("memberEmail")
-          .value
-          .trim();
-
-
-      const password =
-        document
-          .getElementById("memberPassword")
-          .value;
-
-
-      if (!email || !password) {
-
-        setMemberStatus(
-          "⚠️ Enter email and password."
-        );
-
-        return;
-
-      }
-
-
-      setMemberStatus(
-        "🔐 Logging in..."
-      );
-
-
-      try {
-
-        const result =
-          await supabaseClient.auth
-            .signInWithPassword({
-
-              email: email,
-
-              password: password
-
-            });
-
-
-        if (result.error) {
-
-          setMemberStatus(
-            "❌ " +
-            result.error.message
-          );
-
-          return;
-
-        }
-
-
-        currentUser =
-          result.data.user;
-
-
-        await loadCurrentUser();
-
-
-        setMemberStatus(
-          "✅ Login successful!"
-        );
-
-
-        showMessage(
-          "✅ Member Login Successful!"
-        );
-
-      } catch (error) {
-
-        setMemberStatus(
-          "❌ " +
-          error.message
-        );
-
-      }
-
-    }
-  );
-
-
 /* =====================================================
    ADMIN LOGIN
 ===================================================== */
 
 document
   .getElementById("adminLoginButton")
-  .addEventListener(
-    "click",
-    async function () {
+  .addEventListener("click", async function () {
+    const email = document
+      .getElementById("adminEmail")
+      .value
+      .trim();
 
-      const email =
-        document
-          .getElementById("adminEmail")
-          .value
-          .trim();
+    const password = document
+      .getElementById("adminPassword")
+      .value;
 
+    if (!email || !password) {
+      setAdminStatus("Enter admin email and password.");
+      return;
+    }
 
-      const password =
-        document
-          .getElementById("adminPassword")
-          .value;
+    setAdminStatus("Connecting to Supabase...");
 
+    try {
+      const result =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
-      const key =
-        document
-          .getElementById("adminKey")
-          .value
-          .trim();
+      if (result.error) {
+        setAdminStatus(
+          "Login failed: " + result.error.message
+        );
+        return;
+      }
 
+      currentUser = result.data.user;
+
+      const profileResult =
+        await supabaseClient
+          .from("profiles")
+          .select("id, role")
+          .eq("id", currentUser.id)
+          .maybeSingle();
+
+      if (profileResult.error) {
+        await supabaseClient.auth.signOut();
+
+        currentUser = null;
+        currentProfile = null;
+
+        hideAdminPanel();
+
+        setAdminStatus(
+          "Profile error: " +
+          profileResult.error.message
+        );
+
+        return;
+      }
 
       if (
-        !email ||
-        !password ||
-        !key
+        !profileResult.data ||
+        profileResult.data.role !== "admin"
       ) {
+        await supabaseClient.auth.signOut();
+
+        currentUser = null;
+        currentProfile = null;
+
+        hideAdminPanel();
 
         setAdminStatus(
-          "⚠️ Fill all Admin Login fields."
+          "This account does not have admin access."
         );
 
         return;
-
       }
 
+      currentProfile = profileResult.data;
 
-      /*
-       IMPORTANT:
-       This is only a frontend check.
-       Real security comes from the
-       Supabase profiles.role = admin check.
-      */
-
-      if (key !== "Rajthari") {
-
-        setAdminStatus(
-          "❌ Wrong Admin Key."
-        );
-
-        return;
-
-      }
-
+      showAdminPanel();
 
       setAdminStatus(
-        "🔐 Connecting to Supabase..."
+        "Admin login successful."
       );
 
+      showMessage(
+        "Admin login successful."
+      );
 
-      try {
+    } catch (error) {
+      console.error("Admin login error:", error);
 
-        const result =
-          await supabaseClient.auth
-            .signInWithPassword({
-
-              email: email,
-
-              password: password
-
-            });
-
-
-        if (result.error) {
-
-          setAdminStatus(
-            "❌ Login failed: " +
-            result.error.message
-          );
-
-          return;
-
-        }
+      setAdminStatus(
+        "Something went wrong during admin login."
+      );
+    }
+  });
 
 
-        currentUser =
-          result.data.user;
+/* =====================================================
+   MEMBER LOGOUT
+===================================================== */
+
+document
+  .getElementById("memberLogoutButton")
+  .addEventListener("click", async function () {
+    const result =
+      await supabaseClient.auth.signOut();
+
+    if (result.error) {
+      showMessage(
+        "Logout failed: " +
+        result.error.message
+      );
+      return;
+    }
+
+    currentUser = null;
+    currentProfile = null;
+
+    hideAdminPanel();
+
+    document
+      .getElementById("memberLogoutButton")
+      .style.display = "none";
+
+    setMemberStatus(
+      "Logged out successfully."
+    );
+
+    showMessage(
+      "Logged out successfully."
+    );
+  });
 
 
-        /* =========================================
-           CHECK ADMIN PROFILE
-        ========================================= */
+/* =====================================================
+   ADMIN LOGOUT
+===================================================== */
 
-        const profileResult =
-          await supabaseClient
-            .from("profiles")
-            .select("id, role")
-            .eq(
-              "id",
-              currentUser.id
-            )
-            .maybeSingle();
+document
+  .getElementById("adminLogoutButton")
+  .addEventListener("click", async function () {
+    const result =
+      await supabaseClient.auth.signOut();
+
+    if (result.error) {
+      showMessage(
+        "Logout failed: " +
+        result.error.message
+      );
+      return;
+    }
+
+    currentUser = null;
+    currentProfile = null;
+
+    hideAdminPanel();
+
+    document
+      .getElementById("memberLogoutButton")
+      .style.display = "none";
+
+    setAdminStatus(
+      "Logged out successfully."
+    );
+
+    showMessage(
+      "Admin logged out successfully."
+    );
+  });
 
 
-        if (profileResult.error) {
+/* =====================================================
+   SECURITY HELPER
+===================================================== */
 
-          await supabaseClient.auth.signOut();
-
-          currentUser = null;
-          currentProfile = null;
-
-          setAdminStatus(
-            "❌ Profile error: " +
-            profileResult.error.message
-          );
-
-          hideAdminPanel();
-
-          return;
-
-        }
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 
-        if (!profileResult.data) {
+function formatDate(value) {
+  if (!value) {
+    return "";
+  }
 
-          await supabaseClient.auth.signOut();
+  const date = new Date(value);
 
-          currentUser = null;
-          currentProf
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return date.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  });
+}
+
+
+/* =====================================================
+   LOAD NOTICES
+===================================================== */
+
+async function loadNotices() {
+  const board =
+    document.getElementById("notice-board");
+
+  board.innerHTML =
+    '<p class="empty">Loading notices...</p>';
+
+  const result =
+    await supabaseClient
+      .from("notices")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
+
+  if (result.error) {
+    console.error(
+      "Notice loading error:",
+      result.error
+    );
+
+    board.innerHTML =
+      '<p class="empty">Unable to load notices.</p>';
+
+    return;
+  }
+
+  if (!result.data || result.data.length === 0) {
+    board.innerHTML =
+      '<p class="empty">No notices published yet.</p>';
+
+    return;
+  }
+
+  board.innerHTML = result.data
+    .map(function (notice) {
+      return `
+        <article class="notice">
+          <h3>${escapeHtml(notice.title)}</h3>
+
+          <p>
+            ${escapeHtml(
+              notice.message || notice.content
+            )}
+          </p>
+
+          <div class="notice-date">
+            ${escapeHtml(
+              formatDate(notice.created_at)
+            )}
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+
+/* =====================================================
+   PUBLISH NOTICE
+===================================================== */
+
+document
+  .getElementById("addNoticeButton")
+  .addEventListener("click", async function () {
+    if (
+      !currentUser ||
+      !currentProfile ||
+      currentProfile.role !== "admin"
+    ) {
+      showMessage(
+        "Only an admin can publish notices."
+      );
+      return;
+    }
+
+    const title =
+      document
+        .getElementById("noticeTitle")
+        .value
+        .trim();
+
+    const message =
+      document
+        .getElementById("noticeMessage")
+        .value
+        .trim();
+
+    if (!title || !message) {
+      showMessage(
+        "Enter a notice title and message."
+      );
+      return;
+    }
+
+    const result =
+      await supabaseClient
+        .from("notices")
+        .insert({
+          title: title,
+          message: message,
+          created_by: currentUser.id
+        });
+
+    if (result.error) {
+      console.error(
+        "Notice insert error:",
+        result.error
+      );
+
+      showMessage(
+        "Could not publish notice: " +
+        result.error.message
+      );
+
+      return;
+    }
+
+    document
+      .getElementById("noticeTitle")
+      .value = "";
+
+    document
+      .getElementById("noticeMessage")
+      .value = "";
+
+    await loadNotices();
+
+    showMessage(
+      "Notice published successfully."
+    );
+  });
+
+
+/* =====================================================
+   LOAD GALLERY PHOTOS
+===================================================== */
+
+async function loadGalleryPhotos(category) {
+  const gallery =
+    document.getElementById("galleryPhotos");
+
+  gallery.innerHTML =
+    '<p class="empty">Loading photos...</p>';
+
+  const result =
+    await supabaseClient
+      .from("gallery")
+      .select("*")
+      .eq("category", category)
+      .order("created_at", {
+        ascending: false
+      });
+
+  if (result.error) {
+    console.error(
+      "Gallery loading error:",
+      result.error
+    );
+
+    gallery.innerHTML =
+      '<p class="empty">Unable to load photos.</p>';
+
+    return;
+  }
+
+  if (!result.data || result.data.length === 0) {
+    gallery.innerHTML =
+      '<p class="empty">No photos in this category yet.</p>';
+
+    return;
+  }
+
+  gallery.innerHTML = result.data
+    .map(function (photo) {
+      const imageUrl =
+        photo.image_url ||
+        photo.url ||
+        photo.public_url ||
+        "";
+
+      const adminButton =
+        currentProfile &&
+        currentProfile.role === "admin"
+          ? `
+            <button
+              type="button"
+              class="delete-button"
+              onclick="deletePhoto(
+                '${escapeHtml(photo.id)}',
+                '${escapeHtml(
+                  photo.storage_path || ""
+                )}',
+                '${escapeHtml(category)}'
+              )"
+            >
+              Delete
+            </button>
+          `
+          : "";
+
+      return `
+        <article class="photo-card">
+          <img
+            src="${escapeHtml(imageUrl)}"
+            alt="${escapeHtml(
+              photo.file_name ||
+              "Rajthari village photo"
+            )}"
+            loading="lazy"
+          >
+
+          <div class="photo-name">
+            ${escapeHtml(
+              photo.file_name ||
+              "Village photo"
+            )}
+          </div>
+
+          ${adminButton}
+        </article>
+      `;
+    })
+    .join("");
+}
+
+
+/* =====================================================
+   OPEN AND CLOSE GALLERY
+===================================================== */
+
+async function showGallery(category) {
+  const title =
+    document.getElementById("galleryTitle");
+
+  const titles = {
+    village: "Village Gallery",
+    farming: "Farming Gallery",
+    events: "Events Gallery"
+  };
+
+  title.textContent =
+    titles[category] || "Gallery";
+
+  document
+    .getElementById("photoGallery")
+    .style.display = "block";
+
+  document
+    .getElementById("photoGallery")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+
+  await loadGalleryPhotos(category);
+}
+
+
+function closeGallery() {
+  document
+    .getElementById("photoGallery")
+    .style.display = "none";
+}
+
+
+window.showGallery = showGallery;
+window.closeGallery = closeGallery;
+
+
+/* =====================================================
+   UPLOAD PHOTO
+===================================================== */
+
+document
+  .getElementById("uploadPhotoButton")
+  .addEventListener("click", async function () {
+    if (
+      !currentUser ||
+      !currentProfile ||
+      currentProfile.role !== "admin"
+    ) {
+      showMessage(
+        "Only an admin can upload photos."
+      );
+      return;
+    }
+
+    const fileInput =
+      document.getElementById("photoUpload");
+
+    const file = fileInput.files[0];
+
+    const category =
+      document
+        .getElementById("photoCategory")
+        .value;
+
+    if (!file) {
+      showMessage("Select a photo first.");
+      return;
+    }
+
+    const safeFileName =
+      file.name.replace(
+        /[^a-zA-Z0-9._-]/g,
+        "-"
+      );
+
+    const storagePath =
+      currentUser.id +
+      "/" +
+      Date.now() +
+      "-" +
+      safeFileName;
+
+    const uploadResult =
+      await supabaseClient
+        .storage
+        .from("gallery")
+        .upload(
+          storagePath,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type
+          }
+        );
+
+    if (uploadResult.error) {
+      console.error(
+        "Photo upload error:",
+        uploadResult.error
+      );
+
+      showMessage(
+        "Photo upload failed: " +
+        uploadResult.error.message
+      );
+
+      return;
+    }
+
+    const publicResult =
+      supabaseClient
+        .storage
+        .from("gallery")
+        .getPublicUrl(storagePath);
+
+    const insertResult =
+      await supabaseClient
+        .from("gallery")
+        .insert({
+          category: category,
+          file_name: file.name,
+          storage_path: storagePath,
+          image_url:
+            publicResult.data.publicUrl,
+          uploaded_by: currentUser.id
+        });
+
+    if (insertResult.error) {
+      console.error(
+        "Gallery record error:",
+        insertResult.error
+      );
+
+      await supabaseClient
+        .storage
+        .from("gallery")
+        .remove([storagePath]);
+
+      showMessage(
+        "Photo record could not be saved: " +
+        insertResult.error.message
+      );
+
+      return;
+    }
+
+    fileInput.value = "";
+
+    showMessage(
+      "Photo uploaded successfully."
+    );
+
+    await showGallery(category);
+  });
+
+
+/* =====================================================
+   DELETE PHOTO
+===================================================== */
+
+async function deletePhoto(
+  photoId,
+  storagePath,
+  category
+) {
+  if (
+    !currentUser ||
+    !currentProfile ||
+    currentProfile.role !== "admin"
+  ) {
+    showMessage(
+      "Only an admin can delete photos."
+    );
+    return;
+  }
+
+  if (!window.confirm("Delete this photo?")) {
+    return;
+  }
+
+  if (storagePath) {
+    await supabaseClient
+      .storage
+      .from("gallery")
+      .remove([storagePath]);
+  }
+
+  const result =
+    await supabaseClient
+      .from("gallery")
+      .delete()
+      .eq("id", photoId);
+
+  if (result.error) {
+    console.error(
+      "Photo delete error:",
+      result.error
+    );
+
+    showMessage(
+      "Could not delete photo: " +
+      result.error.message
+    );
+
+    return;
+  }
+
+  showMessage(
+    "Photo deleted successfully."
+  );
+
+  await loadGalleryPhotos(category);
+}
+
+
+window.deletePhoto = deletePhoto;
+
+
+/* =====================================================
+   START WEBSITE
+===================================================== */
+
+loadNotices();
+loadCurrentUser();
+
+supabaseClient.auth.onAuthStateChange(
+  function () {
+    setTimeout(function () {
+      loadCurrentUser();
+      loadNotices();
+    }, 0);
+  }
+);
+
+</script>
+</body>
+</html>
+
+      
+
+              
+
+          
