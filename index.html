@@ -430,12 +430,11 @@
   >
 
   <button
-  type="button"
-  class="button full-button"
-  id="adminLoginButton"
-  onclick="adminLogin()"
->
-  🔐 Admin Login
+    type="button"
+    class="button full-button"
+    id="adminLoginButton"
+  >
+    🔐 Admin Login
   </button>
 
   <p
@@ -912,6 +911,10 @@ async function loadCurrentUser() {
         "memberLogoutButton"
       ).style.display = "none";
 
+      document.getElementById(
+        "memberLoginButton"
+      ).style.display = "block";
+
       return;
 
     }
@@ -960,6 +963,10 @@ async function loadCurrentUser() {
     document.getElementById(
       "memberLogoutButton"
     ).style.display = "block";
+
+    document.getElementById(
+      "memberLoginButton"
+    ).style.display = "none";
 
 
     /*
@@ -1315,167 +1322,10 @@ async function logout() {
     return;
   }
 
-
   try {
 
     const result =
       await supabaseClient.auth.signOut();
-
-
-    if (result.error) {
-
-      showMessage(
-      ❌ Login failed: " +
-        result.error.message
-      );
-
-      return;
-
-    }
-
-
-    currentUser =
-      result.data.user;
-
-
-    /*
-       Check profile
-    */
-
-    const profileResult =
-      await supabaseClient
-        .from("profiles")
-        .select("id, role")
-        .eq("id", currentUser.id)
-        .maybeSingle();
-
-
-    if (profileResult.error) {
-
-      await supabaseClient.auth.signOut();
-
-      currentUser = null;
-
-      currentProfile = null;
-
-      setAdminStatus(
-        "❌ Profile error: " +
-        profileResult.error.message
-      );
-
-      return;
-
-    }
-
-
-    if (!profileResult.data) {
-
-      await supabaseClient.auth.signOut();
-
-      currentUser = null;
-
-      currentProfile = null;
-
-      setAdminStatus(
-        "❌ इस account की profile नहीं मिली।"
-      );
-
-      return;
-
-    }
-
-
-    /*
-       ADMIN ROLE CHECK
-    */
-
-    if (
-      profileResult.data.role !== "admin"
-    ) {
-
-      await supabaseClient.auth.signOut();
-
-      currentUser = null;
-
-      currentProfile = null;
-
-      setAdminStatus(
-        "❌ यह account Admin नहीं है।"
-      );
-
-      return;
-
-    }
-
-
-    /*
-       Admin successfully logged in
-    */
-
-    currentProfile =
-      profileResult.data;
-
-
-    showAdminPanel();
-
-
-    setAdminStatus(
-      "👑 Admin Login Successful!"
-    );
-
-
-    showMessage(
-      "👑 Admin Login Successful!"
-    );
-
-
-    document
-      .getElementById("adminPanel")
-      .scrollIntoView({
-
-        behavior: "smooth",
-
-        block: "start"
-
-      });
-
-
-    await loadNotices();
-
-
-  } catch (error) {
-
-    console.error(
-      "Admin login error:",
-      error
-    );
-
-    setAdminStatus(
-      "❌ " +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-async function logout() {
-
-  if (!supabaseClient) {
-    return;
-  }
-
-
-  try {
-
-    const result =
-      await supabaseClient.auth.signOut();
-
 
     if (result.error) {
 
@@ -1488,18 +1338,18 @@ async function logout() {
 
     }
 
-
     currentUser = null;
-
     currentProfile = null;
-
 
     hideAdminPanel();
 
+    document.getElementById(
+      "memberLogoutButton"
+    ).style.display = "none";
 
     document.getElementById(
-  "memberLogoutButton"
-).style.display = "none";
+      "memberLoginButton"
+    ).style.display = "block";
 
     setAdminStatus("");
     setMemberStatus("🚪 Logged out.");
@@ -1587,7 +1437,6 @@ async function loadNotices() {
 
       box.className = "notice";
 
-
       const title =
         document.createElement("h3");
 
@@ -1595,22 +1444,14 @@ async function loadNotices() {
         "📢 " +
         (notice.title || "Village Notice");
 
-
       const message =
         document.createElement("p");
 
       message.textContent =
-        notice.message || "";
-
+        notice.content || notice.message || "";
 
       box.appendChild(title);
-
       box.appendChild(message);
-
-
-      /*
-         Admin delete button
-      */
 
       if (
         currentProfile &&
@@ -1638,7 +1479,6 @@ async function loadNotices() {
         );
 
       }
-
 
       board.appendChild(box);
 
@@ -1688,7 +1528,6 @@ async function deleteNotice(id) {
     return;
   }
 
-
   try {
 
     const result =
@@ -1696,7 +1535,6 @@ async function deleteNotice(id) {
         .from("notices")
         .delete()
         .eq("id", id);
-
 
     if (result.error) {
 
@@ -1709,11 +1547,9 @@ async function deleteNotice(id) {
 
     }
 
-
     showMessage(
       "✅ Notice deleted!"
     );
-
 
     await loadNotices();
 
@@ -1749,20 +1585,17 @@ async function addNotice() {
 
   }
 
-
   const title =
     document
       .getElementById("noticeTitle")
       .value
       .trim();
 
-
   const message =
     document
       .getElementById("noticeMessage")
       .value
       .trim();
-
 
   if (!title || !message) {
 
@@ -1774,11 +1607,9 @@ async function addNotice() {
 
   }
 
-
   showMessage(
     "📢 Notice publish हो रहा है..."
   );
-
 
   try {
 
@@ -1788,11 +1619,10 @@ async function addNotice() {
         .insert({
 
           title: title,
-
-          message: message
+          content: message,
+          user_id: currentUser.id
 
         });
-
 
     if (result.error) {
 
@@ -1805,21 +1635,17 @@ async function addNotice() {
 
     }
 
-
     document.getElementById(
       "noticeTitle"
     ).value = "";
-
 
     document.getElementById(
       "noticeMessage"
     ).value = "";
 
-
     showMessage(
       "✅ Notice Published!"
     );
-
 
     await loadNotices();
 
@@ -1854,18 +1680,15 @@ async function uploadPhoto() {
 
   }
 
-
   const file =
     document
       .getElementById("photoUpload")
       .files[0];
 
-
   const category =
     document
       .getElementById("photoCategory")
       .value;
-
 
   if (!file) {
 
@@ -1877,11 +1700,6 @@ async function uploadPhoto() {
 
   }
 
-
-  /*
-     File size limit: 10 MB
-  */
-
   if (file.size > 10 * 1024 * 1024) {
 
     showMessage(
@@ -1892,11 +1710,9 @@ async function uploadPhoto() {
 
   }
 
-
   showMessage(
     "📤 Photo uploading..."
   );
-
 
   try {
 
@@ -1908,7 +1724,6 @@ async function uploadPhoto() {
             .toLowerCase()
         : "jpg";
 
-
     const fileName =
       Date.now() +
       "_" +
@@ -1918,16 +1733,9 @@ async function uploadPhoto() {
       "." +
       extension;
 
-
     const storagePath =
-      category +
-      "/" +
+      "gallery/" +
       fileName;
-
-
-    /*
-       Upload to Supabase Storage
-    */
 
     const uploadResult =
       await supabaseClient
@@ -1942,7 +1750,6 @@ async function uploadPhoto() {
           }
         );
 
-
     if (uploadResult.error) {
 
       showMessage(
@@ -1954,34 +1761,19 @@ async function uploadPhoto() {
 
     }
 
-
-    /*
-       Save photo information
-       in gallery_photos table
-    */
-
     const insertResult =
       await supabaseClient
         .from("gallery_photos")
         .insert({
 
           category: category,
-
           file_name: file.name,
-
           storage_path: storagePath,
-
           uploaded_by: currentUser.id
 
         });
 
-
     if (insertResult.error) {
-
-      /*
-         Remove uploaded file
-         if database insert fails
-      */
 
       await supabaseClient
         .storage
@@ -1989,7 +1781,6 @@ async function uploadPhoto() {
         .remove([
           storagePath
         ]);
-
 
       showMessage(
         "❌ Database error: " +
@@ -2000,11 +1791,9 @@ async function uploadPhoto() {
 
     }
 
-
     document.getElementById(
       "photoUpload"
     ).value = "";
-
 
     showMessage(
       "✅ Photo uploaded successfully!"
@@ -2036,24 +1825,20 @@ async function showGallery(category) {
     return;
   }
 
-
   const gallery =
     document.getElementById(
       "photoGallery"
     );
-
 
   const galleryPhotos =
     document.getElementById(
       "galleryPhotos"
     );
 
-
   const galleryTitle =
     document.getElementById(
       "galleryTitle"
     );
-
 
   galleryTitle.textContent =
     category === "village"
@@ -2062,20 +1847,16 @@ async function showGallery(category) {
       ? "🌾 Farming Gallery"
       : "🎉 Events Gallery";
 
-
   gallery.style.display =
     "block";
-
 
   gallery.scrollIntoView({
     behavior: "smooth",
     block: "start"
   });
 
-
   galleryPhotos.innerHTML =
     '<p class="loading">📷 Loading photos...</p>';
-
 
   try {
 
@@ -2087,7 +1868,6 @@ async function showGallery(category) {
         .order("created_at", {
           ascending: false
         });
-
 
     if (result.error) {
 
@@ -2103,7 +1883,6 @@ async function showGallery(category) {
 
     }
 
-
     if (
       !result.data ||
       result.data.length === 0
@@ -2116,9 +1895,7 @@ async function showGallery(category) {
 
     }
 
-
     galleryPhotos.innerHTML = "";
-
 
     result.data.forEach(function(photo) {
 
@@ -2130,13 +1907,11 @@ async function showGallery(category) {
             photo.storage_path
           );
 
-
       const photoCard =
         document.createElement("div");
 
       photoCard.className =
         "photo-card";
-
 
       const img =
         document.createElement("img");
@@ -2151,13 +1926,7 @@ async function showGallery(category) {
       img.loading =
         "lazy";
 
-
       photoCard.appendChild(img);
-
-
-      /*
-         Admin delete photo button
-      */
 
       if (
         currentProfile &&
@@ -2184,13 +1953,11 @@ async function showGallery(category) {
 
           };
 
-
         photoCard.appendChild(
           deleteButton
         );
 
       }
-
 
       galleryPhotos.appendChild(
         photoCard
@@ -2237,17 +2004,14 @@ async function deletePhoto(
 
   }
 
-
   const confirmDelete =
     confirm(
       "क्या आप यह photo delete करना चाहते हैं?"
     );
 
-
   if (!confirmDelete) {
     return;
   }
-
 
   try {
 
@@ -2258,7 +2022,6 @@ async function deletePhoto(
         .remove([
           storagePath
         ]);
-
 
     if (storageResult.error) {
 
@@ -2271,13 +2034,11 @@ async function deletePhoto(
 
     }
 
-
     const dbResult =
       await supabaseClient
         .from("gallery_photos")
         .delete()
         .eq("id", id);
-
 
     if (dbResult.error) {
 
@@ -2290,14 +2051,11 @@ async function deletePhoto(
 
     }
 
-
     showMessage(
       "✅ Photo deleted!"
     );
 
-
-    await showGallery(category
-                          );
+    await showGallery(category);
 
   } catch (error) {
 
@@ -2337,7 +2095,6 @@ document.addEventListener(
   "DOMContentLoaded",
   function() {
 
-    /* MEMBER LOGIN */
     document
       .getElementById("memberLoginButton")
       .addEventListener(
@@ -2345,7 +2102,6 @@ document.addEventListener(
         memberLogin
       );
 
-    /* MEMBER LOGOUT */
     document
       .getElementById("memberLogoutButton")
       .addEventListener(
@@ -2353,7 +2109,6 @@ document.addEventListener(
         logout
       );
 
-    /* ADMIN LOGOUT */
     document
       .getElementById("adminLogoutButton")
       .addEventListener(
@@ -2361,7 +2116,6 @@ document.addEventListener(
         logout
       );
 
-    /* UPLOAD PHOTO */
     document
       .getElementById("uploadPhotoButton")
       .addEventListener(
@@ -2369,7 +2123,6 @@ document.addEventListener(
         uploadPhoto
       );
 
-    /* ADD NOTICE */
     document
       .getElementById("addNoticeButton")
       .addEventListener(
@@ -2377,7 +2130,6 @@ document.addEventListener(
         addNotice
       );
 
-    /* LOAD INITIAL DATA */
     loadCurrentUser();
     loadNotices();
 
