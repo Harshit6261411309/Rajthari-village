@@ -1343,3 +1343,801 @@ async function logout() {
 
     document.getElementById(
       "memberLogoutButt
+on").style.display = "none";
+
+    setAdminStatus("");
+    setMemberStatus("🚪 Logged out.");
+
+    document.getElementById("adminEmail").value = "";
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("adminKey").value = "";
+
+    document.getElementById("memberEmail").value = "";
+    document.getElementById("memberPassword").value = "";
+
+    showMessage("🚪 Logged out successfully.");
+
+    await loadNotices();
+
+  } catch (error) {
+
+    console.error("Logout error:", error);
+
+    showMessage(
+      "❌ Logout failed: " + error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   LOAD NOTICES
+===================================================== */
+
+async function loadNotices() {
+
+  if (!supabaseClient) return;
+
+  const board =
+    document.getElementById("notice-board");
+
+  board.innerHTML =
+    '<p class="loading">Loading notices...</p>';
+
+  try {
+
+    const result =
+      await supabaseClient
+        .from("notices")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+    if (result.error) {
+
+      console.error(
+        "Notice error:",
+        result.error
+      );
+
+      board.innerHTML =
+        "<p>❌ Notices load नहीं हो सके।</p>";
+
+      return;
+
+    }
+
+    if (
+      !result.data ||
+      result.data.length === 0
+    ) {
+
+      board.innerHTML =
+        "<p>📢 अभी कोई notice नहीं है।</p>";
+
+      return;
+
+    }
+
+    board.innerHTML = "";
+
+    result.data.forEach(function(notice) {
+
+      const box =
+        document.createElement("div");
+
+      box.className = "notice";
+
+
+      const title =
+        document.createElement("h3");
+
+      title.textContent =
+        "📢 " +
+        (notice.title || "Village Notice");
+
+
+      const message =
+        document.createElement("p");
+
+      message.textContent =
+        notice.message || "";
+
+
+      box.appendChild(title);
+
+      box.appendChild(message);
+
+
+      /*
+         Admin delete button
+      */
+
+      if (
+        currentProfile &&
+        currentProfile.role === "admin"
+      ) {
+
+        const deleteButton =
+          document.createElement("button");
+
+        deleteButton.className =
+          "delete-button";
+
+        deleteButton.textContent =
+          "🗑️ Delete Notice";
+
+        deleteButton.onclick =
+          function() {
+
+            deleteNotice(notice.id);
+
+          };
+
+        box.appendChild(
+          deleteButton
+        );
+
+      }
+
+
+      board.appendChild(box);
+
+    });
+
+  } catch (error) {
+
+    console.error(
+      "loadNotices error:",
+      error
+    );
+
+    board.innerHTML =
+      "<p>❌ Notices load करने में error आया।</p>";
+
+  }
+
+}
+
+
+/* =====================================================
+   DELETE NOTICE
+===================================================== */
+
+async function deleteNotice(id) {
+
+  if (
+    !currentUser ||
+    !currentProfile ||
+    currentProfile.role !== "admin"
+  ) {
+
+    showMessage(
+      "❌ Admin access required."
+    );
+
+    return;
+
+  }
+
+  const confirmDelete =
+    confirm(
+      "क्या आप यह notice delete करना चाहते हैं?"
+    );
+
+  if (!confirmDelete) {
+    return;
+  }
+
+
+  try {
+
+    const result =
+      await supabaseClient
+        .from("notices")
+        .delete()
+        .eq("id", id);
+
+
+    if (result.error) {
+
+      showMessage(
+        "❌ Delete failed: " +
+        result.error.message
+      );
+
+      return;
+
+    }
+
+
+    showMessage(
+      "✅ Notice deleted!"
+    );
+
+
+    await loadNotices();
+
+  } catch (error) {
+
+    showMessage(
+      "❌ Delete error: " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   ADD NOTICE
+===================================================== */
+
+async function addNotice() {
+
+  if (
+    !currentUser ||
+    !currentProfile ||
+    currentProfile.role !== "admin"
+  ) {
+
+    showMessage(
+      "❌ Admin access required."
+    );
+
+    return;
+
+  }
+
+
+  const title =
+    document
+      .getElementById("noticeTitle")
+      .value
+      .trim();
+
+
+  const message =
+    document
+      .getElementById("noticeMessage")
+      .value
+      .trim();
+
+
+  if (!title || !message) {
+
+    showMessage(
+      "⚠️ Notice title और message भरें।"
+    );
+
+    return;
+
+  }
+
+
+  showMessage(
+    "📢 Notice publish हो रहा है..."
+  );
+
+
+  try {
+
+    const result =
+      await supabaseClient
+        .from("notices")
+        .insert({
+
+          title: title,
+
+          message: message
+
+        });
+
+
+    if (result.error) {
+
+      showMessage(
+        "❌ Notice error: " +
+        result.error.message
+      );
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "noticeTitle"
+    ).value = "";
+
+
+    document.getElementById(
+      "noticeMessage"
+    ).value = "";
+
+
+    showMessage(
+      "✅ Notice Published!"
+    );
+
+
+    await loadNotices();
+
+  } catch (error) {
+
+    showMessage(
+      "❌ " + error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   UPLOAD PHOTO
+===================================================== */
+
+async function uploadPhoto() {
+
+  if (
+    !currentUser ||
+    !currentProfile ||
+    currentProfile.role !== "admin"
+  ) {
+
+    showMessage(
+      "❌ Admin access required."
+    );
+
+    return;
+
+  }
+
+
+  const file =
+    document
+      .getElementById("photoUpload")
+      .files[0];
+
+
+  const category =
+    document
+      .getElementById("photoCategory")
+      .value;
+
+
+  if (!file) {
+
+    showMessage(
+      "⚠️ पहले photo select करें।"
+    );
+
+    return;
+
+  }
+
+
+  /*
+     File size limit: 10 MB
+  */
+
+  if (file.size > 10 * 1024 * 1024) {
+
+    showMessage(
+      "❌ Photo 10 MB से छोटी होनी चाहिए।"
+    );
+
+    return;
+
+  }
+
+
+  showMessage(
+    "📤 Photo uploading..."
+  );
+
+
+  try {
+
+    const extension =
+      file.name.includes(".")
+        ? file.name
+            .split(".")
+            .pop()
+            .toLowerCase()
+        : "jpg";
+
+
+    const fileName =
+      Date.now() +
+      "_" +
+      Math.random()
+        .toString(36)
+        .substring(2, 10) +
+      "." +
+      extension;
+
+
+    const storagePath =
+      category +
+      "/" +
+      fileName;
+
+
+    /*
+       Upload to Supabase Storage
+    */
+
+    const uploadResult =
+      await supabaseClient
+        .storage
+        .from("gallery")
+        .upload(
+          storagePath,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false
+          }
+        );
+
+
+    if (uploadResult.error) {
+
+      showMessage(
+        "❌ Upload failed: " +
+        uploadResult.error.message
+      );
+
+      return;
+
+    }
+
+
+    /*
+       Save photo information
+       in gallery_photos table
+    */
+
+    const insertResult =
+      await supabaseClient
+        .from("gallery_photos")
+        .insert({
+
+          category: category,
+
+          file_name: file.name,
+
+          storage_path: storagePath,
+
+          uploaded_by: currentUser.id
+
+        });
+
+
+    if (insertResult.error) {
+
+      /*
+         Remove uploaded file
+         if database insert fails
+      */
+
+      await supabaseClient
+        .storage
+        .from("gallery")
+        .remove([
+          storagePath
+        ]);
+
+
+      showMessage(
+        "❌ Database error: " +
+        insertResult.error.message
+      );
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "photoUpload"
+    ).value = "";
+
+
+    showMessage(
+      "✅ Photo uploaded successfully!"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Upload error:",
+      error
+    );
+
+    showMessage(
+      "❌ " + error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   SHOW GALLERY
+===================================================== */
+
+async function showGallery(category) {
+
+  if (!supabaseClient) {
+    return;
+  }
+
+
+  const gallery =
+    document.getElementById(
+      "photoGallery"
+    );
+
+
+  const galleryPhotos =
+    document.getElementById(
+      "galleryPhotos"
+    );
+
+
+  const galleryTitle =
+    document.getElementById(
+      "galleryTitle"
+    );
+
+
+  galleryTitle.textContent =
+    category === "village"
+      ? "🏘️ Village Gallery"
+      : category === "farming"
+      ? "🌾 Farming Gallery"
+      : "🎉 Events Gallery";
+
+
+  gallery.style.display =
+    "block";
+
+
+  gallery.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+
+  galleryPhotos.innerHTML =
+    '<p class="loading">📷 Loading photos...</p>';
+
+
+  try {
+
+    const result =
+      await supabaseClient
+        .from("gallery_photos")
+        .select("*")
+        .eq("category", category)
+        .order("created_at", {
+          ascending: false
+        });
+
+
+    if (result.error) {
+
+      console.error(
+        "Gallery database error:",
+        result.error
+      );
+
+      galleryPhotos.innerHTML =
+        "<p>❌ Photos load नहीं हो सकीं।</p>";
+
+      return;
+
+    }
+
+
+    if (
+      !result.data ||
+      result.data.length === 0
+    ) {
+
+      galleryPhotos.innerHTML =
+        "<p>📷 इस category में अभी कोई photo नहीं है।</p>";
+
+      return;
+
+    }
+
+
+    galleryPhotos.innerHTML = "";
+
+
+    result.data.forEach(function(photo) {
+
+      const urlResult =
+        supabaseClient
+          .storage
+          .from("gallery")
+          .getPublicUrl(
+            photo.storage_path
+          );
+
+
+      const photoCard =
+        document.createElement("div");
+
+      photoCard.className =
+        "photo-card";
+
+
+      const img =
+        document.createElement("img");
+
+      img.src =
+        urlResult.data.publicUrl;
+
+      img.alt =
+        photo.file_name ||
+        "Rajthari Village Photo";
+
+      img.loading =
+        "lazy";
+
+
+      photoCard.appendChild(img);
+
+
+      /*
+         Admin delete photo button
+      */
+
+      if (
+        currentProfile &&
+        currentProfile.role === "admin"
+      ) {
+
+        const deleteButton =
+          document.createElement("button");
+
+        deleteButton.className =
+          "delete-button";
+
+        deleteButton.textContent =
+          "🗑️ Delete Photo";
+
+        deleteButton.onclick =
+          function() {
+
+            deletePhoto(
+              photo.id,
+              photo.storage_path,
+              category
+            );
+
+          };
+
+
+        photoCard.appendChild(
+          deleteButton
+        );
+
+      }
+
+
+      galleryPhotos.appendChild(
+        photoCard
+      );
+
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Gallery error:",
+      error
+    );
+
+    galleryPhotos.innerHTML =
+      "<p>❌ Gallery load error.</p>";
+
+  }
+
+}
+
+
+/* =====================================================
+   DELETE PHOTO
+===================================================== */
+
+async function deletePhoto(
+  id,
+  storagePath,
+  category
+) {
+
+  if (
+    !currentUser ||
+    !currentProfile ||
+    currentProfile.role !== "admin"
+  ) {
+
+    showMessage(
+      "❌ Admin access required."
+    );
+
+    return;
+
+  }
+
+
+  const confirmDelete =
+    confirm(
+      "क्या आप यह photo delete करना चाहते हैं?"
+    );
+
+
+  if (!confirmDelete) {
+    return;
+  }
+
+
+  try {
+
+    const storageResult =
+      await supabaseClient
+        .storage
+        .from("gallery")
+        .remove([
+          storagePath
+        ]);
+
+
+    if (storageResult.error) {
+
+      showMessage(
+        "❌ Storage delete failed: " +
+        storageResult.error.message
+      );
+
+      return;
+
+    }
+
+
+    const dbResult =
+      await supabaseClient
+        .from("gallery_photos")
+        .delete()
+        .eq("id", id);
+
+
+    if (dbResult.error) {
+
+      showMessage(
+        "❌ Database delete failed: " +
+        dbResult.error.message
+      );
+
+      return;
+
+    }
+
+
+    showMessage(
+      "✅ Photo deleted!"
+    );
+
+
+    await showGallery(category
