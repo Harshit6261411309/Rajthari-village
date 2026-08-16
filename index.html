@@ -1237,4 +1237,99 @@ async function loadNotices() {
     board.innerHTML = "";
 
 
-    if 
+      if (!result.data || result.data.length === 0) {
+      board.innerHTML = "<p>📢 No notices available.</p>";
+      return;
+    }
+
+    board.innerHTML = "";
+    result.data.forEach((notice) => {
+      const box = document.createElement("div");
+      box.className = "notice";
+
+      const title = document.createElement("h3");
+      title.textContent = "📢 " + (notice.title || "Notice");
+
+      const message = document.createElement("p");
+      message.textContent = notice.message || "";
+
+      box.appendChild(title);
+      box.appendChild(message);
+
+      if (currentProfile && currentProfile.role === "admin") {
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-button";
+        deleteBtn.textContent = "🗑️ Delete";
+        deleteBtn.onclick = () => deleteNotice(notice.id);
+        box.appendChild(deleteBtn);
+      }
+
+      board.appendChild(box);
+    });
+  } catch (error) {
+    board.innerHTML = "<p>❌ Error loading notices.</p>";
+  }
+}
+
+async function deleteNotice(id) {
+  const result = await supabaseClient.from("notices").delete().eq("id", id);
+  if (result.error) {
+    showMessage("❌ " + result.error.message);
+    return;
+  }
+  showMessage("✅ Notice deleted!");
+  await loadNotices();
+}
+
+/* ADD NOTICE */
+document.getElementById("addNoticeButton").addEventListener("click", async function() {
+  if (!currentProfile || currentProfile.role !== "admin") {
+    showMessage("❌ Admin access required.");
+    return;
+  }
+
+  const title = document.getElementById("noticeTitle").value.trim();
+  const message = document.getElementById("noticeMessage").value.trim();
+
+  if (!title || !message) {
+    showMessage("⚠️ Enter title and message.");
+    return;
+  }
+
+  const result = await supabaseClient.from("notices").insert({
+    title: title,
+    message: message,
+    created_by: currentUser.id
+  });
+
+  if (result.error) {
+    showMessage("❌ " + result.error.message);
+    return;
+  }
+
+  document.getElementById("noticeTitle").value = "";
+  document.getElementById("noticeMessage").value = "";
+  showMessage("✅ Notice published!");
+  await loadNotices();
+});
+
+/* GALLERY FUNCTIONS */
+function showGallery(category) {
+  document.getElementById("galleryTitle").textContent = category.toUpperCase() + " Gallery";
+  document.getElementById("photoGallery").style.display = "block";
+  document.getElementById("photoGallery").scrollIntoView({ behavior: "smooth" });
+}
+
+function closeGallery() {
+  document.getElementById("photoGallery").style.display = "none";
+}
+
+/* INITIAL LOAD */
+window.addEventListener("DOMContentLoaded", async () => {
+  await loadCurrentUser();
+  await loadNotices();
+});
+</script>
+</body>
+</html>
+
