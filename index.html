@@ -1343,3 +1343,185 @@ window.addEventListener("DOMContentLoaded", async () => {
 </body>
 </html>
 
+    if (!result.data || result.data.length === 0) {
+      board.innerHTML = "<p>📢 No notices available.</p>";
+      return;
+    }
+
+    result.data.forEach(function(notice) {
+
+      const box = document.createElement("div");
+      box.className = "notice";
+
+      const title = document.createElement("h3");
+      title.textContent = "📢 " + (notice.title || "Notice");
+
+      const message = document.createElement("p");
+      message.textContent = notice.message || "";
+
+      box.appendChild(title);
+      box.appendChild(message);
+
+      if (
+        currentProfile &&
+        currentProfile.role === "admin"
+      ) {
+
+        const deleteButton =
+          document.createElement("button");
+
+        deleteButton.className =
+          "delete-button";
+
+        deleteButton.textContent =
+          "🗑️ Delete";
+
+        deleteButton.onclick = async function() {
+
+          const result =
+            await supabaseClient
+              .from("notices")
+              .delete()
+              .eq("id", notice.id);
+
+          if (result.error) {
+            showMessage(
+              "❌ " + result.error.message
+            );
+            return;
+          }
+
+          showMessage(
+            "✅ Notice deleted!"
+          );
+
+          loadNotices();
+        };
+
+        box.appendChild(deleteButton);
+      }
+
+      board.appendChild(box);
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    board.innerHTML =
+      "<p>❌ Could not load notices.</p>";
+  }
+}
+
+
+/* ==================================================
+   ADD NOTICE
+================================================== */
+
+document
+  .getElementById("addNoticeButton")
+  .addEventListener("click", async function() {
+
+    if (
+      !currentUser ||
+      !currentProfile ||
+      currentProfile.role !== "admin"
+    ) {
+
+      showMessage("❌ Admin access required.");
+      return;
+    }
+
+    const title =
+      document
+        .getElementById("noticeTitle")
+        .value
+        .trim();
+
+    const message =
+      document
+        .getElementById("noticeMessage")
+        .value
+        .trim();
+
+    if (!title || !message) {
+
+      showMessage(
+        "⚠️ Enter title and message."
+      );
+
+      return;
+    }
+
+    const result =
+      await supabaseClient
+        .from("notices")
+        .insert({
+          title: title,
+          message: message,
+          created_by: currentUser.id
+        });
+
+    if (result.error) {
+
+      showMessage(
+        "❌ " + result.error.message
+      );
+
+      return;
+    }
+
+    document.getElementById(
+      "noticeTitle"
+    ).value = "";
+
+    document.getElementById(
+      "noticeMessage"
+    ).value = "";
+
+    showMessage(
+      "✅ Notice published!"
+    );
+
+    loadNotices();
+  });
+
+
+/* ==================================================
+   START WEBSITE
+================================================== */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  async function() {
+
+    await loadCurrentUser();
+
+    await loadNotices();
+
+    console.log(
+      "✅ Rajthari website JavaScript running"
+    );
+
+  }
+);
+
+
+/* ==================================================
+   SUPABASE AUTH LISTENER
+================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  async function() {
+
+    await loadCurrentUser();
+
+    await loadNotices();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
