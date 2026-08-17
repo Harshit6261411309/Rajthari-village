@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <body>
+        <script>
+    alert('🚀 Page loaded!');
+        </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rajthari Village</title>
@@ -1768,7 +1772,83 @@ window.logout = logout;
 // ============================================================
 // END OF JAVASCRIPT
 // ============================================================
-</script>
+// ============================================================
+// DEBUG - Test Admin Login
+// ============================================================
+async function debugAdminLogin() {
+    console.log('🔍 Debug: Testing admin login...');
+    
+    try {
+        // Test 1: Check if supabase exists
+        console.log('✅ Supabase client exists:', typeof supabase !== 'undefined');
+        
+        // Test 2: Check if admin user exists in auth
+        const email = document.getElementById('adminEmail').value.trim();
+        const password = document.getElementById('adminPassword').value;
+        const key = document.getElementById('adminKey').value.trim();
+        
+        console.log('📧 Email entered:', email);
+        console.log('🔑 Key entered:', key);
+        
+        if (!email || !password || !key) {
+            alert('⚠️ Please fill all fields');
+            return;
+        }
+        
+        if (key !== 'Rajthari') {
+            alert('❌ Wrong Admin Key. Expected "Rajthari"');
+            return;
+        }
+        
+        console.log('✅ Admin Key correct, attempting login...');
+        
+        // Test 3: Try to login
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if (error) {
+            alert('❌ Login Error: ' + error.message);
+            console.log('❌ Login Error:', error);
+            return;
+        }
+        
+        console.log('✅ Login successful! User:', data.user.email);
+        alert('✅ Login successful! Checking profile...');
+        
+        // Test 4: Check profile role
+        const { data: profile, error: pErr } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', data.user.id)
+            .single();
+        
+        if (pErr) {
+            alert('❌ Profile error: ' + pErr.message);
+            console.log('❌ Profile error:', pErr);
+            return;
+        }
+        
+        console.log('👤 Profile role:', profile.role);
+        alert('👤 Profile role: ' + profile.role);
+        
+        if (profile.role !== 'admin') {
+            alert('❌ This account is NOT admin. Role: ' + profile.role);
+            return;
+        }
+        
+        alert('✅ Admin login successful!');
+        
+    } catch (error) {
+        alert('❌ Exception: ' + error.message);
+        console.log('❌ Exception:', error);
+    }
+}
+
+// Override adminLogin with debug version
+window.adminLogin = debugAdminLogin;
+    </script>
 
 </body>
 </html>
