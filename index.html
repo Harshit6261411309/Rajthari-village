@@ -832,7 +832,7 @@
             <input type="password" id="signupPassword" placeholder="Min 6 characters" />
             <label for="signupConfirm">Confirm Password</label>
             <input type="password" id="signupConfirm" placeholder="Confirm your password" />
-            <button class="btn btn-block" id="signupBtn">📝 Create Account</button>
+                        <button class="btn btn-block" id="signupBtn" onclick="signUp()">📝 Create Account</button>
             <p id="signupStatus" class="status"></p>
             <div class="auth-links">
                 Already have an account? <a onclick="showSection('member-login')">Login here</a>
@@ -853,7 +853,7 @@
             <input type="email" id="loginEmail" placeholder="Enter your email" />
             <label for="loginPassword">Password</label>
             <input type="password" id="loginPassword" placeholder="Enter your password" />
-            <button class="btn btn-block" id="loginBtn">🔐 Login</button>
+                        <button class="btn btn-block" id="loginBtn" onclick="memberLogin()">🔐 Login</button>
             <p id="loginStatus" class="status"></p>
             <div class="auth-links">
                 Don't have an account? <a onclick="showSection('member-signup')">Sign Up here</a>
@@ -876,7 +876,7 @@
             <input type="password" id="adminPassword" placeholder="Admin password" />
             <label for="adminKey">Admin Key</label>
             <input type="password" id="adminKey" placeholder="Enter Admin Key" />
-            <button class="btn btn-block" id="adminLoginBtn">👑 Admin Login</button>
+                        <button class="btn btn-block" id="adminLoginBtn" onclick="adminLogin()">👑 Admin Login</button>
             <p id="adminStatus" class="status"></p>
             <div class="auth-links">
                 <a onclick="showSection('member-login')">← Back to Member Login</a>
