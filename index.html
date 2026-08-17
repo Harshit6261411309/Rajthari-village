@@ -1,1829 +1,1774 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-    <meta charset="UTF-8" />  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
-    <title>Rajthari Village Connect</title>  <!-- Supabase SDK -->  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">  
-</script>  
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rajthari Village</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+    <style>
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7f5;
+            color: #1e2b37;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        header {
+            background: #176b3a;
+            color: white;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header .logo p {
+            font-size: 13px;
+            opacity: 0.85;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        header .user-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        header .user-area .avatar {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        /* ============================================================
+           NAVIGATION
+           ============================================================ */
+        nav {
+            background: #ffffff;
+            padding: 12px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 24px;
+            border-bottom: 2px solid #e8ede8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            color: #176b3a;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            background: #e8f5e9;
+        }
+
+        nav a.active {
+            background: #176b3a;
+            color: white;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            display: inline-block;
+            border: none;
+            background: #176b3a;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #0f552c;
+            transform: scale(1.02);
+        }
+
+        .btn-danger {
+            background: #b3261e;
+        }
+        .btn-danger:hover {
+            background: #8a1c15;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #176b3a;
+            color: #176b3a;
+        }
+        .btn-outline:hover {
+            background: #176b3a;
+            color: white;
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-sm {
+            padding: 6px 16px;
+            font-size: 13px;
+            border-radius: 6px;
+        }
+
+        /* ============================================================
+           SECTIONS
+           ============================================================ */
+        .section {
+            display: none;
+            padding: 30px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+           HERO / WELCOME
+           ============================================================ */
+        .hero {
+            background: linear-gradient(135deg, #176b3a, #2d8a4e);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h2 {
+            font-size: 32px;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .hero .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-top: 6px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .hero .tagline {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 8px;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 10px;
+            display: inline-block;
+        }
+
+        /* ============================================================
+           CARDS
+           ============================================================ */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e8ede8;
+        }
+
+        .card h3 {
+            color: #176b3a;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .card .card-sub {
+            color: #6a7a6a;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        /* ============================================================
+           AUTH BOXES
+           ============================================================ */
+        .auth-box {
+            max-width: 420px;
+            margin: 40px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+        }
+
+        .auth-box h2 {
+            text-align: center;
+            color: #176b3a;
+            font-size: 26px;
+            margin-bottom: 4px;
+        }
+
+        .auth-box .sub {
+            text-align: center;
+            color: #6a7a6a;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .auth-box label {
+            display: block;
+            font-weight: 600;
+            margin-top: 14px;
+            margin-bottom: 4px;
+        }
+
+        .auth-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0dcd0;
+            border-radius: 8px;
+            font-size: 15px;
+            background: #fafcfa;
+            transition: 0.3s;
+        }
+
+        .auth-box input:focus {
+            outline: none;
+            border-color: #176b3a;
+            box-shadow: 0 0 0 3px rgba(23, 107, 58, 0.15);
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .auth-links a {
+            color: #176b3a;
+            font-weight: 600;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-links .divider {
+            color: #ccc;
+            margin: 0 8px;
+        }
+
+        /* ============================================================
+           DASHBOARD GRID
+           ============================================================ */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-grid .card {
+            text-align: center;
+            padding: 24px 16px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .dashboard-grid .card:hover {
+            border-color: #176b3a;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .dashboard-grid .card .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-grid .card h4 {
+            color: #176b3a;
+            font-size: 16px;
+        }
+
+        .dashboard-grid .card p {
+            font-size: 13px;
+            color: #6a7a6a;
+        }
+
+        /* ============================================================
+           NOTICES
+           ============================================================ */
+        .notice-item {
+            background: #f8fbf8;
+            border-left: 5px solid #176b3a;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .notice-item .content {
+            flex: 1;
+        }
+
+        .notice-item .content h4 {
+            color: #176b3a;
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+
+        .notice-item .content p {
+            color: #3a4a3a;
+            font-size: 14px;
+        }
+
+        .notice-item .meta {
+            font-size: 12px;
+            color: #8a9a8a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .notice-item .meta .tag {
+            background: #e8f0e8;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #176b3a;
+        }
+
+        .notice-item .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           COMMUNITY UPDATES
+           ============================================================ */
+        .update-item {
+            background: #f8fbf8;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid #e8ede8;
+        }
+
+        .update-item .icon {
+            font-size: 28px;
+        }
+
+        .update-item .info h4 {
+            color: #1e2b37;
+            font-size: 16px;
+        }
+
+        .update-item .info p {
+            color: #6a7a6a;
+            font-size: 14px;
+        }
+
+        /* ============================================================
+           GALLERY
+           ============================================================ */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .gallery-grid .photo-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e8ede8;
+            transition: 0.3s;
+        }
+
+        .gallery-grid .photo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .gallery-grid .photo-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-grid .photo-card .info {
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .gallery-grid .photo-card .info .cat {
+            font-size: 12px;
+            background: #e8f0e8;
+            padding: 2px 12px;
+            border-radius: 20px;
+            color: #176b3a;
+        }
+
+        /* ============================================================
+           UPLOAD AREA
+           ============================================================ */
+        .upload-area {
+            border: 2px dashed #d0dcd0;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #fafcfa;
+        }
+
+        .upload-area:hover {
+            border-color: #176b3a;
+            background: #f0f8f0;
+        }
+
+        .upload-area .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .preview-container .preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e8ede8;
+        }
+
+        .preview-container .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-container .preview-item .remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-container .preview-item .remove:hover {
+            background: #b3261e;
+        }
+
+        /* ============================================================
+           STATUS
+           ============================================================ */
+        .status {
+            text-align: center;
+            font-weight: 600;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .status.error {
+            color: #b3261e;
+        }
+
+        .status.success {
+            color: #176b3a;
+        }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        #toast {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e2b37;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            z-index: 9999;
+            max-width: 90%;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        #toast.success {
+            background: #176b3a;
+        }
+
+        #toast.error {
+            background: #b3261e;
+        }
+
+        /* ============================================================
+           LOADING / EMPTY
+           ============================================================ */
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #6a7a6a;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #8a9a8a;
+        }
+
+        .empty .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #123b26;
+            color: white;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        footer .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        footer .footer-links a:hover {
+            color: white;
+        }
+
+        footer .copyright {
+            opacity: 0.6;
+            font-size: 13px;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .notice-item {
+                flex-direction: column;
+            }
+
+            .notice-item .actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            header .logo h1 {
+                font-size: 22px;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+
+            .hero .subtitle {
+                font-size: 15px;
+            }
+
+            .auth-box {
+                padding: 24px 18px;
+                margin: 20px 12px;
+            }
+
+            nav {
+                padding: 10px 12px;
+                gap: 6px 12px;
+            }
+
+            nav a {
+                font-size: 13px;
+                padding: 4px 10px;
+            }
+
+            .update-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Your HTML content here... -->
-
-<script>
-    // ============================================================
-    // SUPABASE INITIALIZATION
-    // ============================================================
-    const SUPABASE_URL = "https://idrbdrnzomavafkvoike.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
-    const ADMIN_KEY = "Rajthari";
-
-    // Create Supabase client
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-    console.log("✅ Supabase initialized!");
-
-    // ============================================================
-    // YOUR EXISTING JAVASCRIPT CODE
-    // ============================================================
-    // ... paste all your existing functions here ...
-    // (loadCurrentUser, memberLogin, adminLogin, logout, loadNotices, etc.)
-
-    // ============================================================
-    // DEBUG TEST - Check if Supabase is working
-    // ============================================================
-    setTimeout(async function() {
-        try {
-            const { data, error } = await supabase.from('profiles').select('count');
-            if (error) {
-                alert('❌ Supabase test failed: ' + error.message);
-            } else {
-                alert('✅ Supabase is working! Profiles table exists.');
-            }
-        } catch (err) {
-            alert('❌ Test error: ' + err.message);
-        }
-    }, 1000);
-</script>
-
-</body>
-</html>
-
-<style>  
-    /* ============================================================  
-               RESET & BASE STYLES  
-               ============================================================ */  
-    * {  
-        margin: 0;  
-        padding: 0;  
-        box-sizing: border-box;  
-    }  
-
-    body {  
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
-        background: #f4f8f4;  
-        color: #1e2b37;  
-        line-height: 1.6;  
-    }  
-
-    a {  
-        text-decoration: none;  
-        cursor: pointer;  
-    }  
-
-    /* ============================================================  
-               HEADER  
-               ============================================================ */  
-    header {  
-        background: linear-gradient(135deg, #176b3a, #2d8a4e);  
-        color: white;  
-        padding: 14px 24px;  
-        display: flex;  
-        justify-content: space-between;  
-        align-items: center;  
-        flex-wrap: wrap;  
-        gap: 12px;  
-    }  
-
-    header .logo {  
-        font-size: 24px;  
-        font-weight: 700;  
-        display: flex;  
-        align-items: center;  
-        gap: 8px;  
-    }  
-
-    header .user-area {  
-        display: flex;  
-        align-items: center;  
-        gap: 14px;  
-        font-size: 14px;  
-    }  
-
-    header .user-area .avatar {  
-        width: 36px;  
-        height: 36px;  
-        background: rgba(255, 255, 255, 0.2);  
-        border-radius: 50%;  
-        display: flex;  
-        align-items: center;  
-        justify-content: center;  
-        font-weight: 700;  
-        font-size: 16px;  
-        color: #fff;  
-    }  
-
-    .btn-outline-light {  
-        background: transparent;  
-        border: 2px solid rgba(255, 255, 255, 0.7);  
-        color: white;  
-        padding: 6px 16px;  
-        border-radius: 20px;  
-        font-weight: 600;  
-        font-size: 13px;  
-        cursor: pointer;  
-        transition: 0.3s;  
-    }  
-
-    .btn-outline-light:hover {  
-        background: rgba(255, 255, 255, 0.15);  
-    }  
-
-    .btn-light {  
-        background: white;  
-        color: #176b3a;  
-        border: none;  
-        padding: 6px 16px;  
-        border-radius: 20px;  
-        font-weight: 600;  
-        font-size: 13px;  
-        cursor: pointer;  
-        transition: 0.3s;  
-    }  
-
-    .btn-light:hover {  
-        transform: scale(1.05);  
-    }  
-
-    /* ============================================================  
-               NAVIGATION  
-               ============================================================ */  
-    nav {  
-        background: white;  
-        padding: 10px 24px;  
-        display: flex;  
-        flex-wrap: wrap;  
-        gap: 8px 16px;  
-        border-bottom: 1px solid #e0e8e0;  
-        position: sticky;  
-        top: 0;  
-        z-index: 100;  
-    }  
-
-    nav a {  
-        color: #176b3a;  
-        font-weight: 600;  
-        font-size: 14px;  
-        padding: 6px 14px;  
-        border-radius: 20px;  
-        transition: 0.3s;  
-    }  
-
-    nav a:hover {  
-        background: #e8f5e9;  
-    }  
-
-    nav a.active {  
-        background: #176b3a;  
-        color: white;  
-    }  
-
-    /* ============================================================  
-               SECTIONS  
-               ============================================================ */  
-    .section {  
-        display: none;  
-        padding: 24px 20px;  
-        max-width: 1000px;  
-        margin: 0 auto;  
-        animation: fadeUp 0.4s ease;  
-    }  
-
-    .section.active {  
-        display: block;  
-    }  
-
-    @keyframes fadeUp {  
-        from {  
-            opacity: 0;  
-            transform: translateY(20px);  
-        }  
-        to {  
-            opacity: 1;  
-            transform: translateY(0);  
-        }  
-    }  
-
-    /* ============================================================  
-               CARDS  
-               ============================================================ */  
-    .card {  
-        background: white;  
-        border-radius: 16px;  
-        padding: 24px;  
-        margin-bottom: 20px;  
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);  
-        border: 1px solid #e8ede8;  
-    }  
-
-    .card h2,  
-    .card h3 {  
-        color: #176b3a;  
-        margin-bottom: 12px;  
-    }  
-
-    /* ============================================================  
-               AUTH BOXES (Login / Signup / Admin)  
-               ============================================================ */  
-    .auth-box {  
-        max-width: 420px;  
-        margin: 40px auto;  
-        background: white;  
-        padding: 32px 28px;  
-        border-radius: 20px;  
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);  
-    }  
-
-    .auth-box h2 {  
-        text-align: center;  
-        color: #176b3a;  
-        font-size: 26px;  
-        margin-bottom: 4px;  
-    }  
-
-    .auth-box .sub {  
-        text-align: center;  
-        color: #6a7a6a;  
-        font-size: 14px;  
-        margin-bottom: 24px;  
-    }  
-
-    .auth-box label {  
-        display: block;  
-        font-weight: 600;  
-        margin-top: 16px;  
-        margin-bottom: 5px;  
-        font-size: 14px;  
-    }  
-
-    .auth-box input {  
-        width: 100%;  
-        padding: 12px 14px;  
-        border: 1px solid #d0dcd0;  
-        border-radius: 10px;  
-        font-size: 15px;  
-        background: #fafcfa;  
-        transition: 0.3s;  
-    }  
-
-    .auth-box input:focus {  
-        outline: none;  
-        border-color: #176b3a;  
-        box-shadow: 0 0 0 3px rgba(23, 107, 58, 0.15);  
-    }  
-
-    .auth-links {  
-        text-align: center;  
-        margin-top: 18px;  
-        font-size: 14px;  
-    }  
-
-    .auth-links a {  
-        color: #176b3a;  
-        font-weight: 600;  
-    }  
-
-    .auth-links a:hover {  
-        text-decoration: underline;  
-    }  
-
-    .auth-links .divider {  
-        color: #ccc;  
-        margin: 0 8px;  
-    }  
-
-    /* ============================================================  
-               BUTTONS  
-               ============================================================ */  
-    .btn {  
-        display: inline-block;  
-        border: none;  
-        background: #176b3a;  
-        color: white;  
-        padding: 12px 28px;  
-        border-radius: 10px;  
-        font-weight: 600;  
-        font-size: 15px;  
-        cursor: pointer;  
-        transition: 0.3s;  
-    }  
-
-    .btn:hover {  
-        background: #0f552c;  
-        transform: scale(1.02);  
-    }  
-
-    .btn-block {  
-        width: 100%;  
-        margin-top: 16px;  
-    }  
-
-    .btn-danger {  
-        background: #b3261e;  
-    }  
-
-    .btn-danger:hover {  
-        background: #8a1c15;  
-    }  
-
-    .btn-outline {  
-        background: transparent;  
-        border: 2px solid #176b3a;  
-        color: #176b3a;  
-    }  
-
-    .btn-outline:hover {  
-        background: #176b3a;  
-        color: white;  
-    }  
-
-    .btn-sm {  
-        padding: 6px 14px;  
-        font-size: 13px;  
-        border-radius: 8px;  
-    }  
-
-    /* ============================================================  
-               DASHBOARD GRID  
-               ============================================================ */  
-    .dashboard-grid {  
-        display: grid;  
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  
-        gap: 16px;  
-        margin-bottom: 24px;  
-    }  
-
-    .dashboard-grid .card {  
-        text-align: center;  
-        padding: 20px 12px;  
-        cursor: pointer;  
-        border: 2px solid transparent;  
-        transition: 0.3s;  
-    }  
-
-    .dashboard-grid .card:hover {  
-        border-color: #176b3a;  
-        transform: translateY(-4px);  
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);  
-    }  
-
-    .dashboard-grid .card .icon {  
-        font-size: 36px;  
-        display: block;  
-        margin-bottom: 8px;  
-    }  
-
-    .dashboard-grid .card h4 {  
-        color: #176b3a;  
-        margin-bottom: 2px;  
-    }  
-
-    .dashboard-grid .card p {  
-        font-size: 12px;  
-        color: #6a7a6a;  
-    }  
-
-    /* ============================================================  
-               NOTICE ITEMS  
-               ============================================================ */  
-    .notice-item {  
-        background: #f8fbf8;  
-        border-left: 5px solid #176b3a;  
-        padding: 16px 20px;  
-        margin-bottom: 12px;  
-        border-radius: 0 12px 12px 0;  
-        display: flex;  
-        justify-content: space-between;  
-        align-items: flex-start;  
-        flex-wrap: wrap;  
-        gap: 10px;  
-    }  
-
-    .notice-item .content {  
-        flex: 1;  
-    }  
-
-    .notice-item .content h4 {  
-        color: #176b3a;  
-        margin-bottom: 4px;  
-    }  
-
-    .notice-item .content p {  
-        color: #3a4a3a;  
-        font-size: 14px;  
-    }  
-
-    .notice-item .meta {  
-        font-size: 12px;  
-        color: #8a9a8a;  
-        display: flex;  
-        align-items: center;  
-        gap: 12px;  
-        margin-top: 6px;  
-    }  
-
-    .notice-item .actions {  
-        display: flex;  
-        gap: 8px;  
-        flex-wrap: wrap;  
-    }  
-
-    /* ============================================================  
-               GALLERY GRID  
-               ============================================================ */  
-    .gallery-grid {  
-        display: grid;  
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));  
-        gap: 16px;  
-    }  
-
-    .gallery-grid .photo-card {  
-        background: white;  
-        border-radius: 12px;  
-        overflow: hidden;  
-        border: 1px solid #e8ede8;  
-        transition: 0.3s;  
-    }  
-
-    .gallery-grid .photo-card:hover {  
-        transform: translateY(-4px);  
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);  
-    }  
-
-    .gallery-grid .photo-card img {  
-        width: 100%;  
-        height: 200px;  
-        object-fit: cover;  
-        display: block;  
-    }  
-
-    .gallery-grid .photo-card .info {  
-        padding: 12px 14px;  
-        display: flex;  
-        justify-content: space-between;  
-        align-items: center;  
-        flex-wrap: wrap;  
-        gap: 6px;  
-    }  
-
-    .gallery-grid .photo-card .info .cat {  
-        font-size: 12px;  
-        background: #e8f0e8;  
-        padding: 2px 12px;  
-        border-radius: 20px;  
-        color: #176b3a;  
-    }  
-
-    /* ============================================================  
-               IMAGE UPLOAD AREA (Drag & Drop)  
-               ============================================================ */  
-    .upload-area {  
-        border: 2px dashed #d0dcd0;  
-        border-radius: 16px;  
-        padding: 40px 20px;  
-        text-align: center;  
-        cursor: pointer;  
-        transition: 0.3s;  
-        background: #fafcfa;  
-    }  
-
-    .upload-area:hover {  
-        border-color: #176b3a;  
-        background: #f0f8f0;  
-    }  
-
-    .upload-area.dragover {  
-        border-color: #176b3a;  
-        background: #e8f5e9;  
-    }  
-
-    .upload-area .icon {  
-        font-size: 48px;  
-        display: block;  
-        margin-bottom: 8px;  
-    }  
-
-    .upload-area p {  
-        color: #6a7a6a;  
-        font-size: 14px;  
-    }  
-
-    .upload-area input[type="file"] {  
-        display: none;  
-    }  
-
-    .preview-container {  
-        display: flex;  
-        flex-wrap: wrap;  
-        gap: 12px;  
-        margin-top: 16px;  
-    }  
-
-    .preview-container .preview-item {  
-        position: relative;  
-        width: 100px;  
-        height: 100px;  
-        border-radius: 10px;  
-        overflow: hidden;  
-        border: 1px solid #e8ede8;  
-    }  
-
-    .preview-container .preview-item img {  
-        width: 100%;  
-        height: 100%;  
-        object-fit: cover;  
-    }  
-
-    .preview-container .preview-item .remove {  
-        position: absolute;  
-        top: 4px;  
-        right: 4px;  
-        background: rgba(0, 0, 0, 0.6);  
-        color: white;  
-        border: none;  
-        border-radius: 50%;  
-        width: 22px;  
-        height: 22px;  
-        font-size: 14px;  
-        cursor: pointer;  
-        display: flex;  
-        align-items: center;  
-        justify-content: center;  
-    }  
-
-    .preview-container .preview-item .remove:hover {  
-        background: #b3261e;  
-    }  
-
-    /* ============================================================  
-               STATUS MESSAGES  
-               ============================================================ */  
-    .status {  
-        text-align: center;  
-        font-weight: 600;  
-        margin: 10px 0;  
-        font-size: 14px;  
-    }  
-
-    .status.error {  
-        color: #b3261e;  
-    }  
-
-    .status.success {  
-        color: #176b3a;  
-    }  
-
-    /* ============================================================  
-               TOAST NOTIFICATIONS  
-               ============================================================ */  
-    #toast {  
-        display: none;  
-        position: fixed;  
-        bottom: 30px;  
-        left: 50%;  
-        transform: translateX(-50%);  
-        background: #1e2b37;  
-        color: white;  
-        padding: 14px 28px;  
-        border-radius: 12px;  
-        z-index: 9999;  
-        max-width: 90%;  
-        text-align: center;  
-        font-weight: 500;  
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);  
-        font-size: 15px;  
-    }  
-
-    #toast.success {  
-        background: #176b3a;  
-    }  
-
-    #toast.error {  
-        background: #b3261e;  
-    }  
-
-    /* ============================================================  
-               LOADING & EMPTY STATES  
-               ============================================================ */  
-    .loading {  
-        text-align: center;  
-        padding: 30px;  
-        color: #6a7a6a;  
-    }  
-
-    .empty {  
-        text-align: center;  
-        padding: 30px;  
-        color: #8a9a8a;  
-    }  
-
-    .empty .icon {  
-        font-size: 40px;  
-        display: block;  
-        margin-bottom: 10px;  
-    }  
-
-    /* ============================================================  
-               HERO / WELCOME  
-               ============================================================ */  
-    .hero {  
-        background: linear-gradient(135deg, #176b3a, #2d8a4e);  
-        color: white;  
-        padding: 30px;  
-        border-radius: 16px;  
-        text-align: center;  
-        margin-bottom: 24px;  
-    }  
-
-    .hero h2 {  
-        font-size: 28px;  
-        margin: 0;  
-    }  
-
-    .hero p {  
-        opacity: 0.9;  
-        margin-top: 6px;  
-    }  
-
-    /* ============================================================  
-               RESPONSIVE  
-               ============================================================ */  
-    @media (max-width: 600px) {  
-        .gallery-grid {  
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));  
-        }  
-
-        .notice-item {  
-            flex-direction: column;  
-        }  
-
-        .notice-item .actions {  
-            width: 100%;  
-            justify-content: flex-end;  
-        }  
-
-        .dashboard-grid {  
-            grid-template-columns: 1fr 1fr;  
-        }  
-
-        header .logo {  
-            font-size: 20px;  
-        }  
-
-        .auth-box {  
-            padding: 24px 18px;  
-            margin: 20px 12px;  
-        }  
-
-        nav {  
-            padding: 8px 12px;  
-            gap: 6px 10px;  
-        }  
-
-        nav a {  
-            font-size: 13px;  
-            padding: 4px 10px;  
-        }  
-
-        .hero h2 {  
-            font-size: 22px;  
-        }  
-    }  
-
-    /* ============================================================  
-               FOOTER  
-               ============================================================ */  
-    footer {  
-        text-align: center;  
-        padding: 20px;  
-        background: #123b26;  
-        color: white;  
-        margin-top: 30px;  
-        font-size: 13px;  
-    }  
-
-    footer span {  
-        opacity: 0.7;  
-    }  
-
-    /* ============================================================  
-               UTILITY  
-               ============================================================ */  
-    .hidden {  
-        display: none !important;  
-    }  
-    .text-center {  
-        text-align: center;  
-    }  
-    .mt-12 {  
-        margin-top: 12px;  
-    }  
-    .mb-12 {  
-        margin-bottom: 12px;  
-    }  
-</style>
-
-</head>  <body>  <!-- ============================================================  
-HEADER  
-============================================================ -->  
-<header>  
-    <div class="logo">🌾 Rajthari</div>  
-    <div class="user-area" id="headerUser" style="display:none;">  
-        <span id="headerName">Member</span>  
-        <div class="avatar" id="headerAvatar">M</div>  
-        <button class="btn-sm btn-danger" id="headerLogoutBtn">Logout</button>  
-    </div>  
-    <div class="user-area" id="headerGuest">  
-        <button class="btn-outline-light" onclick="showSection('member-login')">Login</button>  
-        <button class="btn-light" onclick="showSection('member-signup')">Sign Up</button>  
-    </div>  
-</header>  
-
-<!-- ============================================================  
-NAVIGATION  
-============================================================ -->  
-<nav>  
-    <a href="#" data-section="home" class="active">🏠 Home</a>  
-    <a href="#" data-section="notices">📢 Notices</a>  
-    <a href="#" data-section="gallery">🖼️ Gallery</a>  
-    <a href="#" data-section="dashboard" id="navDashboard" style="display:none;">📊 Dashboard</a>  
-    <a href="#" data-section="member-login" id="navLogin">🔐 Login</a>  
-    <a href="#" data-section="member-signup" id="navSignup">📝 Sign Up</a>  
-    <a href="#" data-section="admin-login" id="navAdmin">👑 Admin</a>  
-</nav>  
-
-<!-- ============================================================  
-HOME SECTION  
-============================================================ -->  
-<section class="section active" id="home">  
-    <div class="hero">  
-        <h2>🏡 Welcome to Rajthari</h2>  
-        <p>आपका अपना गाँव • आपकी अपनी community</p>  
-    </div>  
-    <div class="card">  
-        <h3>🌾 Our Village</h3>  
-        <p>Rajthari is a small village where everyone helps each other. Stay connected  
-      with your village community.</p>
-    </div>  
-    </div>  
-    <div class="text-center mt-12">  
-        <button class="btn" onclick="showSection('member-login')">🔐 Login</button>  
-        <button class="btn btn-outline" style="margin-left:12px;" onclick="showSection('member-signup')">📝 Sign Up</button>  
-    </div>  
-</section>  
-
-<!-- ============================================================  
-SIGN UP SECTION  
-============================================================ -->  
-<section class="section" id="member-signup">  
-    <div class="auth-box">  
-        <h2>📝 Create Account</h2>  
-        <p class="sub">एक बार account बनाएं और फिर login करें</p>  
-
-        <label for="signupEmail">Email</label>  
-        <input type="email" id="signupEmail" placeholder="Enter your email" />  
-
-        <label for="signupPassword">Password</label>  
-        <input type="password" id="signupPassword" placeholder="Min 6 characters" />  
-
-        <label for="signupConfirm">Confirm Password</label>  
-        <input type="password" id="signupConfirm" placeholder="Confirm your password" />  
-
-        <button class="btn btn-block" id="signupBtn">📝 Create Account</button>  
-        <p id="signupStatus" class="status"></p>  
-
-                <div class="auth-links">
-            Already have an account? <a onclick="showSection('member-login')">Login here</a>
-            <span class="divider">|</span>
-            <a onclick="showSection('admin-login')">👑 Admin Login</a>
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header>
+        <div class="logo">
+            <h1>🌾 Rajthari Village</h1>
+            <p>Community Hub: Together We Grow</p>
         </div>
-    </div>
-</section>
-
-<!-- ============================================================
-MEMBER LOGIN SECTION
-============================================================ -->
-<section class="section" id="member-login">
-    <div class="auth-box">
-        <h2>👤 Member Login</h2>
-        <p class="sub">अपने account से login करें</p>
-
-        <label for="loginEmail">Email</label>
-        <input type="email" id="loginEmail" placeholder="Enter your email" />
-
-        <label for="loginPassword">Password</label>
-        <input type="password" id="loginPassword" placeholder="Enter your password" />
-
-        <button class="btn btn-block" id="loginBtn">🔐 Login</button>
-        <p id="loginStatus" class="status"></p>
-
-        <div class="auth-links">
-            Don't have an account? <a onclick="showSection('member-signup')">Sign Up here</a>
-            <span class="divider">|</span>
-            <a onclick="showSection('admin-login')">👑 Admin Login</a>
+        <div class="user-area" id="headerGuest">
+            <!-- Login and Sign Up buttons removed from header -->
         </div>
-    </div>
-</section>
-
-<!-- ============================================================
-ADMIN LOGIN SECTION
-============================================================ -->
-<section class="section" id="admin-login">
-    <div class="auth-box">
-        <h2>👑 Admin Login</h2>
-        <p class="sub">Village Administrator</p>
-
-        <label for="adminEmail">Admin Email</label>
-        <input type="email" id="adminEmail" placeholder="Admin email" />
-
-        <label for="adminPassword">Admin Password</label>
-        <input type="password" id="adminPassword" placeholder="Admin password" />
-
-        <label for="adminKey">Admin Key</label>
-        <input type="password" id="adminKey" placeholder="Enter Admin Key" />
-
-        <button class="btn btn-block" id="adminLoginBtn">👑 Admin Login</button>
-        <p id="adminStatus" class="status"></p>
-
-        <div class="auth-links">
-            <a onclick="showSection('member-login')">← Back to Member Login</a>
-            <span class="divider">|</span>
-            <a onclick="showSection('member-signup')">📝 Sign Up</a>
+        <div class="user-area" id="headerUser" style="display:none;">
+            <span id="headerName" style="font-weight:600;"></span>
+            <div class="avatar" id="headerAvatar">M</div>
+            <button class="btn btn-sm btn-danger" onclick="logout()">🚪 Logout</button>
         </div>
-    </div>
-</section>
+    </header>
 
-<!-- ============================================================
-DASHBOARD SECTION (Logged-in users)
-============================================================ -->
-<section class="section" id="dashboard">
-    <div class="hero">
-        <h2>🌾 Rajthari Village</h2>
-        <p>Welcome, <span id="userName">Member</span>! 👋</p>
-    </div>
+    <!-- ============================================================
+    NAVIGATION
+    ============================================================ -->
+    <nav>
+        <a href="#" onclick="showSection('home')" class="active">🏠 Home</a>
+        <a href="#" onclick="showSection('notices')">📢 Notices</a>
+        <a href="#" onclick="showSection('gallery')">🖼️ Gallery</a>
+        <a href="#" onclick="showSection('member-login')" id="navLogin">🔐 Login</a>
+        <a href="#" onclick="showSection('member-signup')" id="navSignup">📝 Sign Up</a>
+        <a href="#" onclick="showSection('admin-login')" id="navAdmin">👑 Admin</a>
+        <a href="#" onclick="showSection('dashboard')" id="navDashboard" style="display:none;">📊 Dashboard</a>
+    </nav>
 
-    <!-- Quick Action Cards -->
-    <div class="dashboard-grid">
-        <div class="card" onclick="document.getElementById('postNotice').scrollIntoView({behavior:'smooth'})">
-            <span class="icon">📢</span>
-            <h4>Post Notice</h4>
-            <p>Share updates</p>
-        </div>
-        <div class="card" onclick="document.getElementById('uploadPhoto').scrollIntoView({behavior:'smooth'})">
-            <span class="icon">📸</span>
-            <h4>Upload Photo</h4>
-            <p>Share moments</p>
-        </div>
-        <div class="card" onclick="showSection('notices')">
-            <span class="icon">📋</span>
-            <h4>View Notices</h4>
-            <p>See updates</p>
-        </div>
-        <div class="card" onclick="showSection('gallery')">
-            <span class="icon">🖼️</span>
-            <h4>View Gallery</h4>
-            <p>See photos</p>
-        </div>
-    </div>
-
-    <!-- Post Notice -->
-    <div class="card" id="postNotice">
-        <h3>📢 Post a Notice</h3>
-        <p style="color:#4a5a4a;font-size:14px;margin-bottom:12px;">
-            Examples: "Going to Bankhedi, need anything?" or "Doctor came to village today"
-        </p>
-        <label for="noticeTitle">Title</label>
-        <input type="text" id="noticeTitle" placeholder="e.g., Going to Bankhedi" />
-
-        <label for="noticeContent">Message</label>
-        <textarea id="noticeContent" rows="3" placeholder="Write your notice..."></textarea>
-
-        <button class="btn" id="publishNoticeBtn">📢 Publish Notice</button>
-    </div>
-
-    <!-- Upload Photo with Drag & Drop -->
-    <div class="card" id="uploadPhoto">
-        <h3>📸 Upload Photo</h3>
-
-        <label for="photoCategory">Category</label>
-        <select id="photoCategory">
-            <option value="village">🏘️ Village</option>
-            <option value="farming">🌾 Farming</option>
-            <option value="events">🎉 Events</option>
-        </select>
-
-        <!-- Drag & Drop Area -->
-        <div class="upload-area" id="dropArea">
-            <span class="icon">📤</span>
-            <p><strong>Click to upload</strong> or drag & drop your photo here</p>
-            <p style="font-size:13px;color:#8a9a8a;margin-top:4px;">JPG, PNG, WebP (max 10MB)</p>
-            <input type="file" id="photoFile" accept="image/*" />
+        <!-- ============================================================
+    HOME SECTION
+    ============================================================ -->
+    <section class="section active" id="home">
+        <div class="hero">
+            <h2>🏡 Welcome to Rajthari</h2>
+            <div class="subtitle">Welcome to your village, Rajthari</div>
+            <div class="tagline">🌱 Community Hub: Together We Grow</div>
         </div>
 
-        <!-- Preview Container -->
-        <div class="preview-container" id="previewContainer"></div>
+        <!-- Member Portal Card -->
+        <div class="card" style="text-align:center; background: linear-gradient(135deg, #f8fbf8, #e8f5e9);">
+            <h3>👤 Member Portal</h3>
+            <p style="color:#6a7a6a; font-size:14px;">Access your village dashboard</p>
+            <div style="margin-top:12px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <button class="btn" onclick="showSection('member-login')">🔐 Login</button>
+                <button class="btn btn-outline" onclick="showSection('member-signup')">📝 Sign Up</button>
+                <span style="background:#176b3a; color:white; padding:4px 16px; border-radius:20px; font-size:13px; display:inline-flex; align-items:center;">
+                    👑 Administrator
+                </span>
+            </div>
+        </div>
 
-        <button class="btn" id="uploadPhotoBtn" style="margin-top:16px;">📤 Upload Photo</button>
-    </div>
-</section>
+        <!-- Notices Preview -->
+        <div class="card">
+            <h3>📢 Notices & Announcements</h3>
+            <div id="homeNotices">
+                <p class="loading">Loading notices...</p>
+            </div>
+        </div>
 
-<!-- ============================================================
-NOTICES SECTION
-============================================================ -->
-<section class="section" id="notices">
-    <h2 style="color:#176b3a;text-align:center;margin-bottom:20px;">📢 Village Notices</h2>
-    <div id="noticesContainer">
-        <p class="loading">Loading notices...</p>
-    </div>
-</section>
+        <!-- Community Updates -->
+        <div class="card">
+            <h3>📍 Community Updates</h3>
+            <div class="update-item">
+                <div class="icon">🚗</div>
+                <div class="info">
+                    <h4>Going to Bankhedi?</h4>
+                    <p>Share your travel plans with the community</p>
+                </div>
+                <button class="btn btn-sm" onclick="showSection('dashboard')">Post Update</button>
+            </div>
+            <div class="update-item">
+                <div class="icon">🩺</div>
+                <div class="info">
+                    <h4>Local Service Listings</h4>
+                    <p>Find doctors, mechanics, and other services</p>
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="showSection('dashboard')">View All</button>
+            </div>
+        </div>
 
-<!-- ============================================================
-GALLERY SECTION
-============================================================ -->
-<section class="section" id="gallery">
-    <h2 style="color:#176b3a;text-align:center;margin-bottom:20px;">🖼️ Village Gallery</h2>
+        <!-- Gallery Preview -->
+        <div class="card">
+            <h3>🖼️ Gallery & Community Life</h3>
+            <p class="card-sub">Explore our fields, festivals, and people</p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:12px; margin-top:12px;">
+                <div style="background:#e8f0e8; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:32px;">🌾</div>
+                    <p style="font-size:13px; color:#176b3a; font-weight:600;">Farming in Rajthari</p>
+                </div>
+                <div style="background:#e8f0e8; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:32px;">🎉</div>
+                    <p style="font-size:13px; color:#176b3a; font-weight:600;">Diwali Celebrations</p>
+                </div>
+                <div style="background:#e8f0e8; border-radius:12px; padding:20px; text-align:center;">
+                    <div style="font-size:32px;">🍲</div>
+                    <p style="font-size:13px; color:#176b3a; font-weight:600;">Community Kitchen</p>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:12px;">
+                <button class="btn btn-sm btn-outline" onclick="showSection('gallery')">View Full Gallery →</button>
+            </div>
+        </div>
+    </section>
 
-    <!-- Filter Buttons -->
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">
-        <button class="btn btn-sm btn-outline" onclick="filterGallery('all')">📸 All</button>
-        <button class="btn btn-sm btn-outline" onclick="filterGallery('village')">🏘️ Village</button>
-        <button class="btn btn-sm btn-outline" onclick="filterGallery('farming')">🌾 Farming</button>
-        <button class="btn btn-sm btn-outline" onclick="filterGallery('events')">🎉 Events</button>
-    </div>
+    <!-- ============================================================
+    SIGN UP SECTION
+    ============================================================ -->
+    <section class="section" id="member-signup">
+        <div class="auth-box">
+            <h2>📝 Create Account</h2>
+            <p class="sub">Join the Rajthari community</p>
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" placeholder="Enter your email" />
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" placeholder="Min 6 characters" />
+            <label for="signupConfirm">Confirm Password</label>
+            <input type="password" id="signupConfirm" placeholder="Confirm your password" />
+            <button class="btn btn-block" id="signupBtn">📝 Create Account</button>
+            <p id="signupStatus" class="status"></p>
+            <div class="auth-links">
+                Already have an account? <a onclick="showSection('member-login')">Login here</a>
+                <span class="divider">|</span>
+                <a onclick="showSection('admin-login')">👑 Admin Login</a>
+            </div>
+        </div>
+    </section>
 
-    <div id="galleryContainer" class="gallery-grid">
-        <p class="loading">Loading gallery...</p>
-    </div>
-</section>
+    <!-- ============================================================
+    MEMBER LOGIN SECTION
+    ============================================================ -->
+    <section class="section" id="member-login">
+        <div class="auth-box">
+            <h2>👤 Member Login</h2>
+            <p class="sub">Welcome back to Rajthari</p>
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email" />
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" />
+            <button class="btn btn-block" id="loginBtn">🔐 Login</button>
+            <p id="loginStatus" class="status"></p>
+            <div class="auth-links">
+                Don't have an account? <a onclick="showSection('member-signup')">Sign Up here</a>
+                <span class="divider">|</span>
+                <a onclick="showSection('admin-login')">👑 Admin Login</a>
+            </div>
+        </div>
+    </section>
 
-<!-- ============================================================
-TOAST NOTIFICATION
-============================================================ -->
-<div id="toast"></div>
+    <!-- ============================================================
+    ADMIN LOGIN SECTION
+    ============================================================ -->
+    <section class="section" id="admin-login">
+        <div class="auth-box">
+            <h2>👑 Admin Login</h2>
+            <p class="sub">Village Administrator Access</p>
+            <label for="adminEmail">Admin Email</label>
+            <input type="email" id="adminEmail" placeholder="Admin email" />
+            <label for="adminPassword">Admin Password</label>
+            <input type="password" id="adminPassword" placeholder="Admin password" />
+            <label for="adminKey">Admin Key</label>
+            <input type="password" id="adminKey" placeholder="Enter Admin Key" />
+            <button class="btn btn-block" id="adminLoginBtn">👑 Admin Login</button>
+            <p id="adminStatus" class="status"></p>
+            <div class="auth-links">
+                <a onclick="showSection('member-login')">← Back to Member Login</a>
+                <span class="divider">|</span>
+                <a onclick="showSection('member-signup')">📝 Sign Up</a>
+            </div>
+        </div>
+    </section>
 
-<!-- ============================================================
-FOOTER
-============================================================ -->
-<footer>
-    <p>🌾 Rajthari Village</p>
-    <span>आपका अपना गाँव • आपकी अपनी website</span>
-</footer>
+    <!-- ============================================================
+    DASHBOARD SECTION
+    ============================================================ -->
+    <section class="section" id="dashboard">
+        <div class="hero" style="padding:25px 30px;">
+            <h2>🌾 Rajthari Village</h2>
+            <p style="opacity:0.9;">Welcome, <span id="userName">Member</span>! 👋</p>
+        </div>
 
-<!-- ============================================================
-JAVASCRIPT - ALL LOGIC
-============================================================ -->
-<script>
-    /**
-     * ============================================================
-     * 1. SUPABASE CONFIGURATION
-     * ============================================================
-     */
-    const SUPABASE_URL = "https://idrbdrnzomavafkvoike.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
-    const ADMIN_KEY = "Rajthari";
+        <div class="dashboard-grid">
+            <div class="card" onclick="document.getElementById('postNotice').scrollIntoView({behavior:'smooth'})">
+                <span class="icon">📢</span>
+                <h4>Post Notice</h4>
+                <p>Share updates with village</p>
+            </div>
+            <div class="card" onclick="document.getElementById('uploadPhoto').scrollIntoView({behavior:'smooth'})">
+                <span class="icon">📸</span>
+                <h4>Upload Photo</h4>
+                <p>Share village moments</p>
+            </div>
+            <div class="card" onclick="showSection('notices')">
+                <span class="icon">📋</span>
+                <h4>View Notices</h4>
+                <p>See all updates</p>
+            </div>
+            <div class="card" onclick="showSection('gallery')">
+                <span class="icon">🖼️</span>
+                <h4>View Gallery</h4>
+                <p>See village photos</p>
+            </div>
+        </div>
 
-    // Global state
-    let supabase = null;
-    let currentUser = null;
-    let currentProfile = null;
-    let currentFilter = 'all';
-    let selectedFile = null;
+        <!-- Post Notice -->
+        <div class="card" id="postNotice">
+            <h3>📢 Post a Notice</h3>
+            <label for="noticeTitle">Title</label>
+            <input type="text" id="noticeTitle" placeholder="e.g., Going to Bankhedi" />
+            <label for="noticeContent">Message</label>
+            <textarea id="noticeContent" rows="3" style="width:100%;padding:12px;border:1px solid #d0dcd0;border-radius:8px;font-size:15px;background:#fafcfa;resize:vertical;"></textarea>
+            <button class="btn" id="publishNoticeBtn">📢 Publish Notice</button>
+        </div>
 
-    // ============================================================
-    // 2. INITIALIZE SUPABASE
-    // ============================================================
-    if (!window.supabase) {
-        alert("❌ Supabase SDK load नहीं हुआ। Internet connection check करें।");
-    } else {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-        console.log("✅ Supabase initialized!");
-    }
+        <!-- Upload Photo -->
+        <div class="card" id="uploadPhoto">
+            <h3>📸 Upload Photo</h3>
+            <label for="photoCategory">Category</label>
+            <select id="photoCategory" style="width:100%;padding:12px;border:1px solid #d0dcd0;border-radius:8px;font-size:15px;background:#fff;">
+                <option value="village">🏘️ Village</option>
+                <option value="farming">🌾 Farming</option>
+                <option value="events">🎉 Events</option>
+            </select>
+            <div class="upload-area" id="dropArea">
+                <span class="icon">📤</span>
+                <p><strong>Click to upload</strong> or drag & drop your photo here</p>
+                <p style="font-size:13px;color:#8a9a8a;margin-top:4px;">JPG, PNG, WebP (max 10MB)</p>
+                <input type="file" id="photoFile" accept="image/*" />
+            </div>
+            <div class="preview-container" id="previewContainer"></div>
+            <button class="btn" id="uploadPhotoBtn" style="margin-top:16px;">📤 Upload Photo</button>
+        </div>
+    </section>
 
-    // ============================================================
-    // 3. DOM HELPERS
-    // ============================================================
-    const $ = (id) => document.getElementById(id);
-    const qs = (sel) => document.querySelector(sel);
-    const qsa = (sel) => document.querySelectorAll(sel);
+    <!-- ============================================================
+    NOTICES SECTION
+    ============================================================ -->
+    <section class="section" id="notices">
+        <h2 style="color:#176b3a;text-align:center;margin-bottom:20px;">📢 Notices & Announcements</h2>
+        <div id="noticesContainer"><p class="loading">Loading notices...</p></div>
+    </section>
 
-    // ============================================================
-    // 4. TOAST / NOTIFICATIONS
-    // ============================================================
-    function showToast(message, type = 'success') {
-        const toast = $('toast');
-        toast.textContent = message;
-        toast.className = type;
-        toast.style.display = 'block';
-        clearTimeout(toast._timer);
-        toast._timer = setTimeout(() => { toast.style.display = 'none'; }, 4000);
-    }
+    <!-- ============================================================
+    GALLERY SECTION
+    ============================================================ -->
+    <section class="section" id="gallery">
+        <h2 style="color:#176b3a;text-align:center;margin-bottom:20px;">🖼️ Gallery & Community Life</h2>
+        <p style="text-align:center;color:#6a7a6a;margin-bottom:20px;">Explore our fields, festivals, and people</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">
+            <button class="btn btn-sm btn-outline" onclick="filterGallery('all')">📸 All</button>
+            <button class="btn btn-sm btn-outline" onclick="filterGallery('village')">🏘️ Village</button>
+            <button class="btn btn-sm btn-outline" onclick="filterGallery('farming')">🌾 Farming</button>
+            <button class="btn btn-sm btn-outline" onclick="filterGallery('events')">🎉 Events</button>
+        </div>
+        <div id="galleryContainer" class="gallery-grid"><p class="loading">Loading gallery...</p></div>
+    </section>
 
-    // ============================================================
-    // 5. SECTION NAVIGATION
-    // ============================================================
-    function showSection(sectionId) {
-        qsa('.section').forEach(el => el.classList.remove('active'));
-        const target = $(sectionId);
-        if (target) target.classList.add('active');
-        qsa('nav a[data-section]').forEach(el => el.classList.remove('active'));
-        const navLink = document.querySelector(`nav a[data-section="${sectionId}"]`);
-        if (navLink) navLink.classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    <!-- ============================================================
+    TOAST
+    ============================================================ -->
+    <div id="toast"></div>
 
-    // ============================================================
-    // 6. AUTH UI UPDATES
-    // ============================================================
-    function updateUIForAuth() {
-        const headerUser = $('headerUser');
-        const headerGuest = $('headerGuest');
-        const navLogin = $('navLogin');
-        const navSignup = $('navSignup');
-        const navAdmin = $('navAdmin');
-        const navDashboard = $('navDashboard');
+    <!-- ============================================================
+    FOOTER
+    ============================================================ -->
+    <footer>
+        <div class="footer-links">
+            <a href="#" onclick="showSection('home')">🏠 Home</a>
+            <a href="#" onclick="showSection('notices')">📢 Notices</a>
+            <a href="#" onclick="showSection('gallery')">🖼️ Gallery</a>
+            <a href="#" onclick="showSection('member-login')">🔐 Login</a>
+            <a href="#" onclick="showSection('member-signup')">📝 Sign Up</a>
+            <a href="#" onclick="showSection('dashboard')">📊 Dashboard</a>
+        </div>
+        <div class="copyright">© 2024 Rajthari Village. All Rights Reserved. Professional Platform by Rajthari Tech.</div>
+    </footer>
 
-        if (currentUser) {
-            headerUser.style.display = 'flex';
-            headerGuest.style.display = 'none';
-            $('headerName').textContent = currentUser.email.split('@')[0] || 'Member';
-            $('headerAvatar').textContent = (currentUser.email.charAt(0) || 'M').toUpperCase();
-            navLogin.style.display = 'none';
-            navSignup.style.display = 'none';
-            navAdmin.style.display = 'none';
-            navDashboard.style.display = 'inline';
-            if (currentProfile) {
-                $('userName').textContent = currentUser.email.split('@')[0] || 'Member';
-                showSection('dashboard');
-                loadNotices();
-                loadGallery();
-            }
-        } else {
-            headerUser.style.display = 'none';
-            headerGuest.style.display = 'flex';
-            navLogin.style.display = 'inline';
-            navSignup.style.display = 'inline';
-            navAdmin.style.display = 'inline';
-            navDashboard.style.display = 'none';
-            const dash = $('dashboard');
-            if (dash && dash.classList.contains('active')) {
-                showSection('home');
-            }
-        }
-    }
-
-    // ============================================================
-    // 7. LOAD CURRENT USER
-    // ============================================================
-    async function loadCurrentUser() {
-        if (!supabase) return;
-        try {
-            const { data, error } = await supabase.auth.getUser();
-            if (error || !data || !data.user) {
-                currentUser = null;
-                currentProfile = null;
-                updateUIForAuth();
-                return;
-            }
-            currentUser = data.user;
-            const { data: profile, error: pErr } = await supabase
-                .from('profiles')
-                .select('id, role')
-                .eq('id', currentUser.id)
-                .maybeSingle();
-            if (pErr) {
-                console.error('Profile error:', pErr);
-                currentProfile = null;
-            } else {
-                currentProfile = profile;
-            }
-            updateUIForAuth();
-            if (currentProfile) {
-                loadNotices();
-                loadGallery();
-            }
-        } catch (error) {
-            console.error('loadCurrentUser error:', error);
-        }
-    }
-
-    // ============================================================
-    // 8. SIGN UP
-    // ============================================================
-    async function signUp() {
-        const email = $('signupEmail').value.trim();
-        const password = $('signupPassword').value;
-        const confirm = $('signupConfirm').value;
-
-        if (!email || !password || !confirm) {
-            setStatus('signupStatus', '⚠️ सभी fields भरें।', true);
-            return;
-        }
-        if (password.length < 6) {
-            setStatus('signupStatus', '⚠️ Password कम से कम 6 characters का होना चाहिए।', true);
-            return;
-        }
-        if (password !== confirm) {
-            setStatus('signupStatus', '❌ Passwords मैच नहीं कर रहे।', true);
-            return;
-        }
-
-        setStatus('signupStatus', '📝 Account बन रहा है...', false);
-
-        try {
-            const { data, error } = await supabase.auth.signUp({ email, password });
-            if (error) {
-                setStatus('signupStatus', '❌ ' + error.message, true);
-                return;
-            }
-            if (!data || !data.user) {
-                setStatus('signupStatus', '❌ Account नहीं बन पाया।', true);
-                return;
-            }
-            const { error: pErr } = await supabase
-                .from('profiles')
-                .insert({ id: data.user.id, role: 'member' });
-            if (pErr) {
-                console.error('Profile creation error:', pErr);
-                setStatus('signupStatus', '⚠️ Account बन गया है, लेकिन profile नहीं बन पाई। Admin से contact करें।', true);
-                return;
-            }
-            setStatus('signupStatus', '✅ Account created! Login now.', false);
-            showToast('✅ Account Created! Please Login.', 'success');
-            $('signupEmail').value = '';
-            $('signupPassword').value = '';
-            $('signupConfirm').value = '';
-            setTimeout(() => showSection('member-login'), 1500);
-        } catch (error) {
-            setStatus('signupStatus', '❌ ' + error.message, true);
-        }
-    }
-
-    // ============================================================
-    // 9. MEMBER LOGIN
-    // ============================================================
-    async function memberLogin() {
-        const email = $('loginEmail').value.trim();
-        const password = $('loginPassword').value;
-        if (!email || !password) {
-            setStatus('loginStatus', '⚠️ Email और password डालें।', true);
-            return;
-        }
-        setStatus('loginStatus', '🔐 Logging in...', false);
-        try {
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) {
-                setStatus('loginStatus', '❌ ' + error.message, true);
-                return;
-            }
-            currentUser = data.user;
-            await loadCurrentUser();
-            setStatus('loginStatus', '✅ Login successful!', false);
-            showToast('✅ Welcome back!', 'success');
-            $('loginEmail').value = '';
-            $('loginPassword').value = '';
-        } catch (error) {
-            setStatus('loginStatus', '❌ ' + error.message, true);
-        }
-    }
-
-    // ============================================================
-    // 10. ADMIN LOGIN
-    // ============================================================
-    async function adminLogin() {
-        const email = $('adminEmail').value.trim();
-        const password = $('adminPassword').value;
-        const key = $('adminKey').value.trim();
-
-        if (!email || !password || !key) {
-            setStatus('adminStatus', '⚠️ सभी fields भरें।', true);
-            return;
-        }
-        if (key !== ADMIN_KEY) {
-            setStatus('adminStatus', '❌ Wrong Admin Key.', true);
-            return;
-        }
-
-        setStatus('adminStatus', '🔐 Logging in...', false);
-
-        try {
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) {
-                setStatus('adminStatus', '❌ ' + error.message, true);
-                return;
-            }
-            currentUser = data.user;
-            const { data: profile, error: pErr } = await supabase
-                .from('profiles')
-                .select('role')
-                .eq('id', currentUser.id)
-                .single();
-
-            if (pErr || !profile || profile.role !== 'admin') {
-                await supabase.auth.signOut();
-                currentUser = null;
-                setStatus('adminStatus', '❌ यह account Admin नहीं है।', true);
-                return;
-            }
-            currentProfile = profile;
-            await loadCurrentUser();
-            setStatus('adminStatus', '👑 Admin Login Successful!', false);
-            showToast('👑 Admin Login Successful!', 'success');
-            $('adminEmail').value = '';
-            $('adminPassword').value = '';
-            $('adminKey').value = '';
-        } catch (error) {
-            setStatus('adminStatus', '❌ ' + error.message, true);
-        }
-    }
-
-    // ============================================================
-    // 11. LOGOUT
-    // ============================================================
-    async function logout() {
-        if (!supabase) return;
-        try {
-            await supabase.auth.signOut();
-            currentUser = null;
-            currentProfile = null;
-            updateUIForAuth();
-            showToast('🚪 Logged out successfully.', 'success');
-            showSection('home');
-            loadNotices();
-            loadGallery();
-        } catch (error) {
-            showToast('❌ Logout failed: ' + error.message, 'error');
-        }
-    }
-
-    // ============================================================
-    // 12. STATUS HELPER
-    // ============================================================
-    function setStatus(id, text, isError) {
-        const el = $(id);
-        if (el) {
-            el.textContent = text;
-            el.className = 'status' + (isError ? ' error' : ' success');
-        }
-    }
-
-    // ============================================================
-    // 13. NOTICES - LOAD
-    // ============================================================
-    async function loadNotices() {
-        const container = $('noticesContainer');
-        if (!container) return;
-        container.innerHTML = '<p class="loading">Loading notices...</p>';
-        try {
-            const { data, error } = await supabase
-                .from('notices')
-                .select('*')
-                .order('created_at', { ascending: false });
-            if (error) {
-                container.innerHTML = '<p class="empty">❌ Notices load नहीं हो सके।</p>';
-                return;
-            }
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p class="empty"><span class="icon">📢</span>अभी कोई notice नहीं है।</p>';
-                return;
-            }
-            container.innerHTML = '';
-            data.forEach(notice => {
-                const div = document.createElement('div');
-                div.className = 'notice-item';
-                const isOwner = currentUser && notice.user_id === currentUser.id;
-                const isAdmin = currentProfile && currentProfile.role === 'admin';
-                const canDelete = isOwner || isAdmin;
-                div.innerHTML = `
-                        <div class="content">
-                            <h4>${notice.title || 'Notice'}</h4>
-                                                        <p>${notice.content || ''}</p>
-                            <div class="meta">
-                                <span>📅 ${new Date(notice.created_at).toLocaleDateString()}</span>
-                                ${isOwner ? '<span style="background:#e8f0e8;padding:0 10px;border-radius:12px;">Your notice</span>' : ''}
-                            </div>
-                        </div>
-                        <div class="actions">
-                            ${canDelete ? `<button class="btn btn-danger btn-sm" onclick="deleteNotice('${notice.id}')">🗑️ Delete</button>` : ''}
-                        </div>
-                    `;
-                container.appendChild(div);
-            });
-        } catch (error) {
-            container.innerHTML = '<p class="empty">❌ Error loading notices.</p>';
-        }
-    }
-
-    // ============================================================
-    // 14. NOTICES - PUBLISH
-    // ============================================================
-    async function publishNotice() {
-        if (!currentUser) {
-            showToast('⚠️ Please login first.', 'error');
-            return;
-        }
-        const title = $('noticeTitle').value.trim();
-        const content = $('noticeContent').value.trim();
-        if (!title || !content) {
-            showToast('⚠️ Title और Message दोनों डालें।', 'error');
-            return;
-        }
-        try {
-            const { error } = await supabase
-                .from('notices')
-                .insert({ title, content, user_id: currentUser.id });
-            if (error) {
-                showToast('❌ ' + error.message, 'error');
-                return;
-            }
-            showToast('✅ Notice published!', 'success');
-            $('noticeTitle').value = '';
-            $('noticeContent').value = '';
-            loadNotices();
-        } catch (error) {
-            showToast('❌ ' + error.message, 'error');
-        }
-    }
-
-    // ============================================================
-    // 15. NOTICES - DELETE
-    // ============================================================
-    async function deleteNotice(id) {
-        if (!currentUser) {
-            showToast('⚠️ Please login first.', 'error');
-            return;
-        }
-        if (!confirm('क्या आप यह notice delete करना चाहते हैं?')) return;
-        try {
-            const { error } = await supabase
-                .from('notices')
-                .delete()
-                .eq('id', id);
-            if (error) {
-                showToast('❌ ' + error.message, 'error');
-                return;
-            }
-            showToast('✅ Notice deleted!', 'success');
-            loadNotices();
-        } catch (error) {
-            showToast('❌ ' + error.message, 'error');
-        }
-    }
-
-    // ============================================================
-    // 16. PHOTO UPLOAD - PREVIEW & DRAG & DROP
-    // ============================================================
-    const dropArea = $('dropArea');
-    const fileInput = $('photoFile');
-    const previewContainer = $('previewContainer');
-
-    dropArea.addEventListener('click', () => fileInput.click());
-
-    dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('dragover');
-    });
-
-    dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('dragover');
-    });
-
-    dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('dragover');
-        if (e.dataTransfer.files.length) {
-            handleFileSelect(e.dataTransfer.files[0]);
-        }
-    });
-
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-            handleFileSelect(e.target.files[0]);
-        }
-    });
-
-    function handleFileSelect(file) {
-        if (!file.type.startsWith('image/')) {
-            showToast('⚠️ Please select an image file.', 'error');
-            return;
-        }
-        if (file.size > 10 * 1024 * 1024) {
-            showToast('❌ Photo 10 MB से छोटी होनी चाहिए।', 'error');
-            return;
-        }
-        selectedFile = file;
-        previewContainer.innerHTML = '';
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const div = document.createElement('div');
-            div.className = 'preview-item';
-            div.innerHTML = `
-                    <img src="${e.target.result}" alt="Preview" />
-                    <button class="remove" onclick="removePreview()">×</button>
-                `;
-            previewContainer.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function removePreview() {
-        selectedFile = null;
-        previewContainer.innerHTML = '';
-        fileInput.value = '';
-    }
-
-    // ============================================================
-    // 17. PHOTO UPLOAD - SUBMIT
-    // ============================================================
-    async function uploadPhoto() {
-        if (!currentUser) {
-            showToast('⚠️ Please login first.', 'error');
-            return;
-        }
-        if (!selectedFile) {
-            showToast('⚠️ पहले photo select करें।', 'error');
-            return;
-        }
-        const category = $('photoCategory').value;
-        showToast('📤 Uploading...', 'success');
-        try {
-            const ext = selectedFile.name.split('.').pop().toLowerCase();
-            const fileName = Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + ext;
-            const path = 'gallery/' + fileName;
-            const { error: uploadErr } = await supabase.storage
-                .from('gallery')
-                .upload(path, selectedFile);
-            if (uploadErr) {
-                showToast('❌ Upload failed: ' + uploadErr.message, 'error');
-                return;
-            }
-            const { data: urlData } = supabase.storage
-                .from('gallery')
-                .getPublicUrl(path);
-            const { error: dbErr } = await supabase
-                .from('gallery_photos')
-                .insert({
-                    category: category,
-                    file_name: selectedFile.name,
-                    storage_path: path,
-                    url: urlData.publicUrl,
-                    uploaded_by: currentUser.id
-                });
-            if (dbErr) {
-                await supabase.storage.from('gallery').remove([path]);
-                showToast('❌ Database error: ' + dbErr.message, 'error');
-                return;
-            }
-            showToast('✅ Photo uploaded!', 'success');
-            removePreview();
-            loadGallery(currentFilter);
-        } catch (error) {
-            showToast('❌ ' + error.message, 'error');
-        }
-    }
-
-    // ============================================================
-    // 18. GALLERY - LOAD
-    // ============================================================
-    async function loadGallery(filter = 'all') {
-        const container = $('galleryContainer');
-        if (!container) return;
-        container.innerHTML = '<p class="loading">Loading gallery...</p>';
-        try {
-            let query = supabase
-                .from('gallery_photos')
-                .select('*')
-                .order('created_at', { ascending: false });
-            if (filter !== 'all') {
-                query = query.eq('category', filter);
-            }
-            const { data, error } = await query;
-            if (error) {
-                container.innerHTML = '<p class="empty">❌ Gallery load नहीं हो सकी।</p>';
-                return;
-            }
-            if (!data || data.length === 0) {
-                container.innerHTML = '<p class="empty"><span class="icon">📷</span>इस category में अभी कोई photo नहीं है।</p>';
-                return;
-            }
-            container.innerHTML = '';
-            data.forEach(photo => {
-                const div = document.createElement('div');
-                div.className = 'photo-card';
-                const isOwner = currentUser && photo.uploaded_by === currentUser.id;
-                const isAdmin = currentProfile && currentProfile.role === 'admin';
-                const canDelete = isOwner || isAdmin;
-                div.innerHTML = `
-                        <img src="${photo.url || photo.storage_path}" alt="${photo.file_name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%22 y=%22115%22 font-size=%2230%22 fill=%22%23999%22%3E📷%3C/text%3E%3C/svg%3E'" />
-                        <div class="info">
-                            <span class="cat">${photo.category}</span>
-                            <span style="font-size:12px;color:#8a9a8a;">${new Date(photo.created_at).toLocaleDateString()}</span>
-                            ${canDelete ? `<button class="btn btn-danger btn-sm" onclick="deletePhoto('${photo.id}','${photo.storage_path}')">🗑️</button>` : ''}
-                        </div>
-                    `;
-                container.appendChild(div);
-            });
-        } catch (error) {
-            container.innerHTML = '<p class="empty">❌ Error loading gallery.</p>';
-        }
-    }
-
-    // ============================================================
-    // 19. GALLERY - FILTER
-    // ============================================================
-    function filterGallery(category) {
-        currentFilter = category;
-        loadGallery(category);
-    }
-
-    // ============================================================
-    // 20. GALLERY - DELETE PHOTO
-    // ============================================================
-    async function deletePhoto(id, storagePath) {
-        if (!currentUser) {
-            showToast('⚠️ Please login first.', 'error');
-            return;
-        }
-        if (!confirm('क्या आप यह photo delete करना चाहते हैं?')) return;
-        try {
-            const { data: photo, error: fetchErr } = await supabase
-                .from('gallery_photos')
-                .select('uploaded_by')
-                .eq('id', id)
-                .single();
-            if (fetchErr) {
-                showToast('❌ Photo not found.', 'error');
-                return;
-            }
-            const isOwner = photo.uploaded_by === currentUser.id;
-            const isAdmin = currentProfile && currentProfile.role === 'admin';
-            if (!isOwner && !isAdmin) {
-                showToast('❌ You can only delete your own photos.', 'error');
-                return;
-            }
-            if (storagePath) {
-                await supabase.storage.from('gallery').remove([storagePath]);
-            }
-            const { error } = await supabase
-                .from('gallery_photos')
-                .delete()
-                .eq('id', id);
-            if (error) {
-                showToast('❌ ' + error.message, 'error');
-                return;
-            }
-            showToast('✅ Photo deleted!', 'success');
-            loadGallery(currentFilter);
-        } catch (error) {
-            showToast('❌ ' + error.message, 'error');
-        }
-    }
-
-    // ============================================================
-    // 21. EVENT LISTENERS
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        qsa('nav a[data-section]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const section = this.dataset.section;
-                if (section === 'dashboard' && !currentUser) {
-                    showToast('⚠️ Please login first.', 'error');
-                    showSection('member-login');
-                    return;
-                }
-                showSection(section);
-            });
-        });
-
-        $('headerLogoutBtn').addEventListener('click', logout);
-        $('signupBtn').addEventListener('click', signUp);
-        $('loginBtn').addEventListener('click', memberLogin);
-        $('adminLoginBtn').addEventListener('click', adminLogin);
-        $('publishNoticeBtn').addEventListener('click', publishNotice);
-        $('uploadPhotoBtn').addEventListener('click', uploadPhoto);
-
-        $('loginPassword').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') memberLogin();
-        });
-        $('signupConfirm').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') signUp();
-        });
-        $('adminKey').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') adminLogin();
-        });
-
-        loadCurrentUser();
-        loadNotices();
-        loadGallery();
-
-        console.log('🌾 Rajthari Village loaded successfully!');
-        console.log('🔑 Admin Key: Rajthari');
-    });
-
-    // ============================================================
-    // 22. EXPOSE FUNCTIONS TO HTML
-    // ============================================================
-    window.showSection = showSection;
-    window.deleteNotice = deleteNotice;
-    window.deletePhoto = deletePhoto;
-    window.filterGallery = filterGallery;
-    window.loadNotices = loadNotices;
-    window.loadGallery = loadGallery;
-    window.removePreview = removePreview;
-    window.uploadPhoto = uploadPhoto;
-    window.publishNotice = publishNotice;
-    window.signUp = signUp;
-    window.memberLogin = memberLogin;
-    window.adminLogin = adminLogin;
-    window.logout = logout;
-</script>
-    <!-- ============================================================ -->
-    <!-- DEBUG CODE - PASTE HERE -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
     <script>
         // ============================================================
-        // DEBUG OVERRIDE - Shows alerts for login steps
+        // SUPABASE CONFIG - YOUR CREDENTIALS INSERTED
         // ============================================================
+        const SUPABASE_URL = "https://gwfgmufddxcloypugjof.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3ZmdtdWZkZHhjbG95cHVnam9mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NTIzMTQsImV4cCI6MjEwMjUyODMxNH0.u2fY-uvnkSs7d9CCbt6h-63pJfb4kClvNSjpRSvYz5I";
+        const ADMIN_KEY = "Rajthari";
 
-        // Save original functions
-        const originalMemberLogin = window.memberLogin;
-        const originalAdminLogin = window.adminLogin;
+        // Create Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("✅ Supabase initialized");
 
-        // Override Member Login with debug
-        window.memberLogin = async function() {
-            alert('🔐 Member Login clicked');
-            
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            
-            alert('📧 Email: ' + email);
-            
-            if (!email || !password) {
-                alert('⚠️ Email or password is empty');
-                return;
-            }
-            
-            alert('🔑 Attempting login with Supabase...');
-            
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                
-                if (error) {
-                    alert('❌ Login Error: ' + error.message);
-                    document.getElementById('loginStatus').textContent = '❌ ' + error.message;
-                    document.getElementById('loginStatus').className = 'status error';
-                    return;
-                }
-                
-                alert('✅ Login successful! User: ' + data.user.email);
-                
-                // Load profile
-                const { data: profile, error: pErr } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', data.user.id)
-                    .single();
-                
-                if (pErr) {
-                    alert('⚠️ Profile fetch error: ' + pErr.message);
-                } else {
-                    alert('👤 Profile role: ' + (profile ? profile.role : 'null'));
-                }
-                
-                currentUser = data.user;
-                currentProfile = profile || null;
-                
-                await loadCurrentUser();
-                
-                document.getElementById('loginStatus').textContent = '✅ Login successful!';
-                document.getElementById('loginStatus').className = 'status success';
-                showToast('✅ Welcome back!', 'success');
-                
-            } catch (err) {
-                alert('❌ Exception: ' + err.message);
-            }
-        };
+        // ============================================================
+        // GLOBAL STATE
+        // ============================================================
+        let currentUser = null;
+        let currentProfile = null;
+        let currentFilter = 'all';
+        let selectedFile = null;
 
-        // Override Admin Login with debug
-        window.adminLogin = async function() {
-            alert('👑 Admin Login clicked');
-            
-            const email = document.getElementById('adminEmail').value.trim();
-            const password = document.getElementById('adminPassword').value;
-            const key = document.getElementById('adminKey').value.trim();
-            
-            alert('📧 Admin Email: ' + email);
-            alert('🔑 Admin Key entered: ' + key);
-            
-            if (!email || !password || !key) {
-                alert('⚠️ All fields are required');
-                return;
-            }
-            
-            if (key !== 'Rajthari') {
-                alert('❌ Wrong Admin Key. Expected "Rajthari", got "' + key + '"');
-                document.getElementById('adminStatus').textContent = '❌ Wrong Admin Key.';
-                document.getElementById('adminStatus').className = 'status error';
-                return;
-            }
-            
-            alert('✅ Admin Key is correct. Attempting login...');
-            
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                
-                if (error) {
-                    alert('❌ Admin Login Error: ' + error.message);
-                    document.getElementById('adminStatus').textContent = '❌ ' + error.message;
-                    document.getElementById('adminStatus').className = 'status error';
-                    return;
-                }
-                
-                alert('✅ Admin auth successful! Checking role...');
-                
-                const { data: profile, error: pErr } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', data.user.id)
-                    .single();
-                
-                if (pErr) {
-                    alert('⚠️ Profile fetch error: ' + pErr.message);
-                    document.getElementById('adminStatus').textContent = '❌ Profile not found';
-                    document.getElementById('adminStatus').className = 'status error';
-                    await supabase.auth.signOut();
-                    return;
-                }
-                
-                alert('👑 Profile role: ' + (profile ? profile.role : 'null'));
-                
-                if (!profile || profile.role !== 'admin') {
-                    alert('❌ This user is NOT admin. Role is: ' + (profile ? profile.role : 'null'));
-                    document.getElementById('adminStatus').textContent = '❌ This account is not admin.';
-                    document.getElementById('adminStatus').className = 'status error';
-                    await supabase.auth.signOut();
-                    return;
-                }
-                
-                alert('✅ Admin role confirmed!');
-                currentUser = data.user;
-                currentProfile = profile;
-                
-                await loadCurrentUser();
-                
-                document.getElementById('adminStatus').textContent = '👑 Admin Login Successful!';
-                document.getElementById('adminStatus').className = 'status success';
-                showToast('👑 Admin Login Successful!', 'success');
-                
-                document.getElementById('adminEmail').value = '';
-                document.getElementById('adminPassword').value = '';
-                document.getElementById('adminKey').value = '';
-                
-            } catch (err) {
-                alert('❌ Exception: ' + err.message);
-            }
-        };
+        // ============================================================
+        // DOM HELPERS
+        // ============================================================
+        function $(id) { return document.getElementById(id); }
 
-        // Add a Supabase connection test
-        window.testSupabase = async function() {
-            alert('🔍 Testing Supabase connection...');
-            try {
-                const { data, error } = await supabase.from('profiles').select('count');
-                if (error) {
-                    alert('❌ Connection test failed: ' + error.message);
-                } else {
-                    alert('✅ Supabase connected! Profiles table exists.');
-                }
-            } catch (err) {
-                alert('❌ Connection test error: ' + err.message);
-            }
-        };
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(msg, type) {
+            type = type || 'success';
+            const toast = $('toast');
+            toast.textContent = msg;
+            toast.className = type;
+            toast.style.display = 'block';
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(function() { toast.style.display = 'none'; }, 4000);
+        }
 
-        // Auto-run test on page load
-        setTimeout(() => {
-            alert('🔍 Running Supabase connection test...');
-            if (typeof supabase !== 'undefined' && supabase) {
-                alert('✅ Supabase client is defined.');
-                testSupabase();
+        // ============================================================
+        // SECTION NAVIGATION
+        // ============================================================
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(function(el) { el.classList.remove('active'); });
+            const target = $(id);
+            if (target) target.classList.add('active');
+
+            document.querySelectorAll('nav a').forEach(function(el) { el.classList.remove('active'); });
+            const navLink = document.querySelector('nav a[onclick*="' + id + '"]');
+            if (navLink) navLink.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // STATUS
+        // ============================================================
+        function setStatus(id, text, isError) {
+            const el = $(id);
+            if (el) {
+                el.textContent = text;
+                el.className = 'status' + (isError ? ' error' : ' success');
+            }
+        }
+
+        // ============================================================
+        // AUTH UI
+        // ============================================================
+        function updateUIForAuth() {
+            const headerUser = $('headerUser');
+            const navLogin = $('navLogin');
+            const navSignup = $('navSignup');
+            const navAdmin = $('navAdmin');
+            const navDashboard = $('navDashboard');
+
+            if (currentUser) {
+                headerUser.style.display = 'flex';
+                $('headerName').textContent = currentUser.email.split('@')[0] || 'Member';
+                $('headerAvatar').textContent = (currentUser.email.charAt(0) || 'M').toUpperCase();
+
+                navLogin.style.display = 'none';
+                navSignup.style.display = 'none';
+                navAdmin.style.display = 'none';
+                navDashboard.style.display = 'inline';
+
+                if (currentProfile) {
+                    $('userName').textContent = currentUser.email.split('@')[0] || 'Member';
+                    showSection('dashboard');
+                    loadNotices();
+                    loadGallery();
+                }
             } else {
-                alert('❌ Supabase client is NOT defined. Check your SUPABASE_URL and key.');
+                headerUser.style.display = 'none';
+                navLogin.style.display = 'inline';
+                navSignup.style.display = 'inline';
+                navAdmin.style.display = 'inline';
+                navDashboard.style.display = 'none';
+
+                if ($('dashboard').classList.contains('active')) {
+                    showSection('home');
+                }
             }
-        }, 1500);
+        }
 
-        console.log('🔧 Debug mode active. Login functions have alerts.');
-        console.log('📞 If login fails, check the alert messages.');
-    </script>
-    <!-- ============================================================ -->
-    <!-- END DEBUG CODE -->
-    <!-- ============================================================ -->
+        // ============================================================
+        // LOAD CURRENT USER
+        // ============================================================
+        async function loadCurrentUser() {
+            if (!supabase) return;
+            try {
+                const { data, error } = await supabase.auth.getUser();
+                if (error || !data || !data.user) {
+                    currentUser = null;
+                    currentProfile = null;
+                    updateUIForAuth();
+                    return;
+                }
+                currentUser = data.user;
 
-</body>
-</html>
+                const { data: profile, error: pErr } = await supabase
+                    .from('profiles')
+                    .select('id, role')
+                    .eq('id', currentUser.id)
+                    .maybeSingle();
+
+                if (pErr) {
+                    console.error('Profile error:', pErr);
+                    currentProfile = null;
+                } else {
+                    currentProfile = profile;
+                }
+
+                updateUIForAuth();
+
+                if (currentProfile) {
+                    loadNotices();
+                    loadGallery();
+                    loadHomeNotices();
+                }
+            } catch (error) {
+                console.error('loadCurrentUser error:', error);
+            }
+        }
+
+        // ============================================================
+        // SIGN UP
+        // ============================================================
+        async function signUp() {
+            const email = $('signupEmail').value.trim();
+            const password = $('signupPassword').value;
+            const confirm = $('signupConfirm').value;
+
+            if (!email || !password || !confirm) {
+                setStatus('signupStatus', '⚠️ All fields are required.', true);
+                return;
+            }
+            if (password.length < 6) {
+                setStatus('signupStatus', '⚠️ Password must be at least 6 characters.', true);
+                return;
+            }
+            if (password !== confirm) {
+                setStatus('signupStatus', '❌ Passwords do not match.', true);
+                return;
+            }
+
+            setStatus('signupStatus', '📝 Creating account...', false);
+
+            try {
+                const { data, error } = await supabase.auth.signUp({ email, password });
+                if (error) {
+                    setStatus('signupStatus', '❌ ' + error..message, true);
+            return;
+        }
+        if (!data || !data.user) {
+            setStatus('signupStatus', '❌ Account could not be created.', true);
+            return;
+        }
+
+        const { error: pErr } = await supabase
+            .from('profiles')
+            .insert({ id: data.user.id, role: 'member' });
+
+        if (pErr) {
+            console.error('Profile creation error:', pErr);
+            setStatus('signupStatus', '⚠️ Account created but profile failed.', true);
+            return;
+        }
+
+        setStatus('signupStatus', '✅ Account created! Please login.', false);
+        showToast('✅ Account Created! Please Login.', 'success');
+
+        $('signupEmail').value = '';
+        $('signupPassword').value = '';
+        $('signupConfirm').value = '';
+
+        setTimeout(function() { showSection('member-login'); }, 1500);
+    } catch (error) {
+        setStatus('signupStatus', '❌ ' + error.message, true);
+    }
+}
+
+// ============================================================
+// MEMBER LOGIN
+// ============================================================
+async function memberLogin() {
+    const email = $('loginEmail').value.trim();
+    const password = $('loginPassword').value;
+
+    if (!email || !password) {
+        setStatus('loginStatus', '⚠️ Email and password are required.', true);
+        return;
+    }
+
+    setStatus('loginStatus', '🔐 Logging in...', false);
+
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            setStatus('loginStatus', '❌ ' + error.message, true);
+            return;
+        }
+
+        currentUser = data.user;
+        await loadCurrentUser();
+
+        setStatus('loginStatus', '✅ Login successful!', false);
+        showToast('✅ Welcome back!', 'success');
+
+        $('loginEmail').value = '';
+        $('loginPassword').value = '';
+    } catch (error) {
+        setStatus('loginStatus', '❌ ' + error.message, true);
+    }
+}
+
+// ============================================================
+// ADMIN LOGIN
+// ============================================================
+async function adminLogin() {
+    const email = $('adminEmail').value.trim();
+    const password = $('adminPassword').value;
+    const key = $('adminKey').value.trim();
+
+    if (!email || !password || !key) {
+        setStatus('adminStatus', '⚠️ All fields are required.', true);
+        return;
+    }
+    if (key !== ADMIN_KEY) {
+        setStatus('adminStatus', '❌ Wrong Admin Key.', true);
+        return;
+    }
+
+    setStatus('adminStatus', '🔐 Logging in...', false);
+
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            setStatus('adminStatus', '❌ ' + error.message, true);
+            return;
+        }
+
+        currentUser = data.user;
+
+        const { data: profile, error: pErr } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', currentUser.id)
+            .single();
+
+        if (pErr || !profile || profile.role !== 'admin') {
+            await supabase.auth.signOut();
+            currentUser = null;
+            setStatus('adminStatus', '❌ This account is not an admin.', true);
+            return;
+        }
+
+        currentProfile = profile;
+        await loadCurrentUser();
+
+        setStatus('adminStatus', '👑 Admin Login Successful!', false);
+        showToast('👑 Admin Login Successful!', 'success');
+
+        $('adminEmail').value = '';
+        $('adminPassword').value = '';
+        $('adminKey').value = '';
+    } catch (error) {
+        setStatus('adminStatus', '❌ ' + error.message, true);
+    }
+}
+
+// ============================================================
+// LOGOUT
+// ============================================================
+async function logout() {
+    if (!supabase) return;
+    try {
+        await supabase.auth.signOut();
+        currentUser = null;
+        currentProfile = null;
+        updateUIForAuth();
+        showToast('🚪 Logged out.', 'success');
+        showSection('home');
+        loadNotices();
+        loadGallery();
+        loadHomeNotices();
+    } catch (error) {
+        showToast('❌ ' + error.message, 'error');
+    }
+}
+
+// ============================================================
+// HOME NOTICES
+// ============================================================
+async function loadHomeNotices() {
+    const container = $('homeNotices');
+    if (!container) return;
+
+    container.innerHTML = '<p class="loading">Loading notices...</p>';
+
+    try {
+        const { data, error } = await supabase
+            .from('notices')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(3);
+
+        if (error || !data || data.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center; padding:10px; color:#6a7a6a;">
+                    <p>📢 No notices yet. Check back soon!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = '';
+        data.forEach(function(notice) {
+            const div = document.createElement('div');
+            div.style.cssText = 'padding:10px 0; border-bottom:1px solid #e8ede8;';
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                    <div>
+                        <strong style="color:#176b3a;">${notice.title || 'Notice'}</strong>
+                        <p style="font-size:14px; color:#4a5a4a; margin-top:2px;">${notice.content || ''}</p>
+                    </div>
+                    <span style="font-size:12px; color:#8a9a8a;">${new Date(notice.created_at).toLocaleDateString()}</span>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        container.innerHTML += `
+            <div style="text-align:center; margin-top:10px;">
+                <button class="btn btn-sm btn-outline" onclick="showSection('notices')">View All Notices →</button>
+            </div>
+        `;
+    } catch (error) {
+        container.innerHTML = '<p class="empty">❌ Could not load notices.</p>';
+    }
+}
+
+// ============================================================
+// NOTICES - LOAD
+// ============================================================
+async function loadNotices() {
+    const container = $('noticesContainer');
+    if (!container) return;
+
+    container.innerHTML = '<p class="loading">Loading notices...</p>';
+
+    try {
+        const { data, error } = await supabase
+            .from('notices')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            container.innerHTML = '<p class="empty">❌ Notices could not be loaded.</p>';
+            return;
+        }
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p class="empty"><span class="icon">📢</span>No notices available.</p>';
+            return;
+        }
+
+        container.innerHTML = '';
+
+        data.forEach(function(notice) {
+            const div = document.createElement('div');
+            div.className = 'notice-item';
+
+            const isOwner = currentUser && notice.user_id === currentUser.id;
+            const isAdmin = currentProfile && currentProfile.role === 'admin';
+            const canDelete = isOwner || isAdmin;
+
+            div.innerHTML = `
+                <div class="content">
+                    <h4>${notice.title || 'Notice'}</h4>
+                    <p>${notice.content || ''}</p>
+                    <div class="meta">
+                        <span>📅 ${new Date(notice.created_at).toLocaleDateString()}</span>
+                        ${isOwner ? '<span class="tag">Your notice</span>' : ''}
+                    </div>
+                </div>
+                <div class="actions">
+                    ${canDelete ? `<button class="btn btn-danger btn-sm" onclick="deleteNotice('${notice.id}')">🗑️ Delete</button>` : ''}
+                </div>
+            `;
+
+            container.appendChild(div);
+        });
+    } catch (error) {
+        container.innerHTML = '<p class="empty">❌ Error loading notices.</p>';
+    }
+}
+
+// ============================================================
+// NOTICES - PUBLISH
+// ============================================================
+async function publishNotice() {
+    if (!currentUser) {
+        showToast('⚠️ Please login first.', 'error');
+        return;
+    }
+
+    const title = $('noticeTitle').value.trim();
+    const content = $('noticeContent').value.trim();
+
+    if (!title || !content) {
+        showToast('⚠️ Please enter both title and message.', 'error');
+        return;
+    }
+
+    try {
+        const { error } = await supabase
+            .from('notices')
+            .insert({ title, content, user_id: currentUser.id });
+
+        if (error) {
+            showToast('❌ ' + error.message, 'error');
+            return;
+        }
+
+        showToast('✅ Notice published!', 'success');
+        $('noticeTitle').value = '';
+        $('noticeContent').value = '';
+        loadNotices();
+        loadHomeNotices();
+    } catch (error) {
+        showToast('❌ ' + error.message, 'error');
+    }
+}
+
+// ============================================================
+// NOTICES - DELETE
+// ============================================================
+async function deleteNotice(id) {
+    if (!currentUser) {
+        showToast('⚠️ Please login first.', 'error');
+        return;
+    }
+
+    if (!confirm('Are you sure you want to delete this notice?')) return;
+
+    try {
+        const { error } = await supabase
+            .from('notices')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            showToast('❌ ' + error.message, 'error');
+            return;
+        }
+
+        showToast('✅ Notice deleted!', 'success');
+        loadNotices();
+        loadHomeNotices();
+    } catch (error) {
+        showToast('❌ ' + error.message, 'error');
+    }
+}
+
+// ============================================================
+// PHOTO UPLOAD - PREVIEW
+// ============================================================
+const dropArea = $('dropArea');
+const fileInput = $('photoFile');
+const previewContainer = $('previewContainer');
+
+dropArea.addEventListener('click', function() { fileInput.click(); });
+
+dropArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropArea.classList.add('dragover');
+});
+
+dropArea.addEventListener('dragleave', function() {
+    dropArea.classList.remove('dragover');
+});
+
+dropArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropArea.classList.remove('dragover');
+    if (e.dataTransfer.files.length) {
+        handleFileSelect(e.dataTransfer.files[0]);
+    }
+});
+
+fileInput.addEventListener('change', function(e) {
+    if (e.target.files.length) {
+        handleFileSelect(e.target.files[0]);
+    }
+});
+
+function handleFileSelect(file) {
+    if (!file.type.startsWith('image/')) {
+        showToast('⚠️ Please select an image file.', 'error');
+        return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+        showToast('❌ Photo must be smaller than 10MB.', 'error');
+        return;
+    }
+
+    selectedFile = file;
+    previewContainer.innerHTML = '';
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const div = document.createElement('div');
+        div.className = 'preview-item';
+        div.innerHTML = `
+            <img src="${e.target.result}" alt="Preview" />
+            <button class="remove" onclick="removePreview()">×</button>
+        `;
+        previewContainer.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+}
+
+function removePreview() {
+    selectedFile = null;
+    previewContainer.innerHTML = '';
+    fileInput.value = '';
+}
+
+// ============================================================
+// PHOTO UPLOAD - SUBMIT
+// ============================================================
+async function uploadPhoto() {
+    if (!currentUser) {
+        showToast('⚠️ Please login first.', 'error');
+        return;
+    }
+
+    if (!selectedFile) {
+        showToast('⚠️ Please select a photo first.', 'error');
+        return;
+    }
+
+    const category = $('photoCategory').value;
+
+    showToast('📤 Uploading...', 'success');
+
+    try {
+        const ext = selectedFile.name.split('.').pop().toLowerCase();
+        const fileName = Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + ext;
+        const path = 'gallery/' + fileName;
+
+        const { error: uploadErr } = await supabase.storage
+            .from('gallery')
+            .upload(path, selectedFile);
+
+        if (uploadErr) {
+            showToast('❌ Upload failed: ' + uploadErr.message, 'error');
+            return;
+        }
+
+        const { data: urlData } = supabase.storage
+            .from('gallery')
+            .getPublicUrl(path);
+
+        const { error: dbErr } = await supabase
+            .from('gallery_photos')
+            .insert({
+                category: category,
+                file_name: selectedFile.name,
+                storage_path: path,
+                url: urlData.publicUrl,
+                uploaded_by: currentUser.id
+            });
+
+        if (dbErr) {
+            await supabase.storage.from('gallery').remove([path]);
+            showToast('❌ Database error: ' + dbErr.message, 'error');
+            return;
+        }
+
+        showToast('✅ Photo uploaded!', 'success');
+        removePreview();
+        loadGallery(currentFilter);
+    } catch (error) {
+        showToast('❌ ' + error.message, 'error');
+    }
+}
+
+// ============================================================
+// GALLERY - LOAD
+// ============================================================
+async function loadGallery(filter) {
+    filter = filter || 'all';
+    const container = $('galleryContainer');
+    if (!container) return;
+
+    container.innerHTML = '<p class="loading">Loading gallery...</p>';
+
+    try {
+        let query = supabase
+            .from('gallery_photos')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (filter !== 'all') {
+            query = query.eq('category', filter);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            container.innerHTML = '<p class="empty">❌ Gallery could not be loaded.</p>';
+            return;
+        }
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p class="empty"><span class="icon">📷</span>No photos in this category.</p>';
+            return;
+        }
+
+        container.innerHTML = '';
+
+        data.forEach(function(photo) {
+            const div = document.createElement('div');
+            div.className = 'photo-card';
+
+            const isOwner = currentUser && photo.uploaded_by === currentUser.id;
+            const isAdmin = currentProfile && currentProfile.role === 'admin';
+            const canDelete = isOwner || isAdmin;
+
+            div.innerHTML = `
+                <img src="${photo.url || photo.storage_path}" alt="${photo.file_name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23eee%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%22 y=%22115%22 font-size=%2230%22 fill=%22%23999%22%3E📷%3C/text%3E%3C/svg%3E'" />
+                <div class="info">
+                    <span class="cat">${photo.category}</span>
+                    <span style="font-size:12px;color:#8a9a8a;">${new Date(photo.created_at).toLocaleDateString()}</span>
+                    ${canDelete ? `<button class="btn btn-danger btn-sm" onclick="deletePhoto('${photo.id}','${photo.storage_path}')">🗑️</button>` : ''}
+                </div>
+            `;
+
+            container.appendChild(div);
+        });
+    } catch (error) {
+        container.innerHTML = '<p class="empty">❌ Error loading gallery.</p>';
+    }
+}
+
+// ============================================================
+// GALLERY - FILTER
+// ============================================================
+function filterGallery(category) {
+    currentFilter = category;
+    loadGallery(category);
+}
+
+// ============================================================
+// GALLERY - DELETE PHOTO
+// ============================================================
+async function deletePhoto(id, storagePath) {
+    if (!currentUser) {
+        showToast('⚠️ Please login first.', 'error');
+        return;
+    }
+
+    if (!confirm('Are you sure you want to delete this photo?')) return;
+
+    try {
+        const { data: photo, error: fetchErr } = await supabase
+            .from('gallery_photos')
+            .select('uploaded_by')
+            .eq('id', id)
+            .single();
+
+        if (fetchErr) {
+            showToast('❌ Photo not found.', 'error');
+            return;
+        }
+
+        const isOwner = photo.uploaded_by === currentUser.id;
+        const isAdmin = currentProfile && currentProfile.role === 'admin';
+
+        if (!isOwner && !isAdmin) {
+            showToast('❌ You can only delete your own photos.', 'error');
+            return;
+        }
+
+        if (storagePath) {
+            await supabase.storage.from('gallery').remove([storagePath]);
+        }
+
+        const { error } = await supabase
+            .from('gallery_photos')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            showToast('❌ ' + error.message, 'error');
+            return;
+        }
+
+        showToast('✅ Photo deleted!', 'success');
+        loadGallery(currentFilter);
+    } catch (error) {
+        showToast('❌ ' + error.message, 'error');
+    }
+}
+
+// ============================================================
+// EVENT LISTENERS
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    $('signupBtn').addEventListener('click', signUp);
+    $('loginBtn').addEventListener('click', memberLogin);
+    $('adminLoginBtn').addEventListener('click', adminLogin);
+    $('publishNoticeBtn').addEventListener('click', publishNotice);
+    $('uploadPhotoBtn').addEventListener('click', uploadPhoto);
+
+    $('loginPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') memberLogin();
+    });
+    $('signupConfirm').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') signUp();
+    });
+    $('adminKey').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') adminLogin();
+    });
+
+    loadCurrentUser();
+    loadNotices();
+    loadGallery();
+    loadHomeNotices();
+
+    console.log('🌾 Rajthari Village loaded successfully!');
+    console.log('🔑 Admin Key: Rajthari');
+});
+        
+// ============================================================
+// EXPOSE FUNCTIONS - CONTINUED
+// ============================================================
+window.showSection = showSection;
+window.deleteNotice = deleteNotice;
+window.deletePhoto = deletePhoto;
+window.filterGallery = filterGallery;
+window.loadNotices = loadNotices;
+window.loadGallery = loadGallery;
+window.removePreview = removePreview;
+window.uploadPhoto = uploadPhoto;
+window.publishNotice = publishNotice;
+window.signUp = signUp;
+window.memberLogin = memberLogin;
+window.adminLogin = adminLogin;
+window.logout = logout;
+
+// ============================================================
+// END OF JAVASCRIPT
+// ============================================================
+</script>
+
 </body>
 </html>
