@@ -5,6 +5,55 @@
     <title>Rajthari Village Connect</title>  <!-- Supabase SDK -->  
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">  
 </script>  
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rajthari Village</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- Your HTML content here... -->
+
+<script>
+    // ============================================================
+    // SUPABASE INITIALIZATION
+    // ============================================================
+    const SUPABASE_URL = "https://idrbdrnzomavafkvoike.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_aptzw3bdHRossoUktQ5Pgg_oLKbq2N_";
+    const ADMIN_KEY = "Rajthari";
+
+    // Create Supabase client
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    console.log("✅ Supabase initialized!");
+
+    // ============================================================
+    // YOUR EXISTING JAVASCRIPT CODE
+    // ============================================================
+    // ... paste all your existing functions here ...
+    // (loadCurrentUser, memberLogin, adminLogin, logout, loadNotices, etc.)
+
+    // ============================================================
+    // DEBUG TEST - Check if Supabase is working
+    // ============================================================
+    setTimeout(async function() {
+        try {
+            const { data, error } = await supabase.from('profiles').select('count');
+            if (error) {
+                alert('❌ Supabase test failed: ' + error.message);
+            } else {
+                alert('✅ Supabase is working! Profiles table exists.');
+            }
+        } catch (err) {
+            alert('❌ Test error: ' + err.message);
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
 
 <style>  
     /* ============================================================  
