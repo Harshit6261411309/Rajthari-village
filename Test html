@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <p id="demo">Waiting for script...</p>
+    <button onclick="document.getElementById('demo').innerHTML = '✅ Button clicked!'">Click Me</button>
+    <script>
+        document.getElementById('demo').innerHTML = '✅ Script ran!';
+    </script>
+</body>
+</html>
