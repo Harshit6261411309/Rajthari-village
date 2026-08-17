@@ -1594,6 +1594,187 @@ JAVASCRIPT - ALL LOGIC
     window.adminLogin = adminLogin;
     window.logout = logout;
 </script>
+    <!-- ============================================================ -->
+    <!-- DEBUG CODE - PASTE HERE -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // DEBUG OVERRIDE - Shows alerts for login steps
+        // ============================================================
 
+        // Save original functions
+        const originalMemberLogin = window.memberLogin;
+        const originalAdminLogin = window.adminLogin;
+
+        // Override Member Login with debug
+        window.memberLogin = async function() {
+            alert('🔐 Member Login clicked');
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            alert('📧 Email: ' + email);
+            
+            if (!email || !password) {
+                alert('⚠️ Email or password is empty');
+                return;
+            }
+            
+            alert('🔑 Attempting login with Supabase...');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                
+                if (error) {
+                    alert('❌ Login Error: ' + error.message);
+                    document.getElementById('loginStatus').textContent = '❌ ' + error.message;
+                    document.getElementById('loginStatus').className = 'status error';
+                    return;
+                }
+                
+                alert('✅ Login successful! User: ' + data.user.email);
+                
+                // Load profile
+                const { data: profile, error: pErr } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', data.user.id)
+                    .single();
+                
+                if (pErr) {
+                    alert('⚠️ Profile fetch error: ' + pErr.message);
+                } else {
+                    alert('👤 Profile role: ' + (profile ? profile.role : 'null'));
+                }
+                
+                currentUser = data.user;
+                currentProfile = profile || null;
+                
+                await loadCurrentUser();
+                
+                document.getElementById('loginStatus').textContent = '✅ Login successful!';
+                document.getElementById('loginStatus').className = 'status success';
+                showToast('✅ Welcome back!', 'success');
+                
+            } catch (err) {
+                alert('❌ Exception: ' + err.message);
+            }
+        };
+
+        // Override Admin Login with debug
+        window.adminLogin = async function() {
+            alert('👑 Admin Login clicked');
+            
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            const key = document.getElementById('adminKey').value.trim();
+            
+            alert('📧 Admin Email: ' + email);
+            alert('🔑 Admin Key entered: ' + key);
+            
+            if (!email || !password || !key) {
+                alert('⚠️ All fields are required');
+                return;
+            }
+            
+            if (key !== 'Rajthari') {
+                alert('❌ Wrong Admin Key. Expected "Rajthari", got "' + key + '"');
+                document.getElementById('adminStatus').textContent = '❌ Wrong Admin Key.';
+                document.getElementById('adminStatus').className = 'status error';
+                return;
+            }
+            
+            alert('✅ Admin Key is correct. Attempting login...');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                
+                if (error) {
+                    alert('❌ Admin Login Error: ' + error.message);
+                    document.getElementById('adminStatus').textContent = '❌ ' + error.message;
+                    document.getElementById('adminStatus').className = 'status error';
+                    return;
+                }
+                
+                alert('✅ Admin auth successful! Checking role...');
+                
+                const { data: profile, error: pErr } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', data.user.id)
+                    .single();
+                
+                if (pErr) {
+                    alert('⚠️ Profile fetch error: ' + pErr.message);
+                    document.getElementById('adminStatus').textContent = '❌ Profile not found';
+                    document.getElementById('adminStatus').className = 'status error';
+                    await supabase.auth.signOut();
+                    return;
+                }
+                
+                alert('👑 Profile role: ' + (profile ? profile.role : 'null'));
+                
+                if (!profile || profile.role !== 'admin') {
+                    alert('❌ This user is NOT admin. Role is: ' + (profile ? profile.role : 'null'));
+                    document.getElementById('adminStatus').textContent = '❌ This account is not admin.';
+                    document.getElementById('adminStatus').className = 'status error';
+                    await supabase.auth.signOut();
+                    return;
+                }
+                
+                alert('✅ Admin role confirmed!');
+                currentUser = data.user;
+                currentProfile = profile;
+                
+                await loadCurrentUser();
+                
+                document.getElementById('adminStatus').textContent = '👑 Admin Login Successful!';
+                document.getElementById('adminStatus').className = 'status success';
+                showToast('👑 Admin Login Successful!', 'success');
+                
+                document.getElementById('adminEmail').value = '';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminKey').value = '';
+                
+            } catch (err) {
+                alert('❌ Exception: ' + err.message);
+            }
+        };
+
+        // Add a Supabase connection test
+        window.testSupabase = async function() {
+            alert('🔍 Testing Supabase connection...');
+            try {
+                const { data, error } = await supabase.from('profiles').select('count');
+                if (error) {
+                    alert('❌ Connection test failed: ' + error.message);
+                } else {
+                    alert('✅ Supabase connected! Profiles table exists.');
+                }
+            } catch (err) {
+                alert('❌ Connection test error: ' + err.message);
+            }
+        };
+
+        // Auto-run test on page load
+        setTimeout(() => {
+            alert('🔍 Running Supabase connection test...');
+            if (typeof supabase !== 'undefined' && supabase) {
+                alert('✅ Supabase client is defined.');
+                testSupabase();
+            } else {
+                alert('❌ Supabase client is NOT defined. Check your SUPABASE_URL and key.');
+            }
+        }, 1500);
+
+        console.log('🔧 Debug mode active. Login functions have alerts.');
+        console.log('📞 If login fails, check the alert messages.');
+    </script>
+    <!-- ============================================================ -->
+    <!-- END DEBUG CODE -->
+    <!-- ============================================================ -->
+
+</body>
+</html>
 </body>
 </html>
